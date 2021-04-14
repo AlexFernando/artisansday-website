@@ -1,0 +1,145 @@
+{
+  "errors": [],
+  "warnings": [],
+  "version": "4.46.0",
+  "hash": "115b945dd4efab450a6b",
+  "publicPath": "/static/",
+  "outputPath": "/home/alexf/react_2020/artisandayluz/build/static",
+  "assetsByChunkName": {
+    "artisandayluz": [
+      "artisandayluz.module.js",
+      "artisandayluz.4d0d97d4500b9f8c3d9a.hot-update.js"
+    ]
+  },
+  "assets": [
+    {
+      "name": "4d0d97d4500b9f8c3d9a.hot-update.json",
+      "size": 55,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
+      "emitted": false
+    },
+    {
+      "name": "artisandayluz.4d0d97d4500b9f8c3d9a.hot-update.js",
+      "size": 203946,
+      "chunks": [
+        "artisandayluz"
+      ],
+      "chunkNames": [
+        "artisandayluz"
+      ],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
+      "emitted": false
+    },
+    {
+      "name": "artisandayluz.module.js",
+      "size": 6625933,
+      "chunks": [
+        "artisandayluz"
+      ],
+      "chunkNames": [
+        "artisandayluz"
+      ],
+      "info": {},
+      "emitted": false
+    },
+    {
+      "name": "images/7.png",
+      "size": 103111,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {
+        "sourceFilename": "packages/artisandayluz-theme/src/images/7.png"
+      },
+      "emitted": false
+    },
+    {
+      "name": "images/calendar.png",
+      "size": 67646,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {
+        "sourceFilename": "packages/artisandayluz-theme/src/images/calendar.png"
+      },
+      "emitted": false
+    },
+    {
+      "name": "images/yoga-2150140_1920.png",
+      "size": 2019151,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {
+        "sourceFilename": "packages/artisandayluz-theme/src/images/yoga-2150140_1920.png"
+      },
+      "emitted": false,
+      "isOverSizeLimit": true
+    }
+  ],
+  "filteredAssets": 0,
+  "entrypoints": {
+    "artisandayluz": {
+      "chunks": [
+        "artisandayluz"
+      ],
+      "assets": [
+        "artisandayluz.module.js",
+        "artisandayluz.4d0d97d4500b9f8c3d9a.hot-update.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "namedChunkGroups": {
+    "artisandayluz": {
+      "chunks": [
+        "artisandayluz"
+      ],
+      "assets": [
+        "artisandayluz.module.js",
+        "artisandayluz.4d0d97d4500b9f8c3d9a.hot-update.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "chunks": [
+    {
+      "id": "artisandayluz",
+      "rendered": true,
+      "initial": true,
+      "entry": true,
+      "size": 1875307,
+      "names": [
+        "artisandayluz"
+      ],
+      "files": [
+        "artisandayluz.module.js",
+        "artisandayluz.4d0d97d4500b9f8c3d9a.hot-update.js"
+      ],
+      "hash": "580a5b222ace2433abb7",
+      "siblings": [],
+      "parents": [],
+      "children": [],
+      "childrenByOrder": {},
+      "modules": [],
+      "filteredModules": 0,
+      "origins": []
+    }
+  ],
+  "logging": {
+    "webpack.buildChunkGraph.visitModules": {
+      "entries": [],
+      "filteredEntries": 2,
+      "debug": false
+    }
+  },
+  "children": [],
+  "generator": "loadable-components"
+}
