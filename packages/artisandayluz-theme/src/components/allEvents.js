@@ -39,18 +39,25 @@ const allEvents = ( {state, libraries, actions} ) => {
     let currentMonth = today.getMonth() + 1; 
     let currentYear = today.getFullYear();
 
-    let dateOfToday = currentDay.toString()+"/"+"0"+currentMonth.toString()+"/"+currentYear.toString(); 
-    let eventsOfToday = [];
-    console.log("date of today: ", dateOfToday.trim());
+    let currentMonthString = "";
 
+    if(currentMonth.toString().length === 1) {
+        currentMonthString = "0"+currentMonth.toString()
+    }
+    else {
+        currentMonthString = currentMonth.toString();
+    }
+
+    let dateOfToday = currentDay.toString()+"/"+currentMonthString+"/"+currentYear.toString(); 
+
+    let eventsOfToday = [];
+ 
     if(data.isReady) {
         data.items.map( ({id}) => {
 
             const singleEvent = state.source.allevents[id];
 
             events.push(singleEvent);
-
-            //console.log("un evento ", singleEvent)
 
             //get events of today
             if(singleEvent.acf.start_date === dateOfToday) {
@@ -65,11 +72,6 @@ const allEvents = ( {state, libraries, actions} ) => {
         })
     }
 
-    //console.log(eventDay, " ", eventMonth, " ", eventYear);
-
-    //console.log("EL ID DE EVENTOS: ", id);
-
-    console.log("evento del dia: ", eventsOfToday);
 
     // filtrar event contra el array de id ( how to do it?)
     const filtered = events.filter(event => id.includes(event.id))
@@ -151,7 +153,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                     const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
                     return(
-
+                        <Link href={event.link}>
                         <EventItem key={event.id}>
                             <ImageStyled src={event.acf.image_event.sizes.medium_large} />
                                                     
@@ -171,6 +173,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                             {/* <a>Link Website : {event.acf.link_to_website}</a> */}
 
                         </EventItem>
+                        </Link>
                     )
                 })
                 
@@ -183,8 +186,9 @@ const allEvents = ( {state, libraries, actions} ) => {
 
                  return(
 
+                    <Link href={event.link}>
                      <EventItem key={event.id}>
-                         <ImageStyled src={event.acf.image_event.sizes.medium_large} />
+                         <ImageStyled src={event.acf.image_event.sizes.medium} />
                                                  
                          <EventInfo>
                              <EventInfoFirst>
@@ -202,6 +206,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                          {/* <a>Link Website : {event.acf.link_to_website}</a> */}
 
                      </EventItem>
+                     </Link>
                  )
                 })
 
@@ -315,25 +320,27 @@ const ButtonCalendar = styled.button `
     }
 `
 
-const EventContainer = styled.div`
+export const EventContainer = styled.div`
     display:flex;
     justify-content: space-around;
     align-content: center;
     flex-wrap: wrap;
+
+    margin: 4rem 0;
 `;
 
-const EventItem = styled.div`
+export const EventItem = styled.div`
     flex-basis: 30%;
     flex-wrap: wrap;
     margin-top: 2rem;
 `;
 
-const EventInfo = styled.div`
+export const EventInfo = styled.div`
     display: flex;
     justify-content: space-between;
 `
 
-const EventInfoFirst = styled.div`
+export const EventInfoFirst = styled.div`
     display: flex;
     flex-direction: column;
     flex-basis: 20%;
@@ -356,7 +363,7 @@ const EventInfoFirst = styled.div`
         }
     }
 `
-const EventInfoSecond = styled.div`
+export const EventInfoSecond = styled.div`
     display: flex;
     flex-direction: column;
     flex-basis: 80%;
@@ -374,7 +381,7 @@ const EventInfoSecond = styled.div`
     }
 `
 
-const ImageStyled = styled(Image)`
-    max-height: 100%;
-    max-width: 100%;
+export const ImageStyled = styled(Image)`
+    max-height: 200px;
+    max-width: 300px;
 `

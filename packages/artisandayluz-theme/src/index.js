@@ -22,6 +22,12 @@ export default {
           isFetching: false,
           isFullProgram: true,
         },
+
+        "/mainevent/": {
+          isReady: true,
+          isFetching: false,
+          isMainEvent: true,
+        },
       },
     },
   },

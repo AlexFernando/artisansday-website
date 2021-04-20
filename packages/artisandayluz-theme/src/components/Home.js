@@ -1,22 +1,62 @@
 import React, {useEffect} from 'react';
 import { connect, styled } from "frontity";
 import Image from "@frontity/components/image";
-import bgImage from "../images/yoga-2150140_1920.png"
-import bgImage2 from "../images/7.png"
+import bgImage2 from "../images/7.png";
 
-const HomePage = () => {
+import Link from './Link';
+import {EventItem, EventInfo, EventInfoFirst, EventInfoSecond} from './allEvents';
+
+const HomePage = ({state, actions}) => {
+
+    useEffect( () => {
+        actions.source.fetch("/allevents")
+    }, [])
+
+    const data = state.source.get('/allevents')
+
+    // Today events
+
+    const today = new Date();
+    let currentDay = today.getDate();
+    let currentMonth = today.getMonth() + 1; 
+    let currentYear = today.getFullYear();
+
+    let currentMonthString = "";
+
+    if(currentMonth.toString().length === 1) {
+        currentMonthString = "0"+currentMonth.toString()
+    }
+    else {
+        currentMonthString = currentMonth.toString();
+    }
+
+    let dateOfToday = currentDay.toString()+"/"+currentMonthString+"/"+currentYear.toString(); 
+
+    let eventsOfToday = [];
+
+    if(data.isReady) {
+        data.items.map( ({id}) => {
+            const singleEvent = state.source.allevents[id];
+
+            //get events of today
+            if(singleEvent.acf.start_date === dateOfToday) {
+                eventsOfToday.push(singleEvent);
+            }
+        })
+    }
+
     return ( 
-
+        <>
         <BackgroundColor>          
             <MainContainer>
 
-                <h1>Created by Developers for Developers</h1>
+                <h1>Created by Artisans for Artisans</h1>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada blandit est, a porttitor sem viverra et.
                 </p>
                 <div>
-                    <a>Get it Free Now</a>
-                    <a>Schedule a Call</a>
+                    <a>Full Program</a>
+                    <a>Contact me</a>
                 </div>
                 
             </MainContainer>
@@ -24,10 +64,65 @@ const HomePage = () => {
             <ImageStyled src={bgImage2} />
 
         </BackgroundColor>
+
+        <AboutContainer>
+            <h2>
+                About
+            </h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada blandit est, a porttitor sem viverra et.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada blandit est, a porttitor sem viverra et.
+            </p>
+            
+        </AboutContainer>
+
+        <DayProgramContainer>
+
+            <h2>Today's Program</h2>
+
+            <TodayEvents>
+
+            {eventsOfToday.length > 0 ?
+                eventsOfToday.map( event => {
+                    const arrDate = event.acf.start_date.split("/");
+                    //array months to get date data
+                 const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+                 return(
+
+                    <Link href={event.link}>
+                     <EventItem key={event.id}>
+                         <Image src={event.acf.image_event.sizes.medium} height="200" width="320" />
+                                                 
+                         <EventInfo>
+                             <EventInfoFirst>
+                                 <span>{monthsName[arrDate[1]-1]}</span>
+                                 <span>{arrDate[0]}</span>
+                             </EventInfoFirst>
+
+                             <EventInfoSecond>
+                                 <span>{event.acf.start_time} - {event.acf.end_time}</span>
+                                 <h3>{event.acf.title}</h3>
+                                 <span>Free</span>
+                             </EventInfoSecond>    
+                         </EventInfo>
+                         
+                         {/* <a>Link Website : {event.acf.link_to_website}</a> */}
+
+                     </EventItem>
+                     </Link>
+                 )
+                })
+
+                : null
+                }
+                </TodayEvents>
+            </DayProgramContainer>
+        </>
      );
 }
  
-export default HomePage;
+export default connect(HomePage);
 
 const BackgroundColor = styled.div`
     background-image: linear-gradient(to top right, rgba(147,112,219,0), rgba(147,112,219,1));
@@ -120,4 +215,37 @@ const ImageStyled = styled(Image)`
     align-self: center;
     max-height: 60%;
     max-width: 50%;
+`
+
+const DayProgramContainer = styled.div`
+    margin: 3rem;
+
+    h2 {
+        font-size: 2rem;
+        color: #203492;
+        text-align: center;
+    }
+`;
+
+const TodayEvents = styled.div`
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+`
+
+const AboutContainer = styled.div`
+
+    margin: 3rem;
+    padding: 1rem 10rem;
+
+    h2{
+        font-size: 2rem;
+        color: #203492;
+        text-align: center;
+    }
+
+    p {
+        font-size: 1.3rem;
+        color: #4a4a4a;
+    }   
 `

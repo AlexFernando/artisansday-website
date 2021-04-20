@@ -84,29 +84,21 @@ function getAllIndexes(arr, val) {
 
 const Calendar = ({eventDay, eventMonth, eventYear, setIsEvent, setId, idArray, setIsActive}) => {
 
-    //console.log(eventDay, eventMonth, eventYear)
-
     const DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const DAYS_LEAP = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const DAYS_OF_THE_WEEK = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
     const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
     const today = new Date();
-    //console.log(today)
     const [date, setDate] = useState(today);
-
     const [day, setDay] = useState(date.getDate());
-    //console.log(day)
     const [month, setMonth] = useState(date.getMonth());
-    //console.log(month)
     const [year, setYear] = useState(date.getFullYear());
-    //console.log(year)
-
+  
     const calculateStartDayOfMonth = (date) => {
 
-      //console.log("Date con parametro 1: ", new Date(date.getFullYear(), date.getMonth(), 1), "Obten dia: ", new Date(date.getFullYear(), date.getMonth(), 1).getDay(), )
       return new Date(date.getFullYear(), date.getMonth(), 1).getDay() === 0 ? 7 :  new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-
+      
     } 
 
     const [startDay, setStartDay] = useState(calculateStartDayOfMonth(date));
@@ -132,13 +124,7 @@ const Calendar = ({eventDay, eventMonth, eventYear, setIsEvent, setId, idArray, 
       return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
     }
 
-    const days = isLeapYear(date.getFullYear()) ? DAYS_LEAP : DAYS;
-
-    //console.log("isLapYear or no: ", days)
-
-    //console.log("days: ", eventDay, "months: ", eventMonth, "year ", eventYear);
-    
-   
+    const days = isLeapYear(date.getFullYear()) ? DAYS_LEAP : DAYS;   
 
     let currentDay = date.getDate()
     let currentMonth = date.getMonth() 
@@ -167,38 +153,20 @@ const Calendar = ({eventDay, eventMonth, eventYear, setIsEvent, setId, idArray, 
           {Array(days[month] + (startDay - 1))
             .fill(null)
             .map((_, index) => {
-              //console.log("que es index: ", index);
               const d = index - (startDay - 2);
-              //console.log("que es d: ", d);
-              //console.log("startday: ",startDay)
-              //console.log(eventDay.indexOf(d) === eventMonth.indexOf(month+1) === eventYear.indexOf(year))
-              //console.log("day: ", d , "month: ", month, "year: ", year)
-              //console.log("el mes del calendario: ",month)
-              //console.log(eventDay.indexOf)
 
               let indexDay = eventDay.indexOf(d)
 
               let arrayOfIndexesDay = getAllIndexes(eventDay, d);
 
-              //console.log("d: ", d, "allIndexes: ", arrayOfIndexesDay, "indexDay: ", indexDay);
-
               let arrayOfIndexesEvents = [];
-
-              
-              // for arrOfIndexesDay 
-              // If Index > -1
-
-              // showEvent(array of indexes)
 
               if(indexDay > -1 && month === eventMonth[indexDay] && year === eventYear[indexDay] ){
 
                 if (arrayOfIndexesDay.length > 0) {
-                  //console.log("hola")
+                
                   for( let i = 0 ; i < arrayOfIndexesDay.length; i++) {
-                        
                       arrayOfIndexesEvents.push(idArray[arrayOfIndexesDay[i]])
-                      //console.log("los events: ", arrayOfIndexesEvents)
-                      //console.log("el index: ", indexDay," idEvent: ", idArray[indexDay])
                   }
                 }
 

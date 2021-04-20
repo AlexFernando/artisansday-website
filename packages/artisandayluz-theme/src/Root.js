@@ -3,6 +3,11 @@ import { Head, connect, Global, css, styled } from "frontity";
 import AllEvents from './components/allEvents';
 import HomePage from './components/Home';
 import NavBar from './components/NavBar';
+import EventsDetails from './components/EventDetails';
+import MainEvent from './components/MainEvent';
+import Footer from './components/footer';
+import Contact from './components/contact';
+import StayInTouch from './components/stayInTouch';
 
 const Root = ({state, actions}) => {
 
@@ -48,7 +53,16 @@ const Root = ({state, actions}) => {
         <NavBar />
         {/**Other components */}
         {data.isHomePage && <HomePage /> }
-        {data.isFullProgram && <AllEvents />}     
+        {data.isFullProgram && <AllEvents />}  
+        {data.isAllevents && <EventsDetails/>}
+        {data.isMainEvent && <MainEvent />}
+
+        {state.router.link === "/contact/" && data.isPage && <StayInTouch />}
+                
+
+        <Contact />
+            
+        <Footer title={"Artisan's Day Luz"}/>   
       </>
     );
   };
