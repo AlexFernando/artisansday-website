@@ -24,13 +24,13 @@ const NavBar = () => {
                     <Link href= "/">About</Link>
                 </Button> 
                 <Button onClick = {() => setNavbarOpen(!navbarOpen)}> 
-                    <Link href= "/">Main Event</Link>
+                    <Link href= "/mainevent">Main Event</Link>
                 </Button>   
                 <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
                     <Link href="/fullprogram">Full Program</Link>
                 </Button>
 
-                <div> <a href="#" css = {css`
+                {/* <div> <a href="#" css = {css`
                     color: white;
                     line-height: inherit;
                     text-decoration: none;
@@ -47,7 +47,7 @@ const NavBar = () => {
                     letter-spacing: 1px;
                     border-radius: 0px;
                 `}>
-                Day's Program</a></div>
+                Day's Program</a></div> */}
             </Navbox>
         </>
 
@@ -56,8 +56,8 @@ const NavBar = () => {
         <Navbox open>
           <Button><Link href= "/">About</Link></Button> 
           <Button><Link href="/fullprogram">Full Program</Link></Button> 
-          <Button> <Link href= "/">Main Event</Link></Button> 
-          <div> <a href="#" css = {css`
+          <Button> <Link href= "/mainevent">Main Event</Link></Button> 
+          {/* <div> <a href="#" css = {css`
               color: white;
                 line-height: inherit;
                 text-decoration: none;
@@ -73,7 +73,7 @@ const NavBar = () => {
                 box-shadow: 4px 4px 0 0 #7ea2b2;
                 letter-spacing: 1px;
                 border-radius: 0px;
-          `} >Day's Program</a></div>
+          `} >Day's Program</a></div> */}
         </Navbox>
   </>
       )}
