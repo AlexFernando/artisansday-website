@@ -14,10 +14,10 @@ const Root = ({state, actions}) => {
     const data = state.source.get(state.router.link);
 
     useEffect( () => {
-    
+        actions.source.fetch("/homepage")
         actions.source.fetch("/allevents")
-    
     }, [])
+
     
     return (
       <>
@@ -33,9 +33,10 @@ const Root = ({state, actions}) => {
                     }
 
                 
-                   /*  * {
+                    /* * {
                         border: 1px solid #f00 !important;
-                    }  */
+                    }  
+                     */
                     p {
                         font-family: 'Montserrat', sans-serif;
                         font-weight: 400;
@@ -55,10 +56,7 @@ const Root = ({state, actions}) => {
         {data.isHomePage && <HomePage /> }
         {data.isFullProgram && <AllEvents />}  
         {data.isAllevents && <EventsDetails/>}
-        {data.isMainEvent && <MainEvent />}
-
-        {state.router.link === "/contact/" && data.isPage && <StayInTouch />}
-                
+        {state.router.link === "/mainevent/" && <MainEvent />}
 
         <Contact />
             

@@ -8,7 +8,7 @@ import Link from './Link';
 
 /**Hook for dropdown calendar */
 import { useDetectOutsideClick } from "../hooks/useDectectOutsideClick";
-
+import useFilterTags from '../hooks/useFilterTags';
 
 const allEvents = ( {state, libraries, actions} ) => {
 
@@ -90,7 +90,55 @@ const allEvents = ( {state, libraries, actions} ) => {
         console.log("hola: ", e)
      };
 
+    // ALL THE LOGIC FOR TAGS
+    const [filteredByTag, saveFilteredByTag] = useState([]);
+    const {allCategory, FilterSubcategoriesUI} = useFilterTags("");
+
+    const categories = state.source.category;
+
+    //filling the array of events
+    let eventsNoCategories = [];
+
+    if(data.isReady) {
+        data.items.map( ({id}) => {      
+            eventsNoCategories.push(state.source.allevents[id]);
+        })
+    } 
+
+    if(categories && data.isReady){
  
+        eventsNoCategories.map( item => {
+ 
+            if(item.categories.length === 1) {
+              
+                let replaceCategory = categories[item.categories[0]].name;
+                item["category"] = replaceCategory;
+                item["subcategory"] = "";
+            }
+
+            else if(item.categories.length === 2) {
+                let replaceCategory = categories[item.categories[1]].name;
+                let replaceSubCategory = categories[item.categories[0]].name;
+                item["category"] = replaceCategory;
+                item["subcategory"] = replaceSubCategory;
+            }
+        })
+    }
+    
+    useEffect( () => {
+      
+        if(allCategory !== "") {
+            const filter = eventsNoCategories.filter(elemToolkit => elemToolkit.category === allCategory || elemToolkit.subcategory === allCategory)
+            saveFilteredByTag(filter);
+            setIsEvent(false);
+        } 
+    }, [allCategory])
+
+    
+    console.log("mi filter by tags: ", filteredByTag)
+
+    //FILTERING BY TAGS ENDS
+
     return(
 
         <PageContainer>
@@ -99,63 +147,120 @@ const allEvents = ( {state, libraries, actions} ) => {
 
             <p>Check out our events happening soon, try the calendar, tag categories or the search bar</p>
             
-                <SearchBar>
-                    <InputBar>                  
-                        <input 
-                            type="text"
-                            placeholder="What are you searching for?"
-                            value=""
-                            onChange={handleChange}
-                        />                
-                    </InputBar>
-                
-                    <ButtonCalendar>
-                        <Link href="/searchbar"><span>SEARCH</span></Link>
+                    <ButtonCalendar onClick = {onClickDropdown}> 
+                        <span>Calendar</span>
+                        <Image  src = {calendaImage} height="30px" width="30px" />
                     </ButtonCalendar>
-
-                    <ButtonCalendar
-                    onClick = {onClickDropdown}
-                > 
-                    <span>Calendar</span>
-
-                    <Image  src = {calendaImage} height="30px" width="30px" />
-                </ButtonCalendar>
+                    
+                    {
+                            isActive? 
+                    <CalendarContainer ref={dropdownRef}>
+                    
+                            <Calendar 
+                                eventDay = {eventDay} 
+                                eventMonth = {eventMonth} 
+                                eventYear = {eventYear} 
+                                setIsEvent = {setIsEvent}
+                                setId = {setId}
+                                idArray = {idArray}
+                                setIsActive = {setIsActive}
+                            />            
+                    </CalendarContainer>
+                    : null}
                 
+
+                    <TagsContainer>
+                        {FilterSubcategoriesUI()}
+                    </TagsContainer>
+                
+            {data.isReady ?
+                
+                <EventContainer>
                 {
-                        isActive? 
-                <CalendarContainer ref={dropdownRef}>
-                 
-                        <Calendar 
-                            eventDay = {eventDay} 
-                            eventMonth = {eventMonth} 
-                            eventYear = {eventYear} 
-                            setIsEvent = {setIsEvent}
-                            setId = {setId}
-                            idArray = {idArray}
-                            setIsActive = {setIsActive}
-                        />            
-                </CalendarContainer>
-                : null}
+                    isEvent ?
 
-                </SearchBar>
-                
-                
-        {data.isReady ?
-              
-            <EventContainer>
-            {
-                isEvent ?
+                    filtered.reverse().map( event => {
 
-                filtered.reverse().map( event => {
+                        const arrDate = event.acf.start_date.split("/");
+                        //array months to get date data
+                        const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-                    const arrDate = event.acf.start_date.split("/");
-                       //array months to get date data
+                        return(
+                            <>
+                            <Link href={event.link}>
+                            <EventItem key={event.id}>
+                                <ImageStyled src={event.acf.image_event.sizes.medium_large} />
+                                                        
+                                <EventInfo>
+                                    <EventInfoFirst>
+                                        <span>{monthsName[arrDate[1]-1]}</span>
+                                        <span>{arrDate[0]}</span>
+                                    </EventInfoFirst>
+
+                                    <EventInfoSecond>
+                                        <span>{event.acf.start_time} - {event.acf.end_time}</span>
+                                        <span>{event.acf.timezone}</span>
+                                        <h3>{event.acf.title}</h3>
+                                        <span>Free</span>
+                                    </EventInfoSecond>    
+                                </EventInfo>
+                                
+                                {/* <a>Link Website : {event.acf.link_to_website}</a> */}
+
+                            </EventItem>
+                            </Link>
+                            
+                            
+                            </>
+                        )
+                    })
+                    
+                    : 
+                    filteredByTag.length > 0 ?
+                    filteredByTag.map( event => {
+
+                        const arrDate = event.acf.start_date.split("/");
+                        //array months to get date data
+                        const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+                        
+                        return(
+
+                            <Link href={event.link}>
+                            <EventItem key={event.id}>
+                                <ImageStyled src={event.acf.image_event.sizes.medium_large} />
+                                                        
+                                <EventInfo>
+                                    <EventInfoFirst>
+                                        <span>{monthsName[arrDate[1]-1]}</span>
+                                        <span>{arrDate[0]}</span>
+                                    </EventInfoFirst>
+        
+                                    <EventInfoSecond>
+                                        <span>{event.acf.start_time} - {event.acf.end_time} <i>*{event.acf.timezone}</i></span>
+                                        <h3>{event.acf.title}</h3>
+                                        <span>Free</span>
+                                    </EventInfoSecond>    
+                                </EventInfo>
+                                
+                                {/* <a>Link Website : {event.acf.link_to_website}</a> */}
+        
+                            </EventItem>
+                            </Link>
+                        )
+                    })
+
+                    :
+                    eventsOfToday.length > 0 ?
+                    eventsOfToday.map( event => {
+                        const arrDate = event.acf.start_date.split("/");
+                        //array months to get date data
                     const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
                     return(
+
                         <Link href={event.link}>
                         <EventItem key={event.id}>
-                            <ImageStyled src={event.acf.image_event.sizes.medium_large} />
+                            <ImageStyled src={event.acf.image_event.sizes.medium_large}/>
                                                     
                             <EventInfo>
                                 <EventInfoFirst>
@@ -165,6 +270,7 @@ const allEvents = ( {state, libraries, actions} ) => {
 
                                 <EventInfoSecond>
                                     <span>{event.acf.start_time} - {event.acf.end_time}</span>
+                                    <span>{event.acf.timezone}</span>
                                     <h3>{event.acf.title}</h3>
                                     <span>Free</span>
                                 </EventInfoSecond>    
@@ -175,47 +281,14 @@ const allEvents = ( {state, libraries, actions} ) => {
                         </EventItem>
                         </Link>
                     )
-                })
-                
-                :
-                eventsOfToday.length > 0 ?
-                eventsOfToday.map( event => {
-                    const arrDate = event.acf.start_date.split("/");
-                    //array months to get date data
-                 const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+                    })
+                    :
+                    <h1>There is no events in this day, check the calendar and click in the a date with blue background</h1>
+                }
+                </EventContainer>
+                : null
+            } 
 
-                 return(
-
-                    <Link href={event.link}>
-                     <EventItem key={event.id}>
-                         <ImageStyled src={event.acf.image_event.sizes.medium} />
-                                                 
-                         <EventInfo>
-                             <EventInfoFirst>
-                                 <span>{monthsName[arrDate[1]-1]}</span>
-                                 <span>{arrDate[0]}</span>
-                             </EventInfoFirst>
-
-                             <EventInfoSecond>
-                                 <span>{event.acf.start_time} - {event.acf.end_time}</span>
-                                 <h3>{event.acf.title}</h3>
-                                 <span>Free</span>
-                             </EventInfoSecond>    
-                         </EventInfo>
-                         
-                         {/* <a>Link Website : {event.acf.link_to_website}</a> */}
-
-                     </EventItem>
-                     </Link>
-                 )
-                })
-
-                : 
-                <h1>There is no events in this day, check the calendar and click in the a date with blue background</h1>
-            }
-            </EventContainer>
-            : null
-        } 
         </PageContainer>
     )
 }
@@ -236,54 +309,25 @@ const PageContainer = styled.div`
         text-align: center;
         letter-spacing: 1px;
     }
-`;
 
-
-export const SearchBar = styled.div`
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding-top: 2rem;
-    
-    @media (max-width: 768px){
-        flex-direction: column;
-        align-items: center;
-    }
-`;
-
-export const InputBar = styled.form`
-    display: flex;
-    flex-basis: 60%;
+    flex-direction: column;
+    align-content: center;
     justify-content: flex-start;
-    align-items: center;
-    background-color: #fff;
-    padding: 1rem 2rem 1rem 2rem;
-    border: 1px solid gray;
-    border-radius: 1rem;
-  
-    @media (max-width: 768px){
-        margin-bottom: 1rem;
-    }
+`;
 
-    input {
-        font-size: 1.6rem;
-        border: none;
-        outline: none;
-        padding-left: 1rem;
-        width: 100%;
-        @media (max-width: 768px){
-            width: 100%;
-            font-size: .7rem;
-        }
-    }    
+export const TagsContainer = styled.div`
+    flex-basis: 100%;
 `
+
 
 const CalendarContainer = styled.div`
     display: flex;
-    z-index: 3;
+    align-self: center;
     position: fixed;
+    z-index: 3;
+ 
     max-width: 30%;
-    margin-top: 10rem;
 
     @media (max-width: 768px){
         max-width: 100%;
@@ -296,6 +340,7 @@ const ButtonCalendar = styled.button `
     cursor: pointer;
     display: flex;
     justify-content: center;
+    align-self: center;
     align-items: center;
     padding: 1rem 2rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -303,6 +348,7 @@ const ButtonCalendar = styled.button `
     vertical-align: middle;
     transition: box-shadow 0.4s ease;
     color: #fff;
+    margin-top: 3rem;
 
     span {
         color: #fff;
@@ -330,7 +376,6 @@ export const EventContainer = styled.div`
 `;
 
 export const EventItem = styled.div`
-    flex-basis: 30%;
     flex-wrap: wrap;
     margin-top: 2rem;
 `;
@@ -382,6 +427,10 @@ export const EventInfoSecond = styled.div`
 `
 
 export const ImageStyled = styled(Image)`
-    max-height: 200px;
-    max-width: 300px;
+    width: 100%;
+        height: 20.625rem;
+        object-fit: cover;
+        object-position: 50% 50%;
+
+        
 `

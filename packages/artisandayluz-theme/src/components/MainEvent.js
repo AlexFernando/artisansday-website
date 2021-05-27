@@ -4,14 +4,27 @@ import img2 from "../images/11.jpg";
 import img3 from "../images/13.jpg";
 import Image from "@frontity/components/image";
 
-import {EventDetailsContainer, MoreDetails} from './EventDetails';
+import {MoreDetails} from './EventDetails';
 
+import Loading from './Loading';
 
-const MainEvent = ({state}) => {
+const MainEvent = ({state, actions}) => {
+
+    useEffect( () => {
+        actions.source.fetch("/mainevent")
+    }, [])
+
+    const pageMainEvent = state.source.page[133];
+
+    console.log("la mainpage:  ", pageMainEvent);
+    
     return ( 
+        <>
+        {typeof pageMainEvent === "undefined" ? <Loading /> 
+            :
         <MainEventContainer>
-            <h1>Title of the main event here</h1>
-            <p>Some optional slogan or text related to the event here</p>
+            <h1>{pageMainEvent.acf.main_title}</h1>
+            <p>{pageMainEvent.acf.slogan}</p>
         
             <ImageStack>
                 <TopImage>
@@ -25,32 +38,28 @@ const MainEvent = ({state}) => {
                 <TextDescription>
                     <h3>Description</h3>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada blandit est, a porttitor sem viverra et.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada blandit est, a porttitor sem viverra et.
+                        {pageMainEvent.acf.description_one}
                     </p>
 
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada blandit est, a porttitor sem viverra et.
+                        {pageMainEvent.acf.description_second}
                     </p>
                 </TextDescription>
-                
             </ImageStack>
 
-            <EventDetailsContainer>
-      
             <MoreDetails>
                 <div>
                     <h4>Details</h4>
                     <div>
                         
-                        <span><strong>Date:</strong> <br></br> May 11</span>
+                        <span><strong>Date:</strong> <br></br> {pageMainEvent.acf.date}</span>
                     </div>
                     <div>
            
-                        <span><strong>Time:</strong> <br></br> 8h00-19h:00</span>
+                        <span><strong>Time:</strong> <br></br> {pageMainEvent.acf.time}</span>
                     </div>
                     <div>
-                        <span><strong>Cost:</strong> <br></br> Free</span>
+                        <span><strong>Cost:</strong> <br></br> {pageMainEvent.acf.cost}</span>
                     </div>
 
                     <div>
@@ -58,29 +67,33 @@ const MainEvent = ({state}) => {
                     </div>
 
                     <div>
-                        <span><strong>Language: </strong> <br></br> English</span>
+                        <span><strong>Language: </strong> <br></br> {pageMainEvent.acf.language} </span>
                     </div>
                 </div>
 
                 <div>
                     <h4>Organizer</h4>
                     <div>
-                        <span>Main Host</span>
+                        <span>{pageMainEvent.acf.organizer_name}</span>
                     </div>
                     <div>
-                        <span><strong>Email: </strong> <br></br> organizer@example.com</span>
+                        <span><strong>Email: </strong> <br></br> {pageMainEvent.acf.email_organizer} </span>
                     </div>
                     <div>
-                        <a href="https://all1union.be/" target="_blank" rel="noopener noreferrer">View Organizer Website</a>
+                        <a href={pageMainEvent.acf.organizer_website_url} target="_blank" rel="noopener noreferrer">View Organizer Website</a>
                     </div>
                 </div>
                 
             </MoreDetails>
  
-        </EventDetailsContainer>
-        </MainEventContainer>        
+      
+        </MainEventContainer>
+        }
+    </>
      );
 }
+
+export default connect(MainEvent);
  
 const MainEventContainer =  styled.div`
     margin-top: 5rem;
@@ -94,6 +107,10 @@ const MainEventContainer =  styled.div`
     p {
         font-size: 1.3rem;
         text-align: center;
+    }
+
+    @media(max-width: 768px) {
+        padding: 2rem 1rem;
     }
 `;
 
@@ -115,6 +132,10 @@ const BottomImage = styled.div`
     grid-column: 2 / -1;
     grid-row: 1; // make this image be on the same row
     padding-left: 10%;
+
+    @media(max-width: 768px) {
+        grid-column: 3 / -1;
+    }
 `;
 
 const TextDescription = styled.div`
@@ -132,12 +153,21 @@ const TextDescription = styled.div`
         font-size: 1.3rem;
         color: #4a4a4a;
     }
+
+    @media(max-width: 768px) {
+        grid-column: 1 / span 12;
+        grid-row: 4;
+        padding-top: 1rem;
+    }
 `
 
 
 const ImageStyled = styled(Image)`
     max-height: 350px;
     max-width: 480px;
-`;
 
-export default connect(MainEvent);
+    @media(max-width: 768px) {
+        max-height: 200px;
+        max-width: 220px;
+    }
+`;
