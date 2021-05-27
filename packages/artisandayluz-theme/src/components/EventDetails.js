@@ -1,7 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import { connect, styled } from "frontity";
+import { connect, styled, Global, css } from "frontity";
 import Iframe from "@frontity/components/iframe";
 import Link from './Link';
+
+/**import react add to my calendar button */
+import AddToCalendar from '@culturehq/add-to-calendar';
+import calendarStyles from '@culturehq/add-to-calendar/dist/styles.css';
+
+/**MOMENT TIME ZONE */
+const moment = require('moment-timezone');
 
 const EventDetails = ({state, libraries}) => {
 
@@ -19,18 +26,43 @@ const EventDetails = ({state, libraries}) => {
     //DATE
 
     const arrDate = postEvent.acf.start_date.split("/");
+
     //array months to get date data
     const monthsName = ['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+    //TIMEZONE
+    let startDateTime = moment.tz(postEvent.acf.date_time_start, postEvent.acf.timezone);
+    let endDateTime = moment.tz(postEvent.acf.date_time_end, postEvent.acf.timezone);
+    console.log("la ciudad formateada: ", startDateTime.format()," ",  endDateTime.format())    
+//TIMEZONE
+
+//ADD TO MY CALENDAR
+let event = {
+    name: postEvent.acf.title,
+    details: "Let's go after work",
+    location: postEvent.acf.timezone,
+    startsAt: startDateTime.format(),
+    endsAt: endDateTime.format(),
+}
+// ADD TO MY CALENDAR ENDS 
+
     return ( 
         <EventDetailsContainer>
-            <h1>{postEvent.acf.title} - You can change this title</h1> 
-            <h3>{monthsName[arrDate[1]-1]} {arrDate[0]} {postEvent.acf.start_time} - {postEvent.acf.end_time}</h3>
+            <h1>{postEvent.acf.title}</h1> 
+            <h3>{monthsName[arrDate[1]-1]} {arrDate[0]} 	&nbsp;	&nbsp; &nbsp; {postEvent.acf.start_time} - {postEvent.acf.end_time} 	&nbsp;	&nbsp; &nbsp; Timezone: {postEvent.acf.timezone}</h3>
+
+            {/* loading the styles for AddToCalendar  */}
+            <Global styles={css(calendarStyles)} />
+
             {/* Use Html2React to render the post HTML content */}
             <VideoContainer>
                 <Html2React html={postEvent.acf.video} /> 
+                
+                <div>
+                    <p>{postEvent.acf.description}</p>
+                    <AddToCalendar event={event} />
+                </div>
             </VideoContainer>
-            <p>{postEvent.acf.description}</p>
          
             <MoreDetails>
                 <div>
@@ -70,7 +102,7 @@ const EventDetails = ({state, libraries}) => {
                 </div>
                 
             </MoreDetails>
- 
+
         </EventDetailsContainer>
     );
 }
@@ -83,18 +115,36 @@ export const EventDetailsContainer = styled.div`
         font-size: 1.5rem;
     }
 
-    p {
-        font-size: 1.2rem;
-        font-weight: 400;
-    }
-
-    div {
-        margin-bottom: 1rem;
+    @media(max-width: 768px) {
+        margin: 8rem 1rem 0 1rem;
     }
 `; 
 
 const VideoContainer = styled.div`
-    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+
+    div {
+        
+        flex-basis: 40%;
+
+        p {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            text-align: justify;
+        }
+    }
+
+    @media(max-width: 768px) {
+        iframe{
+            max-width: 280px;
+            max-height: 220px;
+        }
+    }
 `;
 
 export const MoreDetails = styled.div`
@@ -102,8 +152,17 @@ export const MoreDetails = styled.div`
     justify-content: space-between;
     max-width: 50%;
 
+    div {
+        margin-bottom: 1rem;
+    }
+
     h4 {
         font-size: 1.2rem;
+    }
+
+    @media(max-width: 768px) {
+        max-width: 100%;
+        flex-direction: column;
     }
 `
 

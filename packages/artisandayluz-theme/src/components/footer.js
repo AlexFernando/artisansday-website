@@ -49,6 +49,10 @@ const ElementFooter = styled.div`
             justify-content: center;
         }
     }
+
+    @media(max-width: 768px) {
+        text-align: center;
+    }
 `
 
 const Footer = ({title}) => {

@@ -1,12 +1,22 @@
 import React, {useEffect} from 'react';
-import { connect, styled } from "frontity";
+import { connect, styled, css } from "frontity";
 import Image from "@frontity/components/image";
 import bgImage2 from "../images/7.png";
 
 import Link from './Link';
 import {EventItem, EventInfo, EventInfoFirst, EventInfoSecond} from './allEvents';
+import LinkButtonHome from './LinkButtonHome';
+import LinkButtonHomeSecond from './LinkButtonHomeSecond';
+
+import Loading from './Loading';
+
+
 
 const HomePage = ({state, actions}) => {
+
+    const pageHome = state.source.page[121];
+
+    console.log("la homepage: ", pageHome)
 
     useEffect( () => {
         actions.source.fetch("/allevents")
@@ -47,16 +57,18 @@ const HomePage = ({state, actions}) => {
 
     return ( 
         <>
+        {typeof pageHome === "undefined" ? <Loading /> : 
+        <>
         <BackgroundColor>          
             <MainContainer>
 
-                <h1>Created by Artisans for Artisans</h1>
+                <h1>{pageHome.acf.main_title}</h1>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada blandit est, a porttitor sem viverra et.
+                    {pageHome.acf.slogan}
                 </p>
                 <div>
-                    <a>Full Program</a>
-                    <a>Contact me</a>
+                    <LinkButtonHome href="/fullprogram" >FullProgram</LinkButtonHome>
+                    <LinkButtonHomeSecond href="/contact">Contact</LinkButtonHomeSecond>
                 </div>
                 
             </MainContainer>
@@ -67,18 +79,17 @@ const HomePage = ({state, actions}) => {
 
         <AboutContainer>
             <h2>
-                About
+                {pageHome.acf.about_title}
             </h2>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada blandit est, a porttitor sem viverra et.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada blandit est, a porttitor sem viverra et.
+                {pageHome.acf.description_about}
             </p>
             
         </AboutContainer>
 
         <DayProgramContainer>
 
-            <h2>Today's Program</h2>
+            <h2>{pageHome.acf.program_title}</h2>
 
             <TodayEvents>
 
@@ -86,8 +97,7 @@ const HomePage = ({state, actions}) => {
                 eventsOfToday.map( event => {
                     const arrDate = event.acf.start_date.split("/");
                     //array months to get date data
-                 const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-
+                    const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
                  return(
 
                     <Link href={event.link}>
@@ -119,6 +129,8 @@ const HomePage = ({state, actions}) => {
                 </TodayEvents>
             </DayProgramContainer>
         </>
+        }
+        </>
      );
 }
  
@@ -137,7 +149,7 @@ const BackgroundColor = styled.div`
     padding: 1rem 2rem;
    
     @media(max-width: 768px) {
-        height: 573px;
+        height: 673px;
         padding: 1.5rem;
         flex-direction: column;
     }
@@ -148,6 +160,10 @@ const MainContainer = styled.div`
     flex-direction: column;
     flex-basis: 60%;
     justify-content: center;
+
+    @media(max-width: 768px) {
+        flex-basis: 100%;
+    }
 
         h1 {
             text-transform: capitalize;
@@ -161,12 +177,16 @@ const MainContainer = styled.div`
         }
 
         p {
-            font-size: 0.8rem;
             margin-top: 0;
             margin-bottom: 2rem;
             line-height: 1.8;
             font-family: 'Montserrat', sans-serif;
             width: 70%;
+            font-size: 1rem;
+
+            @media(max-width: 768px) {
+                width: 100%;
+            }
 
             @media(min-width: 768px) {
                 font-size: 1.3rem;
@@ -179,31 +199,9 @@ const MainContainer = styled.div`
             display: flex;
             justify-content: flex-start;
             align-content: center;
-          
-            a {
-                color: white;
-                line-height: inherit;
-                text-decoration: none;
-                cursor: pointer;
 
-                background-color: #203492;
-                padding: 15px 20px;
-                border: 1px none #000;
-                font-size: 16px;
-                text-align: center;
-                transition: transform 500ms cubic-bezier(.23, 1, .32, 1), color 200ms ease, opacity 200ms ease, -webkit-transform 500ms cubic-bezier(.23, 1, .32, 1);
-                
-                box-shadow: 4px 4px 0 0 #7ea2b2;
-                letter-spacing: 1px;
-                border-radius: 0px;
-            
-                &:nth-of-type(2) {
-                    border-radius: 1rem;
-                    background-color: #fff;
-                    border: 2px solid #203492;
-                    color: #203492;
-                    margin-left: 2rem;
-                }
+            @media(max-width: 768px) {
+                justify-content: space-between;
             }
         }
 
@@ -215,6 +213,10 @@ const ImageStyled = styled(Image)`
     align-self: center;
     max-height: 60%;
     max-width: 50%;
+
+    @media(max-width: 768px) {
+        margin-top: 2rem;
+    }
 `
 
 const DayProgramContainer = styled.div`
@@ -248,4 +250,8 @@ const AboutContainer = styled.div`
         font-size: 1.3rem;
         color: #4a4a4a;
     }   
+
+    @media(max-width: 768px) {
+        padding: 1rem 0;
+    }
 `

@@ -17,6 +17,7 @@
   },
   "prettier": {},
   "dependencies": {
+    "@culturehq/add-to-calendar": "^1.1.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
@@ -27,6 +28,7 @@
     "@frontity/tiny-router": "^1.4.1",
     "@frontity/wp-source": "^1.11.2",
     "artisandayluz-theme": "file:packages/artisandayluz-theme",
-    "frontity": "^1.14.3"
+    "frontity": "^1.14.3",
+    "moment-timezone": "^0.5.33"
   }
 }

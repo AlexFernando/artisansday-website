@@ -2,16 +2,45 @@
   "errors": [],
   "warnings": [],
   "version": "4.46.0",
-  "hash": "14c52ee034ad00a7a0a7",
+  "hash": "233e5a4633066caf45c0",
   "publicPath": "/static/",
-  "outputPath": "/home/alexf/react_2020/artisandayluz/build/static",
+  "outputPath": "/home/alexf/Documents/react_projects/artisansday-website/build/static",
   "assetsByChunkName": {
-    "artisandayluz": "artisandayluz.module.js"
+    "artisandayluz": [
+      "artisandayluz.module.js",
+      "artisandayluz.54ebf0e3b07b2d3c0766.hot-update.js"
+    ]
   },
   "assets": [
     {
+      "name": "54ebf0e3b07b2d3c0766.hot-update.json",
+      "size": 55,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
+      "emitted": false
+    },
+    {
+      "name": "artisandayluz.54ebf0e3b07b2d3c0766.hot-update.js",
+      "size": 37822,
+      "chunks": [
+        "artisandayluz"
+      ],
+      "chunkNames": [
+        "artisandayluz"
+      ],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
+      "emitted": false
+    },
+    {
       "name": "artisandayluz.module.js",
-      "size": 10563173,
+      "size": 13253091,
       "chunks": [
         "artisandayluz"
       ],
@@ -29,7 +58,8 @@
       "info": {
         "sourceFilename": "packages/artisandayluz-theme/src/images/11.jpg"
       },
-      "emitted": false
+      "emitted": false,
+      "isOverSizeLimit": true
     },
     {
       "name": "images/13.jpg",
@@ -69,7 +99,8 @@
         "artisandayluz"
       ],
       "assets": [
-        "artisandayluz.module.js"
+        "artisandayluz.module.js",
+        "artisandayluz.54ebf0e3b07b2d3c0766.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -81,7 +112,8 @@
         "artisandayluz"
       ],
       "assets": [
-        "artisandayluz.module.js"
+        "artisandayluz.module.js",
+        "artisandayluz.54ebf0e3b07b2d3c0766.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -93,14 +125,15 @@
       "rendered": true,
       "initial": true,
       "entry": true,
-      "size": 3257302,
+      "size": 4016230,
       "names": [
         "artisandayluz"
       ],
       "files": [
-        "artisandayluz.module.js"
+        "artisandayluz.module.js",
+        "artisandayluz.54ebf0e3b07b2d3c0766.hot-update.js"
       ],
-      "hash": "b12d94165f9172fca7ea",
+      "hash": "eec6e0bab6e8904203bf",
       "siblings": [],
       "parents": [],
       "children": [],

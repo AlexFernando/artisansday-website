@@ -7,14 +7,14 @@ const stayInTouch = ({state, actions, libraries}) => {
 
     const content =  state.source.page["56"].content;
 
+    console.log(content);
     return ( 
         <MarginTopContainer>
             <HeadContainer>
-                
+                                
                 <Title>
                     Contact
                 </Title>
-
 
                 <Separator></Separator>
 
