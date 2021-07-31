@@ -4,7 +4,7 @@ import Image from "@frontity/components/image";
 import bgImage2 from "../images/7.png";
 
 import Link from './Link';
-import {EventItem, EventInfo, EventInfoFirst, EventInfoSecond} from './allEvents';
+import {EventItem, EventInfo, EventInfoFirst, EventInfoSecond, EventWrapLink, ImageStyled} from './allEvents';
 import LinkButtonHome from './LinkButtonHome';
 import LinkButtonHomeSecond from './LinkButtonHomeSecond';
 
@@ -12,11 +12,9 @@ import Loading from './Loading';
 
 
 
-const HomePage = ({state, actions}) => {
+const HomePage = ({state, actions, libraries}) => {
 
     const pageHome = state.source.page[121];
-
-    console.log("la homepage: ", pageHome)
 
     useEffect( () => {
         actions.source.fetch("/allevents")
@@ -48,12 +46,18 @@ const HomePage = ({state, actions}) => {
         data.items.map( ({id}) => {
             const singleEvent = state.source.allevents[id];
 
+            const arrDateTimeStart = singleEvent.acf.date_time_start.split(" ");
+
+            const stringDate= arrDateTimeStart[0].split("-").reverse().join("/");
+
             //get events of today
-            if(singleEvent.acf.start_date === dateOfToday) {
+            if(stringDate === dateOfToday) {
                 eventsOfToday.push(singleEvent);
             }
         })
     }
+
+    const Html2react = libraries.html2react.Component;
 
     return ( 
         <>
@@ -70,10 +74,9 @@ const HomePage = ({state, actions}) => {
                     <LinkButtonHome href="/fullprogram" >FullProgram</LinkButtonHome>
                     <LinkButtonHomeSecond href="/contact">Contact</LinkButtonHomeSecond>
                 </div>
-                
             </MainContainer>
         
-            <ImageStyled src={bgImage2} />
+            <ImageStyledHome src={bgImage2} />
 
         </BackgroundColor>
 
@@ -95,32 +98,45 @@ const HomePage = ({state, actions}) => {
 
             {eventsOfToday.length > 0 ?
                 eventsOfToday.map( event => {
-                    const arrDate = event.acf.start_date.split("/");
+
                     //array months to get date data
                     const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+                    // new date time to delete old custom fields
+                    const arrDateTimeStart = event.acf.date_time_start.split(" ");
+
+                    const arrDateAlt = arrDateTimeStart[0].split("-");
+                
+                    const timeStart = arrDateTimeStart[1];
+                        
+                    const arrDateTimeEnd = event.acf.date_time_end.split(" ");
+                
+                    const timeEnd = arrDateTimeEnd[1];
                  return(
 
-                    <Link href={event.link}>
-                     <EventItem key={event.id}>
-                         <Image src={event.acf.image_event.sizes.medium} height="200" width="320" />
-                                                 
-                         <EventInfo>
-                             <EventInfoFirst>
-                                 <span>{monthsName[arrDate[1]-1]}</span>
-                                 <span>{arrDate[0]}</span>
-                             </EventInfoFirst>
+                    <EventWrapLink>
+                        <Link href={event.link}>
+                        <EventItem key={event.id}>
+                            <ImageStyled src={event.acf.image_event.sizes.medium_large}/>
+                                                    
+                            <EventInfo>
+                                <EventInfoFirst>
+                                    <span>{monthsName[arrDateAlt[1]-1]}</span>
+                                    <span>{arrDateAlt[2]}</span>
+                                </EventInfoFirst>
 
-                             <EventInfoSecond>
-                                 <span>{event.acf.start_time} - {event.acf.end_time}</span>
-                                 <h3>{event.acf.title}</h3>
-                                 <span>Free</span>
-                             </EventInfoSecond>    
-                         </EventInfo>
-                         
-                         {/* <a>Link Website : {event.acf.link_to_website}</a> */}
+                                <EventInfoSecond>
+                                    <span>{timeStart} - {timeEnd}</span>
+                                    <h3>{event.acf.title}</h3>
+                                    <span>Free</span>
+                                </EventInfoSecond>    
+                            </EventInfo>
+                            
+                            {/* <a>Link Website : {event.acf.link_to_website}</a> */}
 
-                     </EventItem>
-                     </Link>
+                        </EventItem>
+                        </Link>
+                     </EventWrapLink>
                  )
                 })
 
@@ -207,7 +223,7 @@ const MainContainer = styled.div`
 
 `
 
-const ImageStyled = styled(Image)`
+const ImageStyledHome = styled(Image)`
     display: flex;
     justify-content: center;
     align-self: center;
@@ -227,12 +243,24 @@ const DayProgramContainer = styled.div`
         color: #203492;
         text-align: center;
     }
+
+
+    @media(max-width: 768px) {
+        margin: 2rem 0;
+    }
 `;
 
 const TodayEvents = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
+
+    @media(max-width: 768px) {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
 `
 
 const AboutContainer = styled.div`

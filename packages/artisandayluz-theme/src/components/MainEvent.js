@@ -1,7 +1,5 @@
 import React, {useEffect} from 'react';
 import { connect, styled } from "frontity";
-import img2 from "../images/11.jpg";
-import img3 from "../images/13.jpg";
 import Image from "@frontity/components/image";
 
 import {MoreDetails} from './EventDetails';
@@ -15,8 +13,6 @@ const MainEvent = ({state, actions}) => {
     }, [])
 
     const pageMainEvent = state.source.page[133];
-
-    console.log("la mainpage:  ", pageMainEvent);
     
     return ( 
         <>
@@ -28,11 +24,11 @@ const MainEvent = ({state, actions}) => {
         
             <ImageStack>
                 <TopImage>
-                    <ImageStyled src={img3} />
+                    <ImageStyled src={pageMainEvent.acf.image_1.sizes.medium} />
                 </TopImage>
 
                 <BottomImage>
-                    <ImageStyled src={img2} />
+                    <ImageStyled src={pageMainEvent.acf.image_2.sizes.medium} />
                 </BottomImage>
                 
                 <TextDescription>

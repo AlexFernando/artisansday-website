@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { connect, styled } from "frontity";
+import {Global, connect, styled, css } from "frontity";
 import Iframe from "@frontity/components/iframe";
 import Image from "@frontity/components/image";
 import Calendar from "./Calendar";
@@ -60,11 +60,16 @@ const allEvents = ( {state, libraries, actions} ) => {
             events.push(singleEvent);
 
             //get events of today
-            if(singleEvent.acf.start_date === dateOfToday) {
+
+            const arrDateTimeStart = singleEvent.acf.date_time_start.split(" ");
+            const stringDate = arrDateTimeStart[0].split("-").reverse().join("/");
+
+            if(stringDate === dateOfToday) {
                 eventsOfToday.push(singleEvent);
             }
 
-            const arrayDate = singleEvent.acf.start_date.split("/");
+            // errors
+            const arrayDate = arrDateTimeStart[0].split("-").reverse()
                 eventDay.push(parseInt(arrayDate[0]))
                 eventMonth.push(parseInt(arrayDate[1])-1)
                 eventYear.push(parseInt(arrayDate[2]))
@@ -84,12 +89,7 @@ const allEvents = ( {state, libraries, actions} ) => {
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
     const onClickDropdown = () => setIsActive(!isActive);
 
-    //provisional handle change
-
-    const handleChange = e => {
-        console.log("hola: ", e)
-     };
-
+   
     // ALL THE LOGIC FOR TAGS
     const [filteredByTag, saveFilteredByTag] = useState([]);
     const {allCategory, FilterSubcategoriesUI} = useFilterTags("");
@@ -128,29 +128,32 @@ const allEvents = ( {state, libraries, actions} ) => {
     useEffect( () => {
       
         if(allCategory !== "") {
-            const filter = eventsNoCategories.filter(elemToolkit => elemToolkit.category === allCategory || elemToolkit.subcategory === allCategory)
+            const filter = eventsNoCategories.filter(elemToolkit => elemToolkit.category === allCategory.trim() || elemToolkit.subcategory === allCategory.trim())
             saveFilteredByTag(filter);
             setIsEvent(false);
         } 
     }, [allCategory])
 
     
-    console.log("mi filter by tags: ", filteredByTag)
 
     //FILTERING BY TAGS ENDS
 
     return(
 
         <PageContainer>
-
+        
             <h1>Full Program</h1>
 
             <p>Check out our events happening soon, try the calendar, tag categories or the search bar</p>
-            
+
                     <ButtonCalendar onClick = {onClickDropdown}> 
                         <span>Calendar</span>
                         <Image  src = {calendaImage} height="30px" width="30px" />
                     </ButtonCalendar>
+                    
+                    <TagsContainer>
+                        {FilterSubcategoriesUI()}
+                    </TagsContainer>
                     
                     {
                             isActive? 
@@ -168,11 +171,6 @@ const allEvents = ( {state, libraries, actions} ) => {
                     </CalendarContainer>
                     : null}
                 
-
-                    <TagsContainer>
-                        {FilterSubcategoriesUI()}
-                    </TagsContainer>
-                
             {data.isReady ?
                 
                 <EventContainer>
@@ -181,24 +179,36 @@ const allEvents = ( {state, libraries, actions} ) => {
 
                     filtered.reverse().map( event => {
 
-                        const arrDate = event.acf.start_date.split("/");
+                        //const arrDate = event.acf.start_date.split("/");
                         //array months to get date data
                         const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
+                        // new date time to delete old custom fields
+                        const arrDateTimeStart = event.acf.date_time_start.split(" ");
+
+                        const arrDateAlt = arrDateTimeStart[0].split("-");
+                    
+                        const timeStart = arrDateTimeStart[1];
+                            
+                        const arrDateTimeEnd = event.acf.date_time_end.split(" ");
+                    
+                        const timeEnd = arrDateTimeEnd[1];
+                
                         return(
-                            <>
+
+                            <EventWrapLink>
                             <Link href={event.link}>
                             <EventItem key={event.id}>
-                                <ImageStyled src={event.acf.image_event.sizes.medium_large} />
+                                <ImageStyled src={event.acf.image_event.sizes.medium} />
                                                         
                                 <EventInfo>
                                     <EventInfoFirst>
-                                        <span>{monthsName[arrDate[1]-1]}</span>
-                                        <span>{arrDate[0]}</span>
+                                        <span>{monthsName[arrDateAlt[1]-1]}</span>
+                                        <span>{arrDateAlt[2]}</span>
                                     </EventInfoFirst>
 
                                     <EventInfoSecond>
-                                        <span>{event.acf.start_time} - {event.acf.end_time}</span>
+                                        <span>{timeStart} - {timeEnd}</span>
                                         <span>{event.acf.timezone}</span>
                                         <h3>{event.acf.title}</h3>
                                         <span>Free</span>
@@ -209,9 +219,11 @@ const allEvents = ( {state, libraries, actions} ) => {
 
                             </EventItem>
                             </Link>
+
+                            </EventWrapLink>
                             
                             
-                            </>
+                        
                         )
                     })
                     
@@ -219,67 +231,94 @@ const allEvents = ( {state, libraries, actions} ) => {
                     filteredByTag.length > 0 ?
                     filteredByTag.map( event => {
 
-                        const arrDate = event.acf.start_date.split("/");
+                        //const arrDate = event.acf.start_date.split("/");
                         //array months to get date data
                         const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+                        // new date time to delete old custom fields
+                        const arrDateTimeStart = event.acf.date_time_start.split(" ");
+
+                        const arrDateAlt = arrDateTimeStart[0].split("-");
+                    
+                        const timeStart = arrDateTimeStart[1];
+                    
+                        const arrDateTimeEnd = event.acf.date_time_end.split(" ");
+                    
+                        const timeEnd = arrDateTimeEnd[1];
                         
                         return(
-
-                            <Link href={event.link}>
-                            <EventItem key={event.id}>
-                                <ImageStyled src={event.acf.image_event.sizes.medium_large} />
-                                                        
-                                <EventInfo>
-                                    <EventInfoFirst>
-                                        <span>{monthsName[arrDate[1]-1]}</span>
-                                        <span>{arrDate[0]}</span>
-                                    </EventInfoFirst>
-        
-                                    <EventInfoSecond>
-                                        <span>{event.acf.start_time} - {event.acf.end_time} <i>*{event.acf.timezone}</i></span>
-                                        <h3>{event.acf.title}</h3>
-                                        <span>Free</span>
-                                    </EventInfoSecond>    
-                                </EventInfo>
-                                
-                                {/* <a>Link Website : {event.acf.link_to_website}</a> */}
-        
-                            </EventItem>
-                            </Link>
+                            
+                            <EventWrapLink>
+                                <Link href={event.link}>
+                                <EventItem key={event.id}>
+                                    <ImageStyled src={event.acf.image_event.sizes.medium} />
+                                                            
+                                    <EventInfo>
+                                        <EventInfoFirst>
+                                            <span>{monthsName[arrDateAlt[1]-1]}</span>
+                                            <span>{arrDateAlt[2]}</span>
+                                        </EventInfoFirst>
+            
+                                        <EventInfoSecond>
+                                            <span>{timeStart} - {timeEnd} <i>*{event.acf.timezone}</i></span>
+                                            <h3>{event.acf.title}</h3>
+                                            <span>Free</span>
+                                        </EventInfoSecond>    
+                                    </EventInfo>
+                                    
+                                    {/* <a>Link Website : {event.acf.link_to_website}</a> */}
+            
+                                </EventItem>
+                                </Link>
+                            </EventWrapLink>
+                        
                         )
                     })
 
                     :
                     eventsOfToday.length > 0 ?
                     eventsOfToday.map( event => {
-                        const arrDate = event.acf.start_date.split("/");
+                        //const arrDate = event.acf.start_date.split("/");
                         //array months to get date data
                     const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
+                     // new date time to delete old custom fields
+                     const arrDateTimeStart = event.acf.date_time_start.split(" ");
+
+                     const arrDateAlt = arrDateTimeStart[0].split("-");
+                  
+                     const timeStart = arrDateTimeStart[1];
+                
+                     const arrDateTimeEnd = event.acf.date_time_end.split(" ");
+                 
+                     const timeEnd = arrDateTimeEnd[1];
+
                     return(
 
-                        <Link href={event.link}>
-                        <EventItem key={event.id}>
-                            <ImageStyled src={event.acf.image_event.sizes.medium_large}/>
-                                                    
-                            <EventInfo>
-                                <EventInfoFirst>
-                                    <span>{monthsName[arrDate[1]-1]}</span>
-                                    <span>{arrDate[0]}</span>
-                                </EventInfoFirst>
+                        <EventWrapLink>
+                            <Link href={event.link}>
+                                <EventItem key={event.id}>
+                                    <ImageStyled src={event.acf.image_event.sizes.medium}/>
+                                                            
+                                    <EventInfo>
+                                        <EventInfoFirst>
+                                            <span>{monthsName[arrDateAlt[1]-1]}</span>
+                                            <span>{arrDateAlt[2]}</span>
+                                        </EventInfoFirst>
 
-                                <EventInfoSecond>
-                                    <span>{event.acf.start_time} - {event.acf.end_time}</span>
-                                    <span>{event.acf.timezone}</span>
-                                    <h3>{event.acf.title}</h3>
-                                    <span>Free</span>
-                                </EventInfoSecond>    
-                            </EventInfo>
-                            
-                            {/* <a>Link Website : {event.acf.link_to_website}</a> */}
+                                        <EventInfoSecond>
+                                            <span>{timeStart} - {timeEnd}</span>
+                                            <span>{event.acf.timezone}</span>
+                                            <h3>{event.acf.title}</h3>
+                                            <span>Free</span>
+                                        </EventInfoSecond>    
+                                    </EventInfo>
+                                    
+                                    {/* <a>Link Website : {event.acf.link_to_website}</a> */}
 
-                        </EventItem>
-                        </Link>
+                                </EventItem>
+                            </Link>
+                        </EventWrapLink>
                     )
                     })
                     :
@@ -335,7 +374,7 @@ const CalendarContainer = styled.div`
 `
 const ButtonCalendar = styled.button `
     flex-basis: 10%;
-    background: #203492;
+    background: #349220;
     border-radius: 90px;
     cursor: pointer;
     display: flex;
@@ -371,13 +410,22 @@ export const EventContainer = styled.div`
     justify-content: space-around;
     align-content: center;
     flex-wrap: wrap;
-
     margin: 4rem 0;
 `;
 
-export const EventItem = styled.div`
+export const EventWrapLink = styled.div`
+    flex-basis: 100%;
     flex-wrap: wrap;
-    margin-top: 2rem;
+    margin: 2rem 0;
+
+    @media (min-width: 768px){
+        flex-basis: 30%;
+        margin: 1rem;
+    }
+`
+
+export const EventItem = styled.div`
+    
 `;
 
 export const EventInfo = styled.div`
@@ -428,9 +476,7 @@ export const EventInfoSecond = styled.div`
 
 export const ImageStyled = styled(Image)`
     width: 100%;
-        height: 20.625rem;
-        object-fit: cover;
-        object-position: 50% 50%;
-
-        
+    height: 20.625rem;
+    object-fit: cover;
+    object-position: 50% 50%;        
 `

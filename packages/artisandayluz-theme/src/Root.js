@@ -46,7 +46,7 @@ const Root = ({state, actions}) => {
 
             <Head>
                 <link rel="preconnect" href="https://fonts.gstatic.com" />
-                <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet" /> 
+                <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /> 
                 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
             </Head>
 
@@ -57,6 +57,8 @@ const Root = ({state, actions}) => {
         {data.isFullProgram && <AllEvents />}  
         {data.isAllevents && <EventsDetails/>}
         {state.router.link === "/mainevent/" && <MainEvent />}
+
+        {state.router.link === "/contact/" && <StayInTouch />}
 
         <Contact />
             

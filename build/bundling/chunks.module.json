@@ -2,45 +2,16 @@
   "errors": [],
   "warnings": [],
   "version": "4.46.0",
-  "hash": "233e5a4633066caf45c0",
+  "hash": "45cc5ce28dcae77b09a4",
   "publicPath": "/static/",
   "outputPath": "/home/alexf/Documents/react_projects/artisansday-website/build/static",
   "assetsByChunkName": {
-    "artisandayluz": [
-      "artisandayluz.module.js",
-      "artisandayluz.54ebf0e3b07b2d3c0766.hot-update.js"
-    ]
+    "artisandayluz": "artisandayluz.module.js"
   },
   "assets": [
     {
-      "name": "54ebf0e3b07b2d3c0766.hot-update.json",
-      "size": 55,
-      "chunks": [],
-      "chunkNames": [],
-      "info": {
-        "hotModuleReplacement": true,
-        "immutable": true
-      },
-      "emitted": false
-    },
-    {
-      "name": "artisandayluz.54ebf0e3b07b2d3c0766.hot-update.js",
-      "size": 37822,
-      "chunks": [
-        "artisandayluz"
-      ],
-      "chunkNames": [
-        "artisandayluz"
-      ],
-      "info": {
-        "hotModuleReplacement": true,
-        "immutable": true
-      },
-      "emitted": false
-    },
-    {
       "name": "artisandayluz.module.js",
-      "size": 13253091,
+      "size": 13451118,
       "chunks": [
         "artisandayluz"
       ],
@@ -48,28 +19,8 @@
         "artisandayluz"
       ],
       "info": {},
-      "emitted": false
-    },
-    {
-      "name": "images/11.jpg",
-      "size": 675219,
-      "chunks": [],
-      "chunkNames": [],
-      "info": {
-        "sourceFilename": "packages/artisandayluz-theme/src/images/11.jpg"
-      },
-      "emitted": false,
+      "emitted": true,
       "isOverSizeLimit": true
-    },
-    {
-      "name": "images/13.jpg",
-      "size": 154566,
-      "chunks": [],
-      "chunkNames": [],
-      "info": {
-        "sourceFilename": "packages/artisandayluz-theme/src/images/13.jpg"
-      },
-      "emitted": false
     },
     {
       "name": "images/7.png",
@@ -99,8 +50,7 @@
         "artisandayluz"
       ],
       "assets": [
-        "artisandayluz.module.js",
-        "artisandayluz.54ebf0e3b07b2d3c0766.hot-update.js"
+        "artisandayluz.module.js"
       ],
       "children": {},
       "childAssets": {}
@@ -112,8 +62,7 @@
         "artisandayluz"
       ],
       "assets": [
-        "artisandayluz.module.js",
-        "artisandayluz.54ebf0e3b07b2d3c0766.hot-update.js"
+        "artisandayluz.module.js"
       ],
       "children": {},
       "childAssets": {}
@@ -122,18 +71,17 @@
   "chunks": [
     {
       "id": "artisandayluz",
-      "rendered": true,
+      "rendered": false,
       "initial": true,
       "entry": true,
-      "size": 4016230,
+      "size": 4117677,
       "names": [
         "artisandayluz"
       ],
       "files": [
-        "artisandayluz.module.js",
-        "artisandayluz.54ebf0e3b07b2d3c0766.hot-update.js"
+        "artisandayluz.module.js"
       ],
-      "hash": "eec6e0bab6e8904203bf",
+      "hash": "8f6ce1d9845ac2a3e970",
       "siblings": [],
       "parents": [],
       "children": [],

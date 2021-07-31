@@ -18,14 +18,22 @@ const EventDetails = ({state, libraries}) => {
 
     const postEvent = state.source.allevents[idEvent];
 
-    console.log("postevent: ", postEvent);
-
     // Component exposed by html2react.
     const Html2React = libraries.html2react.Component;
 
     //DATE
 
-    const arrDate = postEvent.acf.start_date.split("/");
+    //const arrDate = postEvent.acf.start_date.split("/");
+
+    const arrDateTimeStart = postEvent.acf.date_time_start.split(" ");
+
+    const arrDateAlt = arrDateTimeStart[0].split("-");
+
+    const timeStart = arrDateTimeStart[1];
+
+    const arrDateTimeEnd = postEvent.acf.date_time_end.split(" ");
+
+    const timeEnd = arrDateTimeEnd[1];
 
     //array months to get date data
     const monthsName = ['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -33,7 +41,7 @@ const EventDetails = ({state, libraries}) => {
     //TIMEZONE
     let startDateTime = moment.tz(postEvent.acf.date_time_start, postEvent.acf.timezone);
     let endDateTime = moment.tz(postEvent.acf.date_time_end, postEvent.acf.timezone);
-    console.log("la ciudad formateada: ", startDateTime.format()," ",  endDateTime.format())    
+
 //TIMEZONE
 
 //ADD TO MY CALENDAR
@@ -49,7 +57,7 @@ let event = {
     return ( 
         <EventDetailsContainer>
             <h1>{postEvent.acf.title}</h1> 
-            <h3>{monthsName[arrDate[1]-1]} {arrDate[0]} 	&nbsp;	&nbsp; &nbsp; {postEvent.acf.start_time} - {postEvent.acf.end_time} 	&nbsp;	&nbsp; &nbsp; Timezone: {postEvent.acf.timezone}</h3>
+            <h3>{monthsName[arrDateAlt[1]-1]} {arrDateAlt[2]} 	&nbsp;	&nbsp; &nbsp; {timeStart} - {timeEnd} 	&nbsp;	&nbsp; &nbsp; Timezone: {postEvent.acf.timezone}</h3>
 
             {/* loading the styles for AddToCalendar  */}
             <Global styles={css(calendarStyles)} />
@@ -69,18 +77,18 @@ let event = {
                     <h4>Details</h4>
                     <div>
                         
-                        <span><strong>Date:</strong> <br></br> {monthsName[arrDate[1]-1]} {arrDate[0]}</span>
+                        <span><strong>Date:</strong> <br></br> {monthsName[arrDateAlt[1]-1]} {arrDateAlt[2]}</span>
                     </div>
                     <div>
            
-                        <span><strong>Time:</strong> <br></br> {postEvent.acf.start_time} - {postEvent.acf.end_time}</span>
+                        <span><strong>Time:</strong> <br></br> {timeStart} - {timeEnd}</span>
                     </div>
                     <div>
                         <span><strong>Cost:</strong> <br></br> Free</span>
                     </div>
 
                     <div>
-                        <span><strong>Event Category: </strong> <br></br> Online Events</span>
+                        <span><strong>Event Category: </strong> <br></br> {postEvent.category}</span>
                     </div>
 
                     <div>
@@ -140,6 +148,10 @@ const VideoContainer = styled.div`
     }
 
     @media(max-width: 768px) {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
         iframe{
             max-width: 280px;
             max-height: 220px;
@@ -154,6 +166,10 @@ export const MoreDetails = styled.div`
 
     div {
         margin-bottom: 1rem;
+
+        span {
+            text-transform: capitalize;
+        }
     }
 
     h4 {
