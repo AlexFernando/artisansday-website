@@ -2,7 +2,7 @@ const settings = {
   "name": "artisandayluz",
   "state": {
     "frontity": {
-      "url": "http://chp.multiviral.cloud",
+      "url": "https://artisan.wildfreewalkingtours.com",
       "title": "Artisan Day Luz",
       "description": "WordPress installation for ArtisanDayLuz Website"
     }
@@ -15,7 +15,7 @@ const settings = {
       "name": "@frontity/wp-source",
       "state": {
         "source": {
-          "api": "http://chp.multiviral.cloud/wp-json",
+          "api": "https://artisan.wildfreewalkingtours.com/wp-json/",
 
           "postTypes": [
 
@@ -24,18 +24,13 @@ const settings = {
               endpoint: "allevents",
               archive: "allevents",
             },
-
-            {
-              type: 'tribe_events',
-              endpoint: 'tribe/events/v1/events',
-              archive: '/events'
-            }
           ],
         }
       }
     },
     "@frontity/tiny-router",
-    "@frontity/html2react"
+    "@frontity/html2react",
+    "@aamodtgroup/frontity-contact-form-7"
   ]
 };
 

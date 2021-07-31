@@ -1,8 +1,10 @@
-import React from 'react';
-import {styled } from "frontity";
+import React, {useEffect} from 'react';
+import {styled, connect } from "frontity";
 import {faPhone, faEnvelope} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faYoutube, faFacebookSquare} from '@fortawesome/free-brands-svg-icons';
+
+import Loading from './Loading';
 
 const ContactContainer = styled.div`
     display: flex;
@@ -68,17 +70,26 @@ const FontAwesomeIconStyled = styled(FontAwesomeIcon)`
 `;
 
 
-const Contact = () => {
+const Contact = ({state,actions}) => {
+
+    useEffect( () => {
+        actions.source.fetch("/footer-info")
+    }, [])
+
+    const pageFooterInfo = state.source.page[165];
 
     return ( 
+        <>
+        {typeof pageFooterInfo === "undefined" ? <Loading /> 
+            :
         <ContactContainer>
             <ContactElement>
                 <h2>Contact</h2>
                 <h3>Stay in touch</h3>
                 <ul>
-                    <li><FontAwesomeIconStyled icon={faPhone}/>+33 987654321</li>
-                    <li><FontAwesomeIconStyled icon={faPhone}/>+33 123456789</li>
-                    <li> <FontAwesomeIconStyled icon={faEnvelope}/>example@example.com </li>
+                    <li><FontAwesomeIconStyled icon={faPhone}/>{pageFooterInfo.acf.phone_contact_1}</li>
+                    <li><FontAwesomeIconStyled icon={faPhone}/>{pageFooterInfo.acf.phone_contact_2}</li>
+                    <li> <FontAwesomeIconStyled icon={faEnvelope}/>{pageFooterInfo.acf.email_contact}</li>
                 </ul>
             </ContactElement>
 
@@ -87,14 +98,15 @@ const Contact = () => {
                 <h3>Follow us to stay tuned about our latest features and releases</h3>
             
                 <ul>
-                        <li><a href="/" alt="Share on Facebook" aria-label="Link to Facebook" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faFacebookSquare}/></a>Facebook</li>
-                        <li><a href="/" alt="Share on Instagram" aria-label="Link to Instagram" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faInstagram}/></a>Instagram</li>
-                        <li><a href="/" alt="Share on Youtube" aria-label="Link to Youtube" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faYoutube}/></a>Youtube</li>
+                        <li><a href={pageFooterInfo.acf.link_facebook} alt="Share on Facebook" aria-label="Link to Facebook" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faFacebookSquare}/></a>Facebook</li>
+                        <li><a href={pageFooterInfo.acf.link_instagram} alt="Share on Instagram" aria-label="Link to Instagram" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faInstagram}/></a>Instagram</li>
+                        <li><a href={pageFooterInfo.acf.link_youtube} alt="Share on Youtube" aria-label="Link to Youtube" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faYoutube}/></a>Youtube</li>
                 </ul>
             </ContactElement>
         </ContactContainer >
-
+        }
+        </>
     );
 }
  
-export default Contact;
+export default connect(Contact);

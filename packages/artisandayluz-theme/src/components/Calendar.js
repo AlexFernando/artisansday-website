@@ -26,7 +26,7 @@ const Header = styled.div`
   padding: 10px 10px 5px 10px;
   display: flex;
   justify-content: space-between;
-  background-color: #203492;;
+  background-color: #349220;
   border-radius: 1rem 1rem 0 0;
   color: #fff;
 `;

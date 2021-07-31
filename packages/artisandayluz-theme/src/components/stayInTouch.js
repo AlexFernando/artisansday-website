@@ -1,32 +1,46 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {connect, styled, css} from "frontity";
+
+
+import Loading from './Loading';
+
 
 const stayInTouch = ({state, actions, libraries}) => {
 
+    useEffect( () => {
+        actions.source.fetch("/contact")
+    }, [])
+
     const Html2react = libraries.html2react.Component;
 
-    const content =  state.source.page["56"].content;
+    const contentForm =  state.source.page["56"];
 
-    console.log(content);
     return ( 
-        <MarginTopContainer>
-            <HeadContainer>
-                                
-                <Title>
-                    Contact
-                </Title>
 
-                <Separator></Separator>
+        <>
+        {typeof contentForm === "undefined" ? <Loading /> 
+            :
 
-                <SubTitle>
-                    Stay in touch. In case you have any question, please email us using the form below.
-                </SubTitle>
-            </HeadContainer>
-            <Content>
-            <Html2react html={content.rendered} />
-            </Content>
+            <MarginTopContainer>
+                <HeadContainer>
+                                    
+                    <Title>
+                        Contact
+                    </Title>
 
-        </MarginTopContainer>
+                    <Separator></Separator>
+
+                    <SubTitle>
+                        Stay in touch. In case you have any question, please email us using the form below.
+                    </SubTitle>
+                </HeadContainer>
+                <Content>
+                <Html2react html={contentForm.content.rendered} />
+                </Content>
+
+            </MarginTopContainer>
+        }
+        </>
     );
 }
  
@@ -54,7 +68,7 @@ const Content = styled.div`
 
     input[type="submit"] { 
        
-    background-color: #f07723 ;
+    background-color: #203492;
     height: 60px;    
     padding: 1.5rem;
  
@@ -67,7 +81,7 @@ const Content = styled.div`
      font-family: 'Montserrat', sans-serif;
     
     &:hover {
-        background-color: #F05523;
+        background-color: #273fb2;
         transition: all 0.4s;
     }
     }
@@ -110,7 +124,7 @@ export const Separator = styled.span`
     margin-top: .5rem;
     margin-bottom: 2rem;
     border-radius: 20px;
-    background-color: #44841a;
+    background-color: #203492;
 
     @media(max-width: 768px) {
         width: 6rem;
