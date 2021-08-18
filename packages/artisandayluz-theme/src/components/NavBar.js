@@ -1,15 +1,22 @@
 import React, {useState} from 'react';
 import {css, connect, styled } from "frontity";
 import Link from './Link'
+import Image from '@frontity/components/image';
+import Loading from './Loading';
 
-const NavBar = () => {
+const NavBar = ({state}) => {
 
     const [navbarOpen, setNavbarOpen] = useState(false)
 
+    const pageHome = state.source.page[121];
+
+
     return ( 
-        
+      <>
+      {typeof pageHome === "undefined" ? <Loading /> : 
+      <>
         <Navigation>
-            <Link href="/"><h1>Logo.com</h1></Link>
+            <Link href="/"><ImageLogo src={pageHome.acf.logo.sizes.thumbnail}/></Link>
         <Toggle
             navbarOpen={navbarOpen}
             onClick={() => setNavbarOpen(!navbarOpen)}
@@ -79,6 +86,9 @@ const NavBar = () => {
       )}
       
     </Navigation>
+    </>
+    }
+  </>
      );
 
 }
@@ -87,7 +97,7 @@ export default connect(NavBar);
 const Navigation = styled.nav`
    display: flex;
    flex: 1 0 100%; /**new line */
-   height: 10vh;
+   height: 15vh;
    justify-content: space-between;
    align-items: center;
    border-bottom: 2px solid #33333320;
@@ -216,4 +226,15 @@ const Hamburger = styled.div`
         }
   `;
 
- 
+const ImageLogo = styled(Image)`    
+    width: 80px;
+    height: 80px;
+    margin-left: 1rem;
+    margin-top: 5px;
+
+    @media(min-width: 768px) {
+          width: 140px;
+          height: 140px;
+          margin-top: 0;
+    }
+`
