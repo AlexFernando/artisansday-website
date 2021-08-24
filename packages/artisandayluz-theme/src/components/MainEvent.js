@@ -92,7 +92,7 @@ const MainEvent = ({state, actions}) => {
 export default connect(MainEvent);
  
 const MainEventContainer =  styled.div`
-    margin-top: 5rem;
+    margin-top: 10rem;
     padding: 2rem 4rem;
 
     h1 {

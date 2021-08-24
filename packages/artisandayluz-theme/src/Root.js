@@ -8,6 +8,7 @@ import MainEvent from './components/MainEvent';
 import Footer from './components/footer';
 import Contact from './components/contact';
 import StayInTouch from './components/stayInTouch';
+import About from './components/about';
 
 const Root = ({state, actions}) => {
 
@@ -59,6 +60,8 @@ const Root = ({state, actions}) => {
         {state.router.link === "/mainevent/" && <MainEvent />}
 
         {state.router.link === "/contact/" && <StayInTouch />}
+
+        {state.router.link === "/about/" && <About/>}
 
         <Contact />
             

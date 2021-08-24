@@ -17,6 +17,11 @@ const settings = {
         "source": {
           "api": "https://artisan.wildfreewalkingtours.com/wp-json/",
 
+          "params": {
+            per_page: 100,
+          },
+
+
           "postTypes": [
 
             {
