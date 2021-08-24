@@ -28,13 +28,18 @@ const NavBar = ({state}) => {
         <>             
             <Navbox>
                 <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
-                    <Link href= "/">About</Link>
+                    <Link href= "/about">About</Link>
                 </Button> 
+
+                <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
+                    <Link href="/fullprogram">Full Program</Link>
+                </Button>
                 <Button onClick = {() => setNavbarOpen(!navbarOpen)}> 
                     <Link href= "/mainevent">Main Event</Link>
                 </Button>   
+               
                 <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
-                    <Link href="/fullprogram">Full Program</Link>
+                    <Link href="/contact">Contact</Link>
                 </Button>
 
                 {/* <div> <a href="#" css = {css`
@@ -61,9 +66,10 @@ const NavBar = ({state}) => {
       ) : (
         <>
         <Navbox open>
-          <Button><Link href= "/">About</Link></Button> 
+          <Button><Link href= "/about">About</Link></Button> 
           <Button><Link href="/fullprogram">Full Program</Link></Button> 
           <Button> <Link href= "/mainevent">Main Event</Link></Button> 
+          <Button> <Link href= "/contact">Contact</Link></Button> 
           {/* <div> <a href="#" css = {css`
               color: white;
                 line-height: inherit;

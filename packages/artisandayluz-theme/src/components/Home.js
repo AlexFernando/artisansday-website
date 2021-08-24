@@ -5,10 +5,7 @@ import Link from './Link';
 import {EventItem, EventInfo, EventInfoFirst, EventInfoSecond, EventWrapLink, ImageStyled} from './allEvents';
 import LinkButtonHome from './LinkButtonHome';
 import LinkButtonHomeSecond from './LinkButtonHomeSecond';
-
 import Loading from './Loading';
-
-
 
 const HomePage = ({state, actions, libraries}) => {
 
@@ -70,7 +67,7 @@ const HomePage = ({state, actions, libraries}) => {
                 
                 <div>
                     <LinkButtonHome href="/fullprogram" >FullProgram</LinkButtonHome>
-                    <LinkButtonHomeSecond href="/contact">Contact</LinkButtonHomeSecond>
+                    <LinkButtonHomeSecond href="/create-event">Create an Event</LinkButtonHomeSecond>
                 </div>
             </MainContainer>
         

@@ -1,5 +1,4 @@
 import Root from './Root';
-import tribeEventsHandler from './components/handler'
 
 export default {
   name: "artisandayluz-theme",
@@ -25,12 +24,4 @@ export default {
       },
     },
   },
-
-  actions: {
-    theme: {
-      init: ({ libraries }) => {
-        libraries.source.handlers.push(tribeEventsHandler);
-      },
-    }, 
-  }
 };
