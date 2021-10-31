@@ -186,7 +186,7 @@ const MyForm = styled.form`
 
     select {
         height: 5vh;
-        width: 60vw;
+        width: 30vw;
         font-size: 1.2rem;
         background-color: #206d92;
         border-color: #206d92;

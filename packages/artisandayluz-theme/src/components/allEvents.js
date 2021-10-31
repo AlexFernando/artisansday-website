@@ -129,11 +129,6 @@ const allEvents = ( {state, libraries, actions} ) => {
             }
         })
     }
-
-
-    console.log("dates: ", filterByDate);
-
-    console.log("categories: ", filteredByTag);
     //DATES CALENDAR ENDS//
 
     return(
