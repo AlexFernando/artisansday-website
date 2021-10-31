@@ -9,6 +9,8 @@ import Footer from './components/footer';
 import Contact from './components/contact';
 import StayInTouch from './components/stayInTouch';
 import About from './components/about';
+import CreateEvent from './components/createEvent';
+
 
 const Root = ({state, actions}) => {
 
@@ -63,8 +65,10 @@ const Root = ({state, actions}) => {
 
         {state.router.link === "/about/" && <About/>}
 
+        {data.isCreateEvent && <CreateEvent />}
+
         <Contact />
-            
+        
         <Footer title={"Artisan's Day Luz"}/>   
       </>
     );

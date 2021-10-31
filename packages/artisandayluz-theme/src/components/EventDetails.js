@@ -116,7 +116,7 @@ let event = {
 }
  
 export const EventDetailsContainer = styled.div`
-    margin: 8rem 2rem 0 2rem;
+    margin: 12rem 5rem 0 2rem;
 
     h3 {
         letter-spacing: 1px;
