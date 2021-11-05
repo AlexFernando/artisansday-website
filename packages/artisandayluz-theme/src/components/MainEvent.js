@@ -81,8 +81,6 @@ const MainEvent = ({state, actions}) => {
                 </div>
                 
             </MoreDetails>
- 
-      
         </MainEventContainer>
         }
     </>

@@ -31,6 +31,7 @@
     "artisandayluz-theme": "file:packages/artisandayluz-theme",
     "frontity": "^1.14.3",
     "moment-timezone": "^0.5.33",
+    "react-multi-carousel": "^2.6.5",
     "react-tabtab": "^2.0.0",
     "styled-components": "^4.4.1"
   }
