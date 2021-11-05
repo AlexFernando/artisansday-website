@@ -30,6 +30,8 @@
     "@frontity/wp-source": "^1.11.2",
     "artisandayluz-theme": "file:packages/artisandayluz-theme",
     "frontity": "^1.14.3",
-    "moment-timezone": "^0.5.33"
+    "moment-timezone": "^0.5.33",
+    "react-tabtab": "^2.0.0",
+    "styled-components": "^4.4.1"
   }
 }

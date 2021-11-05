@@ -5,6 +5,7 @@ import Image from "@frontity/components/image";
 import Link from './Link';
 import Loading from './Loading';
 import useFilterTags from '../hooks/useFilterTags';
+import {NoEventsParagraph} from './Home';
 
 const allEvents = ( {state, libraries, actions} ) => {
 
@@ -144,69 +145,74 @@ const allEvents = ( {state, libraries, actions} ) => {
                         {FilterSubcategoriesUI()}
                     </TagsContainer>
                     <ButtonContainerEvents>
-                        <ButtonStylesEvents onClick={() => SetView(0)}>Monday</ButtonStylesEvents>
-                        <ButtonStylesEvents onClick={() => SetView(1)}>Tuesday</ButtonStylesEvents>
-                        <ButtonStylesEvents onClick={() => SetView(2)}>Wednesday</ButtonStylesEvents>
-                        <ButtonStylesEvents onClick={() => SetView(3)}>Sunday</ButtonStylesEvents>
                         <ButtonStylesEvents onClick={() => SetView(4)}>Thursday</ButtonStylesEvents>
                         <ButtonStylesEvents onClick={() => SetView(5)}>Friday</ButtonStylesEvents>
                         <ButtonStylesEvents onClick={() => SetView(6)}>Saturday</ButtonStylesEvents>
+
+                        <ButtonStylesEvents onClick={() => SetView(3)}>Sunday</ButtonStylesEvents>
+
+                        <ButtonStylesEvents onClick={() => SetView(0)}>Monday</ButtonStylesEvents>
+                        <ButtonStylesEvents onClick={() => SetView(1)}>Tuesday</ButtonStylesEvents>
+                        <ButtonStylesEvents onClick={() => SetView(2)}>Wednesday</ButtonStylesEvents>
+
                     </ButtonContainerEvents>
 
                     {data.isReady && eventsOfToday.length > 0 && filterByDate.length === 0 && filteredByTag.length === 0  ? 
-                        <><h1>Today Events</h1>
+                        <>
+                        
+                        <h1>Today Events</h1>
+
                         <EventContainer>
                             
                             {
 
                                 eventsOfToday.map( event => {
                                     //const arrDate = event.acf.start_date.split("/");
-                            //array months to get date data
-                            const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+                                    //array months to get date data
+                                    const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-                            // new date time to delete old custom fields
-                            const arrDateTimeStart = event.acf.date_time_start.split(" ");
+                                    // new date time to delete old custom fields
+                                    const arrDateTimeStart = event.acf.date_time_start.split(" ");
 
-                            const arrDateAlt = arrDateTimeStart[0].split("-");
-                        
-                            const timeStart = arrDateTimeStart[1];
-                        
-                            const arrDateTimeEnd = event.acf.date_time_end.split(" ");
-                        
-                            const timeEnd = arrDateTimeEnd[1];
-                            
-                            return(
+                                    const arrDateAlt = arrDateTimeStart[0].split("-");
                                 
-                                <EventWrapLink>
-                                    <Link href={event.link}>
-                                    <EventItem key={event.id}>
-                                        <ImageStyled src={event.acf.image_event.sizes.medium} />
-                                                                
-                                        <EventInfo>
-                                            <EventInfoFirst>
-                                                <span>{monthsName[arrDateAlt[1]-1]}</span>
-                                                <span>{arrDateAlt[2]}</span>
-                                            </EventInfoFirst>
-                
-                                            <EventInfoSecond>
-                                                <span>{timeStart} - {timeEnd} <i>*{event.acf.timezone}</i></span>
-                                                <h3>{event.acf.title}</h3>
-                                                <span>Free</span>
-                                            </EventInfoSecond>    
-                                        </EventInfo>
-                                        
-                                    </EventItem>
-                                    </Link>
-                                </EventWrapLink>
+                                    const timeStart = arrDateTimeStart[1];
+                                
+                                    const arrDateTimeEnd = event.acf.date_time_end.split(" ");
+                                
+                                    const timeEnd = arrDateTimeEnd[1];
                             
-                            )       
+                                    return(
+                                        
+                                        <EventWrapLink>
+                                            <Link href={event.link}>
+                                            <EventItem key={event.id}>
+                                                <ImageStyled src={event.acf.image_event.sizes.medium} />
+                                                                        
+                                                <EventInfo>
+                                                    <EventInfoFirst>
+                                                        <span>{monthsName[arrDateAlt[1]-1]}</span>
+                                                        <span>{arrDateAlt[2]}</span>
+                                                    </EventInfoFirst>
+                        
+                                                    <EventInfoSecond>
+                                                        <span>{timeStart} - {timeEnd} <i>*{event.acf.timezone}</i></span>
+                                                        <h3>{event.acf.title}</h3>
+                                                        <span>Free</span>
+                                                    </EventInfoSecond>    
+                                                </EventInfo>
+                                                
+                                            </EventItem>
+                                            </Link>
+                                        </EventWrapLink>
+                                    
+                                    )       
                                 })
                             }
                         </EventContainer>
 
                         </>
-                        :null
-
+                        : null
                     } 
 
 
@@ -263,7 +269,6 @@ const allEvents = ( {state, libraries, actions} ) => {
                         </EventContainer>
 
                     : null
-                    
                     }
                 
             {data.isReady && filteredByTag.length > 0 ?
@@ -318,6 +323,11 @@ const allEvents = ( {state, libraries, actions} ) => {
                 </EventContainer>
                 : null
             }
+
+            {data.isReady && eventsOfToday.length === 0 && filteredByTag.length === 0 && filterByDate.length === 0 ?
+                <NoEventsParagraph>There's no events to show you</NoEventsParagraph>
+                : null
+            } 
         </PageContainer>
         )
 }

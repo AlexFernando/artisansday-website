@@ -42,17 +42,17 @@ const EventDetails = ({state, libraries}) => {
     let startDateTime = moment.tz(postEvent.acf.date_time_start, postEvent.acf.timezone);
     let endDateTime = moment.tz(postEvent.acf.date_time_end, postEvent.acf.timezone);
 
-//TIMEZONE
+    //TIMEZONE
 
-//ADD TO MY CALENDAR
-let event = {
-    name: postEvent.acf.title,
-    details: "Let's go after work",
-    location: postEvent.acf.timezone,
-    startsAt: startDateTime.format(),
-    endsAt: endDateTime.format(),
-}
-// ADD TO MY CALENDAR ENDS 
+    //ADD TO MY CALENDAR
+    let event = {
+        name: postEvent.acf.title,
+        details: "Let's go after work",
+        location: postEvent.acf.timezone,
+        startsAt: startDateTime.format(),
+        endsAt: endDateTime.format(),
+    }
+    // ADD TO MY CALENDAR ENDS 
 
     return ( 
         <EventDetailsContainer>
@@ -84,25 +84,25 @@ let event = {
                         <span><strong>Time:</strong> <br></br> {timeStart} - {timeEnd}</span>
                     </div>
                     <div>
-                        <span><strong>Cost:</strong> <br></br> Free</span>
+                        <span><strong>Cost:</strong> <br></br> {postEvent.acf.cost}</span>
                     </div>
 
                     <div>
-                        <span><strong>Event Category: </strong> <br></br> {postEvent.category}</span>
+                        <span css={css`text-transform:capitalize;`}><strong>Event Category: </strong> <br></br> {postEvent.category}</span>
                     </div>
 
                     <div>
-                        <span><strong>Language: </strong> <br></br> {postEvent.acf.language_event}</span>
+                        <span css={css`text-transform:capitalize;`}><strong>Language: </strong> <br></br> {postEvent.acf.language_event}</span>
                     </div>
                 </div>
 
                 <div>
                     <h4>Organizer</h4>
                     <div>
-                        <span>{postEvent.acf.organizer}</span>
+                        <span css={css`text-transform:capitalize;`}>{postEvent.acf.organizer}</span>
                     </div>
                     <div>
-                        <span><strong>Email: </strong> <br></br> organizer@example.com</span>
+                        <span><strong>Email: </strong> <br></br> {postEvent.acf.organizer_email}</span>
                     </div>
                     <div>
                         <a href={postEvent.acf.link_to_website} target="_blank" rel="noopener noreferrer">View Organizer Website</a>
@@ -166,10 +166,6 @@ export const MoreDetails = styled.div`
 
     div {
         margin-bottom: 1rem;
-
-        span {
-            text-transform: capitalize;
-        }
     }
 
     h4 {

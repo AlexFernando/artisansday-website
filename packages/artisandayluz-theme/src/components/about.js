@@ -4,27 +4,16 @@ import Loading from './Loading';
 
 //icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSeedling, faRainbow, faCampground, faHeart} from '@fortawesome/free-solid-svg-icons';
+import { faSeedling, faRainbow, faCampground, faHeart, faHands} from '@fortawesome/free-solid-svg-icons';
+
+// react tab tab
+import {Tabs, TabList, Tab, PanelList, Panel} from 'react-tabtab';
+import * as customStyle from 'react-tabtab/lib/themes/bulma/index';
 
 const About = ({state}) => {
 
     const pageAbout = state.source.page[422];
 
-    console.log("pageAbout: ", pageAbout)
-
-    const[view, setView] = useState(0);
-    const [colorsActive, setColorsActive] = useState([
-        false,
-        false,
-        false,
-        false,
-    ]);
-
-    const setActions = (id, e) => {
-        setView(id);
-    }
-
-    // ver aproach con e.target
     return(
 
         <>
@@ -34,168 +23,139 @@ const About = ({state}) => {
 
             <h1>{pageAbout.acf.about_main_title}</h1>
 
-            <ButtonContainer>
-                <ButtonStyles onClick={(e) => setActions(0, e)}>{pageAbout.acf.purpose_title}</ButtonStyles>                
-                <ButtonStyles onClick={(e) => setActions(1, e)}>{pageAbout.acf.why_title}</ButtonStyles>
-                <ButtonStyles onClick={(e) => setActions(2, e)}>{pageAbout.acf.what_title}</ButtonStyles>             
-                <ButtonStyles onClick={(e) => setActions(3, e)}>{pageAbout.acf.proposal_title}</ButtonStyles>   
-            </ButtonContainer>
-
-            <div>
-                {view === 0 ? 
-                    <div>
-                <InfoContainer>
-                    <InfoElem>
-                        <FontAwesomeIconStyled icon={faSeedling} />
-                        <p>{pageAbout.acf.purpose_paragraph_first}</p>
-                    </InfoElem>
-
-                    <InfoElem>
-                        <FontAwesomeIconStyled icon={faRainbow} />
-                        <p>{pageAbout.acf.purpose_paragraph_second}</p>
-                    </InfoElem>
-
-                    <InfoElem>
-                        <FontAwesomeIconStyled icon={faCampground} />
-                        <p>{pageAbout.acf.purpose_paragraph_third}</p>
-                    </InfoElem>
-
-                    <InfoElem>
-                        <FontAwesomeIconStyled icon={faHeart} />
-                        <p>{pageAbout.acf.purpose_paragraph_fourth}</p>
-                    </InfoElem>
-                </InfoContainer>
-                    </div>
+            <Tabs customStyle={customStyle}>
+                <TabList>
+                    <Tab>{pageAbout.acf.purpose_title}</Tab>
+                    <Tab>{pageAbout.acf.what_title}</Tab>
+                    <Tab>{pageAbout.acf.why_title}</Tab>
+                    <Tab>{pageAbout.acf.proposal_title}</Tab>
+                </TabList>
                 
-                : ''}
-                {view === 1 ? 
-                    <InfoContainer>
-                        <InfoElem>
-                            <FontAwesomeIconStyled icon={faSeedling} />
-                    
-                            <p>
-                                {pageAbout.acf.why_paragraph_first}
-                            </p>
-                        </InfoElem>
-    
-                        <InfoElem>
-                            <FontAwesomeIconStyled icon={faRainbow} />
-                            
-                            <p>
-                                {pageAbout.acf.why_paragraph_second}
-                            </p>
-                        </InfoElem>
-    
-                        <InfoElem>
-                            <FontAwesomeIconStyled icon={faCampground} />
-                            <p>
-                                {pageAbout.acf.why_paragraph_third}
-                            </p>
-                        </InfoElem>
-    
-                        <InfoElem>
-                            <FontAwesomeIconStyled icon={faHeart} />
-                            <p>
-                                {pageAbout.acf.why_paragraph_fourth}
-                            </p>
-                        </InfoElem>
-                    </InfoContainer>
-                : ''}
-                {view === 2 ? 
-                    <>
-                    <InfoContainer>
-                        <InfoElem>
-                            <FontAwesomeIconStyled icon={faSeedling} />
-                            <p>
-                                {pageAbout.acf.what_paragraph_first}
-                            </p>
-                        </InfoElem>
-    
-                        <InfoElem>
-                            <FontAwesomeIconStyled icon={faRainbow} />
-                            <p>
-                                {pageAbout.acf.what_paragraph_second}
-                            </p>
-                        </InfoElem>
-    
-                        <InfoElem>
-                            <FontAwesomeIconStyled icon={faCampground} />
-                            <p>
-                                {pageAbout.acf.what_paragraph_third}
-                            </p>
-                        </InfoElem>
-    
-                        <InfoElem>
-                            <FontAwesomeIconStyled icon={faHeart} />
-                            <p>
-                                {pageAbout.acf.what_paragraph_fourth} 
-                            </p>
-                        </InfoElem>
-                    </InfoContainer>
-                    <InfoContainer>
-                        <InfoElem>
-                            <h3>{pageAbout.acf.why_title_fifth}</h3>
-                            <p>
-                                {pageAbout.acf.why_paragraph_fifth}
-                            </p>
-                        </InfoElem>
+                <PanelList>
+                    <Panel>
+                        <InfoContainer>
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faSeedling} />
+                                <p>{pageAbout.acf.purpose_paragraph_first}</p>
+                            </InfoElem>
 
-                        <InfoElem>
-                            <h3>{pageAbout.acf.why_title_six}</h3>
-                            <p>
-                                {pageAbout.acf.why_paragraph_six}
-                            </p>
-                        </InfoElem>
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faRainbow} />
+                                <p>{pageAbout.acf.purpose_paragraph_second}</p>
+                            </InfoElem>
 
-                        <InfoElem>
-                            <h3>{pageAbout.acf.why_title_seven} </h3>
-                            <p>
-                                {pageAbout.acf.why_paragraph_seven}
-                            </p>
-                        </InfoElem>
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faHands} />
+                                <p>{pageAbout.acf.purpose_paragraph_third}</p>
+                            </InfoElem>
 
-                        <InfoElem>
-                            <h3>{pageAbout.acf.why_title_eight}</h3>
-                            <p>
-                                {pageAbout.acf.why_paragraph_eight}
-                            </p>
-                        </InfoElem>
-                    </InfoContainer>
-                </>
-                : ''}
-                {view === 3 ? 
-                  <InfoContainer>
-                    <InfoElem>
-                        <FontAwesomeIconStyled icon={faSeedling} />
-                        <p>
-                            {pageAbout.acf.proposal_paragraph_first}
-                        </p>
-                    </InfoElem>
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faHeart} />
+                                <p>{pageAbout.acf.purpose_paragraph_fourth}</p>
+                            </InfoElem>
+                        </InfoContainer>
+                    </Panel>
 
-                    <InfoElem>
-                        <FontAwesomeIconStyled icon={faRainbow} />
-                        <p>
-                            {pageAbout.acf.proposal_paragraph_second}
-                        </p>
-                    </InfoElem>
+                    <Panel>
+                        <InfoContainer>
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faSeedling} />
+                        
+                                <p>
+                                    {pageAbout.acf.why_paragraph_first}
+                                </p>
+                            </InfoElem>
+        
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faRainbow} />
+                                
+                                <p>
+                                    {pageAbout.acf.why_paragraph_second}
+                                </p>
+                            </InfoElem>
+        
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faHands} />
+                                <p>
+                                    {pageAbout.acf.why_paragraph_third}
+                                </p>
+                            </InfoElem>
+        
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faHeart} />
+                                <p>
+                                    {pageAbout.acf.why_paragraph_fourth}
+                                </p>
+                            </InfoElem>
+                        </InfoContainer>
+                    </Panel>
 
-                    <InfoElem>
-                        <FontAwesomeIconStyled icon={faCampground} />
-                        <p>
-                            {pageAbout.acf.proposal_paragraph_third}
-                        </p>
-                    </InfoElem>
+                    <Panel>
+                        <InfoContainer>
+                            <InfoElem>
+                                <h3>{pageAbout.acf.why_title_fifth}</h3>
+                                <p>
+                                    {pageAbout.acf.why_paragraph_fifth}
+                                </p>
+                            </InfoElem>
 
-                    <InfoElem>
-                        <FontAwesomeIconStyled icon={faHeart} />
-                        <p>
-                            {pageAbout.acf.proposal_paragraph_fourth}
-                        </p>
-                    </InfoElem>
-                  </InfoContainer>
-                : ''}
+                            <InfoElem>
+                                <h3>{pageAbout.acf.why_title_six}</h3>
+                                <p>
+                                    {pageAbout.acf.why_paragraph_six}
+                                </p>
+                            </InfoElem>
 
-            </div>
+                            <InfoElem>
+                                <h3>{pageAbout.acf.why_title_seven} </h3>
+                                <p>
+                                    {pageAbout.acf.why_paragraph_seven}
+                                </p>
+                            </InfoElem>
+
+                            <InfoElem>
+                                <h3>{pageAbout.acf.why_title_eight}</h3>
+                                <p>
+                                    {pageAbout.acf.why_paragraph_eight}
+                                </p>
+                            </InfoElem>
+                        </InfoContainer>
+                    </Panel>
+
+                    <Panel>
+                        <InfoContainer>
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faSeedling} />
+                                <p>
+                                    {pageAbout.acf.proposal_paragraph_first}
+                                </p>
+                            </InfoElem>
+
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faRainbow} />
+                                <p>
+                                    {pageAbout.acf.proposal_paragraph_second}
+                                </p>
+                            </InfoElem>
+
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faHands} />
+                                <p>
+                                    {pageAbout.acf.proposal_paragraph_third}
+                                </p>
+                            </InfoElem>
+
+                            <InfoElem>
+                                <FontAwesomeIconStyled icon={faHeart} />
+                                <p>
+                                    {pageAbout.acf.proposal_paragraph_fourth}
+                                </p>
+                            </InfoElem>
+                        </InfoContainer>
+                    </Panel>
+                </PanelList>
+            </Tabs>
+
         </AboutContainer>
 
         </>
@@ -210,7 +170,6 @@ export default connect(About)
 const AboutContainer = styled.div`
 
     margin-top: 12rem;
-
 
     h1{
         text-align: center;
@@ -271,12 +230,12 @@ const InfoElem = styled.div`
     padding: 20px;
     font-size: 1rem;
     text-align: center;
+    line-height: 1.5;
 
     h3 {
         font-size: 1.6rem;
         font-weight: 400;
         margin-bottom: 0;
-
     }
 
     p {
@@ -284,6 +243,8 @@ const InfoElem = styled.div`
         color: #6c757d;
         margin-left: 0rem;
         margin-right: 0rem;
+        text-align: justify;
+
     }  
 `
 
@@ -292,48 +253,3 @@ const FontAwesomeIconStyled = styled(FontAwesomeIcon)`
     font-size: 5rem;
 `;
 
-
-
-/* export const IconsContainer = styled.div`
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin: 4rem 0;
-
-    @media(max-width: 768px) {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: 0;
-    }
-`;
-
-const IconsInfo = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-basis: 20%;
- 
-
-    h3 {
-        font-size: 1.6rem;
-        font-weight: 400;
-        margin-bottom: 0;
-    }
-
-    p {
-        font-size: 1.2rem;
-        color: #6c757d;
-        text-align: center;
-        margin-left: 2rem;
-        margin-right: 2rem;
-
-        @media(max-width: 768px) {
-            p {
-                margin-left: 0;
-                margin-right: 0;
-            }
-        }
-    }   
-` */
