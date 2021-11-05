@@ -79,11 +79,9 @@ const HomePage = ({state, actions, libraries}) => {
             <h2>
                 {pageHome.acf.about_title}
             </h2>
-        
-                
-                {pageHome.acf.description_about.split("*").map( paragraph => paragraph.trim() === "$"? <br></br> : <p>{paragraph}</p>)}
-       
             
+            {pageHome.acf.description_about.split("*").map( paragraph => paragraph.trim() === "$"? <br></br> : <p>{paragraph}</p>)}
+
         </AboutContainer>
 
         <DayProgramContainer>
@@ -112,31 +110,28 @@ const HomePage = ({state, actions, libraries}) => {
 
                     <EventWrapLink>
                         <Link href={event.link}>
-                        <EventItem key={event.id}>
-                            <ImageStyled src={event.acf.image_event.sizes.medium_large}/>
-                                                    
-                            <EventInfo>
-                                <EventInfoFirst>
-                                    <span>{monthsName[arrDateAlt[1]-1]}</span>
-                                    <span>{arrDateAlt[2]}</span>
-                                </EventInfoFirst>
+                            <EventItem key={event.id}>
+                                <ImageStyled src={event.acf.image_event.sizes.medium_large}/>
+                                                        
+                                <EventInfo>
+                                    <EventInfoFirst>
+                                        <span>{monthsName[arrDateAlt[1]-1]}</span>
+                                        <span>{arrDateAlt[2]}</span>
+                                    </EventInfoFirst>
 
-                                <EventInfoSecond>
-                                    <span>{timeStart} - {timeEnd}</span>
-                                    <h3>{event.acf.title}</h3>
-                                    <span>Free</span>
-                                </EventInfoSecond>    
-                            </EventInfo>
-                            
-                            {/* <a>Link Website : {event.acf.link_to_website}</a> */}
-
-                        </EventItem>
+                                    <EventInfoSecond>
+                                        <span>{timeStart} - {timeEnd}</span>
+                                        <h3>{event.acf.title}</h3>
+                                        <span>Free</span>
+                                    </EventInfoSecond>    
+                                </EventInfo>
+                            </EventItem>
                         </Link>
                      </EventWrapLink>
                  )
                 })
 
-                : null
+                : <NoEventsParagraph>There's no events for today</NoEventsParagraph>
                 }
                 </TodayEvents>
             </DayProgramContainer>
@@ -194,6 +189,7 @@ const MainContainer = styled.div`
             font-family: 'Montserrat', sans-serif;
             width: 70%;
             font-size: 1rem;
+            text-align: justify;
 
             @media(max-width: 768px) {
                 width: 100%;
@@ -281,9 +277,16 @@ const AboutContainer = styled.div`
         color: #4a4a4a;
         margin-top: 0;
         margin-bottom: 0;
+        text-align: justify;
     }   
 
     @media(max-width: 768px) {
         padding: 1rem 0;
     }
+`
+export const NoEventsParagraph = styled.p`
+    font-size: 2rem;
+    line-height: 2;
+    color: #4a4a4a;
+    margin: 3rem 0;
 `

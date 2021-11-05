@@ -28,6 +28,9 @@ const NavBar = ({state}) => {
         <>             
             <Navbox>
                 <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
+                    <Link href= "/">Home</Link>
+                </Button> 
+                <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
                     <Link href= "/about">About</Link>
                 </Button> 
 
@@ -41,52 +44,17 @@ const NavBar = ({state}) => {
                 <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
                     <Link href="/contact">Contact</Link>
                 </Button>
-
-                {/* <div> <a href="#" css = {css`
-                    color: white;
-                    line-height: inherit;
-                    text-decoration: none;
-                    cursor: pointer;
-
-                    background-color: #203492;
-                    padding: 15px 20px;
-                    border: 1px none #000;
-                    font-size: 16px;
-                    text-align: center;
-                    transition: transform 500ms cubic-bezier(.23, 1, .32, 1), color 200ms ease, opacity 200ms ease, -webkit-transform 500ms cubic-bezier(.23, 1, .32, 1);
-                    
-                    box-shadow: 4px 4px 0 0 #7ea2b2;
-                    letter-spacing: 1px;
-                    border-radius: 0px;
-                `}>
-                Day's Program</a></div> */}
             </Navbox>
         </>
 
       ) : (
         <>
         <Navbox open>
+          <Button><Link href= "/">Home</Link></Button> 
           <Button><Link href= "/about">About</Link></Button> 
           <Button><Link href="/fullprogram">Full Program</Link></Button> 
           <Button> <Link href= "/mainevent">Main Event</Link></Button> 
           <Button> <Link href= "/contact">Contact</Link></Button> 
-          {/* <div> <a href="#" css = {css`
-              color: white;
-                line-height: inherit;
-                text-decoration: none;
-                cursor: pointer;
-
-                background-color: #203492;
-                padding: 15px 20px;
-                border: 1px none #000;
-                font-size: 16px;
-                text-align: center;
-                transition: transform 500ms cubic-bezier(.23, 1, .32, 1), color 200ms ease, opacity 200ms ease, -webkit-transform 500ms cubic-bezier(.23, 1, .32, 1);
-                
-                box-shadow: 4px 4px 0 0 #7ea2b2;
-                letter-spacing: 1px;
-                border-radius: 0px;
-          `} >Day's Program</a></div> */}
         </Navbox>
   </>
       )}

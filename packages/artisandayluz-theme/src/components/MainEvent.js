@@ -148,6 +148,7 @@ const TextDescription = styled.div`
     p {
         font-size: 1.3rem;
         color: #4a4a4a;
+        text-align: justify;
     }
 
     @media(max-width: 768px) {
