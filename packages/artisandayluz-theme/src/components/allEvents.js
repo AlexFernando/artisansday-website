@@ -7,6 +7,30 @@ import Loading from './Loading';
 import useFilterTags from '../hooks/useFilterTags';
 import {NoEventsParagraph} from './Home';
 
+/**CAROUSEL EVENTS */
+import Carousel from "react-multi-carousel";
+import multiCarouselStyles from  "react-multi-carousel/lib/styles.css";
+import generalStyles from '../styles/generalStyles.css';
+
+const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+      paritialVisibilityGutter: 60
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+      paritialVisibilityGutter: 50
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+      paritialVisibilityGutter: 30
+    }
+  };
+
+
 const allEvents = ( {state, libraries, actions} ) => {
 
     useEffect( () => {
@@ -162,55 +186,63 @@ const allEvents = ( {state, libraries, actions} ) => {
                         
                         <h1>Today Events</h1>
 
-                        <EventContainer>
+                     
+                            <EventContainer>
+                            <Global styles={generalStyles,multiCarouselStyles} />
+                            <Carousel
+                                ssr
+                                partialVisbile
+                                itemClass="image-item"
+                                responsive={responsive}
+                            >
                             
-                            {
+                                {
+                                    eventsOfToday.map( event => {
+                                        //const arrDate = event.acf.start_date.split("/");
+                                        //array months to get date data
+                                        const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-                                eventsOfToday.map( event => {
-                                    //const arrDate = event.acf.start_date.split("/");
-                                    //array months to get date data
-                                    const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+                                        // new date time to delete old custom fields
+                                        const arrDateTimeStart = event.acf.date_time_start.split(" ");
 
-                                    // new date time to delete old custom fields
-                                    const arrDateTimeStart = event.acf.date_time_start.split(" ");
-
-                                    const arrDateAlt = arrDateTimeStart[0].split("-");
-                                
-                                    const timeStart = arrDateTimeStart[1];
-                                
-                                    const arrDateTimeEnd = event.acf.date_time_end.split(" ");
-                                
-                                    const timeEnd = arrDateTimeEnd[1];
-                            
-                                    return(
-                                        
-                                        <EventWrapLink>
-                                            <Link href={event.link}>
-                                            <EventItem key={event.id}>
-                                                <ImageStyled src={event.acf.image_event.sizes.medium} />
-                                                                        
-                                                <EventInfo>
-                                                    <EventInfoFirst>
-                                                        <span>{monthsName[arrDateAlt[1]-1]}</span>
-                                                        <span>{arrDateAlt[2]}</span>
-                                                    </EventInfoFirst>
-                        
-                                                    <EventInfoSecond>
-                                                        <span>{timeStart} - {timeEnd} <i>*{event.acf.timezone}</i></span>
-                                                        <h3>{event.acf.title}</h3>
-                                                        <span>Free</span>
-                                                    </EventInfoSecond>    
-                                                </EventInfo>
-                                                
-                                            </EventItem>
-                                            </Link>
-                                        </EventWrapLink>
+                                        const arrDateAlt = arrDateTimeStart[0].split("-");
                                     
-                                    )       
-                                })
-                            }
-                        </EventContainer>
-
+                                        const timeStart = arrDateTimeStart[1];
+                                    
+                                        const arrDateTimeEnd = event.acf.date_time_end.split(" ");
+                                    
+                                        const timeEnd = arrDateTimeEnd[1];
+                                
+                                        return(
+                                            
+                                            <EventWrapLink>
+                                                <Link href={event.link}>
+                                                <EventItem key={event.id}>
+                                                    <ImageStyled src={event.acf.image_event.sizes.medium} />
+                                                                            
+                                                    <EventInfo>
+                                                        <EventInfoFirst>
+                                                            <span>{monthsName[arrDateAlt[1]-1]}</span>
+                                                            <span>{arrDateAlt[2]}</span>
+                                                        </EventInfoFirst>
+                            
+                                                        <EventInfoSecond>
+                                                            <span>{timeStart} - {timeEnd} <i>*{event.acf.timezone}</i></span>
+                                                            <h3>{event.acf.title}</h3>
+                                                            <span>Free</span>
+                                                        </EventInfoSecond>    
+                                                    </EventInfo>
+                                                    
+                                                </EventItem>
+                                                </Link>
+                                            </EventWrapLink>
+                                        
+                                        )       
+                                    })
+                                }
+                            </Carousel>
+                            </EventContainer>
+                 
                         </>
                         : null
                     } 
@@ -219,6 +251,14 @@ const allEvents = ( {state, libraries, actions} ) => {
                     {data.isReady && filterByDate.length > 0 ?
                     
                         <EventContainer>
+                              
+                            <Global styles={generalStyles, multiCarouselStyles} />
+                            <Carousel
+                                ssr
+                                partialVisbile
+                                itemClass="image-item"
+                                responsive={responsive}
+                            >
                             {
                                 
                                 filterByDate.map( event => {
@@ -266,6 +306,8 @@ const allEvents = ( {state, libraries, actions} ) => {
                                 })
 
                             }   
+
+                            </Carousel>
                         </EventContainer>
 
                     : null
@@ -274,6 +316,14 @@ const allEvents = ( {state, libraries, actions} ) => {
             {data.isReady && filteredByTag.length > 0 ?
                 
                 <EventContainer>
+                
+                    <Global styles={generalStyles, multiCarouselStyles} />
+                    <Carousel
+                        ssr
+                        partialVisbile
+                        itemClass="image-item"
+                        responsive={responsive}
+                    >
                     
                     {                  
                         filteredByTag.map( event => {
@@ -320,7 +370,12 @@ const allEvents = ( {state, libraries, actions} ) => {
                             )
                         })
                     }
+
+                </Carousel>
+
                 </EventContainer>
+
+                
                 : null
             }
 
@@ -359,12 +414,14 @@ const PageContainer = styled.div`
 export const TagsContainer = styled.div`
     flex-basis: 100%;
 `
-export const EventContainer = styled.div`
-    display:flex;
+export const EventContainer = styled.section`
+    /* display:flex;
     justify-content: space-around;
     align-content: center;
     flex-wrap: wrap;
-    margin: 4rem 0;
+    margin: 4rem 0; */
+
+    margin: "20px 0 20px 0";
 `;
 
 export const EventWrapLink = styled.div`
@@ -432,6 +489,7 @@ export const EventInfoSecond = styled.div`
 export const ButtonContainerEvents = styled.div`
     display: flex;
     margin-left: 1rem;
+    margin-bottom: 3rem;
 
     @media (max-width: 768px){
         flex-direction: column;

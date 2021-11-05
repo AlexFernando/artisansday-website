@@ -3,6 +3,10 @@ import {styled, connect, Global, css} from "frontity";
 
 import { useDetectOutsideClick } from "../hooks/useDectectOutsideClick";
 
+//icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faRunning, faSeedling, faDiagnoses } from '@fortawesome/free-solid-svg-icons'
+
 const useFilterTags = () => {
     
     const [allCategory, saveCategory] = useState('');
@@ -87,76 +91,42 @@ const useFilterTags = () => {
 
     let option;
 
+    //icons
+    const faIconsArr = [faUser, faUser, faUser, faDiagnoses, faSeedling, faRunning]
+
     //porque parentesis y no llaves?
     const FilterSubcategoriesUI = () => (
 
-        <Categories>
+        <MyForm>
+                      
+            {realCategories.map((option, index) => (
+                <div>
+                    <div>
+                        <FontIconCategoryStyle icon={faIconsArr[index]}/>
+                        <p>{option.name}</p>
+                    </div>
+                    
+                    <select
+                        onChange = { e => saveCategory(e.target.value) }
+                        value={allCategory}
+                    >
 
-            {/* <Global styles={antdGlobalStyles} />  */}
+                    <option>Select</option>
+
+                    <>
+                    {<option css={css`font-weight: 700`}> {option.name}</option>}
+                        {
+                            option.subcategories.length > 0 ? option.subcategories.map( subCategorie => <option>&nbsp;&nbsp;&nbsp;{subCategorie}</option>) : null
+                        }
+                    </>
+
+                    </select>
+
+                </div>
+            ))}
 
 
-            {/* {realCategories.map(option => (
-                <>
-                <ButtonCategory onClick = { (e) => saveCategory(option.name)}><span>{option.name}</span></ButtonCategory>
-                            
-                {
-                    option.subcategories.length > 0 ? option.subcategories.map( subCategorie => <ButtonSubCategory onClick = { () => saveCategory(subCategorie)}><span>{subCategorie}</span></ButtonSubCategory>) : null 
-                } 
-                </>
-            ))} */}
-
-            {/* <TreeSelect
-            
-                showSearch
-                style={{ width: '100%', border: '1px solid gray'}}
-                value={value}
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                placeholder="Select Category"
-                allowClear
-                size= 'large'
-                listHeight = {700}
-                treeDefaultExpandedKeys = {['All Categories']}
-                onChange={(e) => saveCategory(e)}
-            >
-                <TreeNode value="All Categories" title={<span style={{ color: '#203492'}}>All Categories</span>}>
-                    {
-                        realCategories.map(option => (
-                            <>
-                                <TreeNode value={option.name} title={<span style={{ color: '#08c' }}>{option.name}</span>}>
-                                
-                                        {
-                                            option.subcategories.length > 0 ? option.subcategories.map( subCategorie => 
-                                                <TreeNode value={subCategorie} title={<span style={{ color: '#8C65D3' }}>{subCategorie}</span>}></TreeNode>) : null 
-                                        }
-                            
-                                </TreeNode>
-                            </>
-                        ))
-                    }
-
-                </TreeNode>
-            </TreeSelect> */}
-
-            <MyForm>
-                <select
-                    onChange = { e => saveCategory(e.target.value) }
-                    value={allCategory}
-                >
-
-                    <option>Choose a Category</option>
-                  
-                    {realCategories.map(option => (
-                        <>
-                        {<option css={css`font-weight: 700`}> {option.name}</option>}
-                            {
-                                option.subcategories.length > 0 ? option.subcategories.map( subCategorie => <option>&nbsp;&nbsp;&nbsp;{subCategorie}</option>) : null
-                            }
-                        </>
-                    ))}
-                </select>
-            </MyForm>
-           
-        </Categories>
+        </MyForm>
     )
 
     return {
@@ -182,11 +152,20 @@ const Categories = styled.div`
 
 const MyForm = styled.form`
 
-    margin-bottom: 3rem;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 3rem;
+    margin-bottom: 5rem;
+    text-align: center;
+
+    @media(max-width: 768px) {
+        flex-direction: column;
+    } 
+    
 
     select {
         height: 5vh;
-        width: 30vw;
+        width: 12vw;
         font-size: 1.2rem;
         background-color: #206d92;
         border-color: #206d92;
@@ -202,4 +181,13 @@ const MyForm = styled.form`
             width: 80vw;
         }  
     }
+`
+
+const FontIconCategoryStyle = styled(FontAwesomeIcon)`
+    font-size: 3rem;
+    color: #00A36C;
+
+    @media(max-width: 768px) {
+        margin-top: 2rem;
+    }  
 `
