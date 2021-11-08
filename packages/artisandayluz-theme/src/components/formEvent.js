@@ -86,6 +86,8 @@ state.theme.objectForm = myFields;
 
             <div>
                 <label htmlFor="date_time_start">Datetime Start:</label><br></br>
+                <span>(If you don't see a calendar picker, follow this format "yyyy-dd-mm hh:mm:ss" for this field)</span>
+                <span>(Ex: 2021-01-12 10:30:00)</span>
                 <input                     
                     type="datetime-local" id="date_time_start"
                     name="date_time_start" defaultValue=""
@@ -95,6 +97,8 @@ state.theme.objectForm = myFields;
             </div> <br></br>
             <div>
                 <label htmlFor="date_time_end">DateTime End:</label><br></br>
+                <span>(If you don't see a calendar picker, follow this format "yyyy-dd-mm hh:mm:ss" for this field)</span>
+                <span>(Ex: 2021-01-12 10:30:00)</span>
                 <input                     
                     type="datetime-local" id="date_time_end"
                     name="date_time_end" defaultValue=""

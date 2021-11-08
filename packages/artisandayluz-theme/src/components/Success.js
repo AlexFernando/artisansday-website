@@ -2,18 +2,22 @@ import React, {useEffect} from "react";
 import { connect, styled } from "frontity";
 import Link from './Link'
 
-const Success = () => {
+const Success = ({state,actions}) => {
 
     return(
         <SuccessContainer>
             <h1>Your event has been uploaded!!</h1>
 
-            <h3>Check the event fullpage to see your event.</h3>
-
+            <p>Check your event at: </p> 
+                
             <div>
-                <a href="/">
+                <Link href={`/allevents/` + state.theme.bodyPostEvent.slug}>{`https://artisandayluz.com/allevents/` + state.theme.bodyPostEvent.slug}</Link>
+            </div>
+     
+            <div>
+                <Link href="/">
                     I'm done, log out.
-                </a>
+                </Link>
             </div>
         </SuccessContainer>
     )
@@ -44,7 +48,6 @@ const SuccessContainer = styled.div`
     div {
         display: flex;
         justify-content: space-around;
-        margin-top:2rem;
 
         a{
             list-style: none;
@@ -63,5 +66,11 @@ const SuccessContainer = styled.div`
                 margin-top: 2rem;
                 cursor: pointer;
         }
+    }
+
+    p {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 0;
     }
 `

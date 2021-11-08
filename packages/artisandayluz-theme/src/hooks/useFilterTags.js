@@ -106,7 +106,7 @@ const useFilterTags = () => {
                         <p>{option.name}</p>
                     </div>
                     
-                    <select
+                    <select required
                         onChange = { e => saveCategory(e.target.value) }
                         value={allCategory}
                     >
@@ -124,7 +124,6 @@ const useFilterTags = () => {
 
                 </div>
             ))}
-
 
         </MyForm>
     )

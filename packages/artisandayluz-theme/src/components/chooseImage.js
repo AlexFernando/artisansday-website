@@ -50,20 +50,31 @@ const ChooseImage = ({state, actions}) => {
         )}
       </label>
 
-      <input
-        type="file"
-        id="upload-button"
-        style={{ display: "none" }}
-        onChange={actions.theme.chooseImage}
-      />
 
-      <h2>Step 2: Choose an available Category or Subcategory for your event.</h2>
-        {FilterSubcategoriesUI()}
-    
-      <h2>Step 3: Press Upload, please.</h2>
-      <div>
-          <button onClick={actions.theme.postImageAction}>Upload</button>
-      </div>
+          
+        <>
+          <h2>Step 2: Choose an available Category or Subcategory for your event.</h2>
+          {FilterSubcategoriesUI()}
+      
+          <input
+            type="file"
+            id="upload-button"
+            style={{ display: "none" }}
+            onChange={actions.theme.chooseImage}
+          />
+        </>
+
+      {
+        state.theme.image.preview ?
+          <>
+            <h2>Step 3: Press Upload, please.</h2>
+            <div>
+                <button onClick={actions.theme.postImageAction}>Upload</button>
+            </div>
+          </>
+        :<p>Once you upload an image and choose a category, you'll be able to continue...</p>
+      }
+
           
     </ChooseImageStyled>
 
