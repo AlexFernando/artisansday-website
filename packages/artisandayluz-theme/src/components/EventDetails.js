@@ -30,10 +30,13 @@ const EventDetails = ({state, libraries}) => {
     const arrDateAlt = arrDateTimeStart[0].split("-");
 
     const timeStart = arrDateTimeStart[1];
+    const timeStartShort = timeStart.substring(0, timeStart.length -3)
 
     const arrDateTimeEnd = postEvent.acf.date_time_end.split(" ");
 
     const timeEnd = arrDateTimeEnd[1];
+    const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
+                                
 
     //array months to get date data
     const monthsName = ['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -57,7 +60,7 @@ const EventDetails = ({state, libraries}) => {
     return ( 
         <EventDetailsContainer>
             <h1>{postEvent.acf.title}</h1> 
-            <h3>{monthsName[arrDateAlt[1]-1]} {arrDateAlt[2]} 	&nbsp;	&nbsp; &nbsp; {timeStart} - {timeEnd} 	&nbsp;	&nbsp; &nbsp; Timezone: {postEvent.acf.timezone}</h3>
+            <h3>{monthsName[arrDateAlt[1]-1]} {arrDateAlt[2]} 	&nbsp;	&nbsp; &nbsp; {timeStartShort} - {timeEndShort} 	&nbsp;	&nbsp; &nbsp; Timezone: {postEvent.acf.timezone}</h3>
 
             {/* loading the styles for AddToCalendar  */}
             <Global styles={css(calendarStyles)} />
@@ -81,7 +84,7 @@ const EventDetails = ({state, libraries}) => {
                     </div>
                     <div>
            
-                        <span><strong>Time:</strong> <br></br> {timeStart} - {timeEnd}</span>
+                        <span><strong>Time:</strong> <br></br> {timeStartShort} - {timeEndShort}</span>
                     </div>
                     <div>
                         <span><strong>Cost:</strong> <br></br> {postEvent.acf.cost}</span>

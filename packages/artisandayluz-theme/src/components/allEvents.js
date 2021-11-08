@@ -28,7 +28,7 @@ const responsive = {
       items: 1,
       paritialVisibilityGutter: 30
     }
-  };
+};
 
 
 const allEvents = ( {state, libraries, actions} ) => {
@@ -208,10 +208,14 @@ const allEvents = ( {state, libraries, actions} ) => {
                                         const arrDateAlt = arrDateTimeStart[0].split("-");
                                     
                                         const timeStart = arrDateTimeStart[1];
+                                        
+                                        const timeStartShort = timeStart.substring(0, timeStart.length -3)
                                     
                                         const arrDateTimeEnd = event.acf.date_time_end.split(" ");
                                     
                                         const timeEnd = arrDateTimeEnd[1];
+
+                                        const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
                                 
                                         return(
                                             
@@ -227,7 +231,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                                                         </EventInfoFirst>
                             
                                                         <EventInfoSecond>
-                                                            <span>{timeStart} - {timeEnd} <i>*{event.acf.timezone}</i></span>
+                                                            <span>{timeStartShort} - {timeEndShort} <i>*{event.acf.timezone}</i></span>
                                                             <h3>{event.acf.title}</h3>
                                                             <span>Free</span>
                                                         </EventInfoSecond>    
@@ -273,10 +277,14 @@ const allEvents = ( {state, libraries, actions} ) => {
                                 const arrDateAlt = arrDateTimeStart[0].split("-");
                             
                                 const timeStart = arrDateTimeStart[1];
+
+                                const timeStartShort = timeStart.substring(0, timeStart.length -3)
                             
                                 const arrDateTimeEnd = event.acf.date_time_end.split(" ");
                             
                                 const timeEnd = arrDateTimeEnd[1];
+
+                                const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
                                 
                                 return(
                                     
@@ -292,7 +300,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                                                 </EventInfoFirst>
                     
                                                 <EventInfoSecond>
-                                                    <span>{timeStart} - {timeEnd} <i>*{event.acf.timezone}</i></span>
+                                                    <span>{timeStartShort} - {timeEndShort} <i>*{event.acf.timezone}</i></span>
                                                     <h3>{event.acf.title}</h3>
                                                     <span>Free</span>
                                                 </EventInfoSecond>    
@@ -338,10 +346,13 @@ const allEvents = ( {state, libraries, actions} ) => {
                             const arrDateAlt = arrDateTimeStart[0].split("-");
                         
                             const timeStart = arrDateTimeStart[1];
+                            const timeStartShort = timeStart.substring(0, timeStart.length -3)
                         
                             const arrDateTimeEnd = event.acf.date_time_end.split(" ");
                         
                             const timeEnd = arrDateTimeEnd[1];
+
+                            const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
                             
                             return(
                                 
@@ -357,7 +368,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                                             </EventInfoFirst>
                 
                                             <EventInfoSecond>
-                                                <span>{timeStart} - {timeEnd} <i>*{event.acf.timezone}</i></span>
+                                                <span>{timeStartShort} - {timeEndShort} <i>*{event.acf.timezone}</i></span>
                                                 <h3>{event.acf.title}</h3>
                                                 <span>Free</span>
                                             </EventInfoSecond>    
@@ -391,6 +402,7 @@ export default connect(allEvents);
 
 const PageContainer = styled.div`
     margin-top: 10rem;
+    margin-bottom: 4rem;
 
     h1 {
         font-size: 2rem;
@@ -436,12 +448,13 @@ export const EventWrapLink = styled.div`
 `
 
 export const EventItem = styled.div`
-    
+        box-shadow: 0 1px 20px 1px grey;
 `;
 
 export const EventInfo = styled.div`
     display: flex;
     justify-content: space-between;
+    padding: 1rem;
 `
 
 export const EventInfoFirst = styled.div`
