@@ -1,118 +1,231 @@
-import React, {useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import { connect, styled } from "frontity";
+import {useForm}  from '../hooks/useForm';
 
 const FormEvent = ({ state, actions }) => {
 
-  const myFields = {
-    "title": "",
-    "acf_fields": {
-      "title": "",
-      "organizer": "",
-      "link_to_website": "",
-      "description": "",
-      "video": "",
-      "language_event": "",
-      "timezone": "",
-      "date_time_start": "",
-      "date_time_end": ""
-    },
-  }  
+    let myFields = {
+        "title": "",
+        "acf_fields": {
+          "title": "",
+          "organizer": "",
+          "organizer_email": "",
+          "link_to_website": "",
+          "description": "",
+          "video": "",
+          "language_event": "",
+          "cost": "",
+          "date_time_start": "",
+          "date_time_end": "",
+          "timezone": ""
+        },
+      }
 
-const updateMyTitle = (field, value) => {
-    myFields[field] = value; 
-    myFields.acf_fields[field] = value; 
-}
+    const postEventHandler = () => {
 
-const updateMyField = (field, value) => {
-    myFields.acf_fields[field] = value; 
-}
+        console.log("el field post directo: ",fieldsPost)
 
-state.theme.objectForm = myFields;
+        Object.keys(fieldsPost).map( item => {
+
+            if(item === 'title') {
+                myFields[item] = fieldsPost[item]; 
+                myFields.acf_fields[item] = fieldsPost[item];  
+            }
+        
+            else {
+                myFields.acf_fields[item] = fieldsPost[item];  
+            }
+        })
+        console.log("myFields: ",myFields)  
+        state.theme.objectForm = myFields;
+        console.log("before sending to postEvent: ", state.theme.objectForm);
+        state.theme.postEvent;
+    }
+
+    /**VALIDATIONS STARTS */
+    const { handleSubmit, handleChange, data: user, errors, fieldsPost} = useForm({
+        validations: {
+
+            // title: {
+            //     pattern: {
+            //         value: '^[A-Za-z]*$',
+            //         message:
+            //         "You're not allowed to use special characters or numbers in your name.",
+            //     },
+            // },
+        
+            link_to_website: {
+                pattern: {
+                    value: 'https?://.+',          
+                    message:"the link is invalid.",
+                },
+            },
+
+            // organizer_email: {
+            //     pattern: {
+            //         value: '^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
+            //         message: 'The email is not valid'
+            //     }
+            // },
+
+            video: {
+                pattern: {
+                  value: '(^(https|http):\/\/(?:www\.)?(youtube.com\/embed\/[^\s]+|player.vimeo.com\/video\/[^\s]+))',
+                  message: 'The url video is not valid'
+                }
+            },
+        
+            date_time_start: {
+                pattern: {
+                    value: '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}',
+                    message: 'The datetime is invalid, try to suit the example show above'
+                }
+            },
+
+            date_time_end: {
+                pattern: {
+                    value: '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}',
+                    message: 'The datetime is invalid, try to suit the example show above'
+                }
+            }
+
+        },
+        onSubmit: () => postEventHandler(),
+      });
 
   return (
 
     <FormContainer>
 
     <h1>Create an Event</h1>
-    <p><strong>Step 4:</strong> Please complete the following form correctly and press Post Event Button to finsih the whole process.</p>
+    <p><strong>Step 4:</strong> Please complete the following form correctly and press Create Event Button to finsih the whole process.</p>
     <p><strong>Warning: </strong> You have to be sure that you're completing all the data correctly, For now, you won't be able to change it later.</p>
   
-    <FormStyles method="POST">
+    <FormStyles onSubmit={handleSubmit}>
             <div>
                 <label htmlFor="title">Title of the Event:</label><br></br>
-                <input         
-                    type="text"
-                    defaultValue= ""
-                    onChange={(e) => updateMyTitle("title", e.target.value)}
+                <input 
+                    type="text"        
+                    placeholder="Title of the Event"
+                    defaultValue={user.title || ''}
+                    onChange={handleChange('title')}
+                    required
                 />
+
+                {/* {errors.title && <p>{errors.title}</p>} */}
             </div> 
 
             <div>
                 <label htmlFor="organizer">Organizer/Organization Name:</label><br></br>
-                <input                     
-                    type="text"
-                    defaultValue=""
-                    onChange={(e) => updateMyField("organizer", e.target.value)}
+                <input
+                    type="text"   
+                    placeholder="Organizer's Name"                  
+                    defaultValue={user.organizer || ''}
+                    onChange={handleChange("organizer")}
+                    required
                 />
             </div> <br></br>
 
             <div>
-                <label htmlFor="linkwebsite">Link of Website's Organization:</label><br></br>
-                <input                     
-                    type="text"
-                    defaultValue=""
-                    onChange={(e) => updateMyField("link_to_website", e.target.value)}
+                <label htmlFor="organizer_email">Organizer/Organization Email:</label><br></br>
+                <input
+                    type="email"   
+                    placeholder="Organizer's Email"                  
+                    defaultValue={user.organizer_email || ''}
+                    onChange={handleChange("organizer_email")}
+                    required
                 />
+                {/* {errors.organizer_email && <p>{errors.organizer_email}</p>} */}
             </div> <br></br>
 
             <div>
-                <label htmlFor="video">Link Video:</label>
-                <span>(The link video has to be an embed link video from youtube, vimeo or other platform of your preference. See a useful <a href="https://help.glassdoor.com/s/article/Finding-the-embed-code-on-YouTube-or-Vimeo?language=en_US" target="_blank" rel="noopener noreferrer">link</a>, on how to get an embed video)</span>
+                <label htmlFor="link_to_website">Link Website</label>
+                <input
+                    type="text"                     
+                    placeholder="Link of Website's Organization"                     
+                    defaultValue={user.link_to_website || ''}
+                    onChange={handleChange('link_to_website')}
+                    required
+                />
+                {errors.link_to_website && <p>{errors.link_to_website}</p>}
+            </div> <br></br> 
+
+            <div>
+                <label htmlFor="video_url">Video Url</label>
+                <span>(The link video has to be an embed link video from youtube or vimeo. See a useful <a href="https://help.glassdoor.com/s/article/Finding-the-embed-code-on-YouTube-or-Vimeo?language=en_US" target="_blank" rel="noopener noreferrer">link</a>, on how to get an embed video)</span>
                 <br></br>
-                <input                     
+                <input
                     type="text"
-                    defaultValue=""
-                    onChange={(e) => updateMyField("video", e.target.value)}
+                    placeholder="Video Link Embed"                     
+                    defaultValue={user.video || ''}
+                    onChange={handleChange('video')}
+                    required
                 />
+
+                {errors.video && <p>{errors.video}</p>}
             </div> <br></br>
+
             <div>
                 <label htmlFor="language_event">Language Event:</label><br></br>
-                <input                     
+                <input
                     type="text"
-                    defaultValue=""
-                    onChange={(e) => updateMyField("language_event", e.target.value)}
+                    placeholder="Language Event"                     
+                    defaultValue={user.language_event || ''}
+                    onChange={handleChange("language_event")}
+                    required
                 />
             </div> <br></br>
 
             <div>
-                <label htmlFor="date_time_start">Datetime Start:</label><br></br>
-                <span>(If you don't see a calendar picker, follow this format "yyyy-dd-mm hh:mm:ss" for this field)</span>
-                <span>(Ex: 2021-01-12 10:30:00)</span>
-                <input                     
-                    type="datetime-local" id="date_time_start"
-                    name="date_time_start" defaultValue=""
-                    min="2021-06-07T00:00" max="2022-12-22T00:00"
-                    onChange={(e) => updateMyField("date_time_start", e.target.value)}
+                <label htmlFor="cost">Cost:</label><br></br>
+                <input
+                    type="text"
+                    placeholder="Cost of the Event"                     
+                    defaultValue={user.cost || ''}
+                    onChange={handleChange("cost")}
+                    required
                 />
             </div> <br></br>
+
+
             <div>
-                <label htmlFor="date_time_end">DateTime End:</label><br></br>
-                <span>(If you don't see a calendar picker, follow this format "yyyy-dd-mm hh:mm:ss" for this field)</span>
-                <span>(Ex: 2021-01-12 10:30:00)</span>
-                <input                     
-                    type="datetime-local" id="date_time_end"
-                    name="date_time_end" defaultValue=""
+                <label htmlFor="date_time_start">Date Time Start:</label><br></br>
+                <span>(If you don't see a calendar picker, follow this format "yyyy-dd-mm T hh:mm" for this field)</span><br></br>
+                <span>(Ex: 2021-11-15T15:30)</span>
+                <input
+                    placeholder="DateTimeStart"                     
+                    type="datetime-local"
+                    defaultValue={user.date_time_start || ''}
                     min="2021-06-07T00:00" max="2022-12-22T00:00"
-                    onChange={(e) => updateMyField("date_time_end", e.target.value)}
+                    onChange={handleChange('date_time_start')}
+                    required
                 />
+
+                {errors.date_time_start && <p className="error">{errors.date_time_start}</p>}
+            </div> <br></br>
+
+            <div>
+                <label htmlFor="date_time_end">Date Time End:</label><br></br>
+                <span>(If you don't see a calendar picker, follow this format "yyyy-dd-mm T hh:mm" for this field)</span><br></br>
+                <span>(Ex: 2021-11-15T15:30)</span>
+                <input
+                    placeholder="DateTimeEnd"                     
+                    type="datetime-local" 
+                    defaultValue={user.date_time_end || ''}
+                    min="2021-06-07T00:00" max="2022-12-22T00:00"
+                    onChange={handleChange("date_time_end")}
+                    required
+                />
+                {errors.date_time_end && <p className="error">{errors.date_time_end}</p>}
             </div> <br></br>
 
             <div>
                 <label htmlFor="description">Description of the Event:</label><br></br>
-                <textarea                     
-                    type="text"
-                    defaultValue=""
-                    onChange={(e) => updateMyField("description", e.target.value)}
+                <textarea
+                    placeholder= "Description"                     
+                    defaultValue={user.description || ''}
+                    onChange={handleChange("description")}
+                    required
                 />
             </div> <br></br>
 
@@ -123,7 +236,8 @@ state.theme.objectForm = myFields;
                 <select
                     type="text"
                     defaultValue=""
-                    onChange={(e) => updateMyField("timezone", e.target.value)}
+                    onChange={handleChange("timezone")}
+                    required
                 >
                             <option value="Africa/Abidjan">Africa/Abidjan (GMT)</option>
                             <option value="Africa/Accra">Africa/Accra (GMT)</option>
@@ -182,7 +296,7 @@ state.theme.objectForm = myFields;
                             <option value="America/Anguilla">America/Anguilla (AST)</option>
                             <option value="America/Antigua">America/Antigua (AST)</option>
                             <option value="America/Araguaina">America/Araguaina (-03)</option>
-                            <option value="America/Argentina/Buenos_Aires">America/Argentina/Buenos_Aires (-03)</option>
+                            <option value="America/Argentina/Buenos_Aires">Argentina/Buenos_Aires (-03)</option>
                             <option value="America/Argentina/Catamarca">America/Argentina/Catamarca (-03)</option>
                             <option value="America/Argentina/Cordoba">America/Argentina/Cordoba (-03)</option>
                             <option value="America/Argentina/Jujuy">America/Argentina/Jujuy (-03)</option>
@@ -551,10 +665,14 @@ state.theme.objectForm = myFields;
                             <option value="Pacific/Wallis">Pacific/Wallis (+12)</option>
                             <option value="UTC">UTC (UTC)</option>
                     </select>
-            </div> <br></br>        
+            </div> <br></br>       
+
+                <button type="submit" className="submit">
+                    Create Event
+                </button>  
     </FormStyles>
 
-    <button onClick={actions.theme.postEvent}>Post Event</button>
+
 
     </FormContainer>
 
@@ -577,7 +695,7 @@ const FormStyles = styled.form`
         width: 100%;
     }
 
-    input[type=text], input[type=datetime-local], select {
+    input[type=text], input[type=datetime-local], input[type=email], select {
         // input elements with type="text" attribute
         padding:10px;
         margin:10px 0; 
@@ -610,23 +728,15 @@ const FormStyles = styled.form`
             color:red;
         }
     }
+
+    p{
+        margin-top: 0;
+        color: #e4605e;
+        font-size: 1rem;
+    }
   }
-`
-
-const FormContainer = styled.div`
-    padding: 0rem 2rem;
-    margin-top: 12rem;
-    margin-bottom: 5rem;
- 
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    p {
-        font-size: 1.2rem;
-    }
-
-    button {
+  
+  button {
         /* remove default behavior */
         appearance:none;
         -webkit-appearance:none;
@@ -640,7 +750,27 @@ const FormContainer = styled.div`
         border-radius:5px;
         margin-top: 3rem;
         cursor: pointer;
-        font-size: 1.2rem
+        font-size: 1.2rem;
+
+
+        @media(min-width: 768px) {
+            margin-top: 10rem;
+        }
+
+    }
+`
+
+const FormContainer = styled.div`
+    padding: 0rem 2rem;
+    margin-top: 12rem;
+    margin-bottom: 5rem;
+ 
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 1.2rem;
     }
 `;
 

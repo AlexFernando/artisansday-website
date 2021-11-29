@@ -36,33 +36,31 @@ const ChooseImage = ({state, actions}) => {
 
     <ChooseImageStyled>
 
-      <h2>Step 1: Choose a principal image for your event, clicking on the upload icon.</h2>
+    <h2>Step 1: Choose a principal image for your event, clicking on the upload icon.</h2>
 
-      <label htmlFor="upload-button">
-        {state.theme.image.preview ? (
-          <img src={state.theme.image.preview} alt="dummy" width="300" height="300" />
-        ) : (
-          <>
-            <FontAwesomeIconStyled icon={faUpload}/>
-            
-            <h3>Upload your photo</h3>
-          </>
-        )}
-      </label>
-
-
-          
+    <label htmlFor="upload-button">
+      {state.theme.image.preview ? (
+        <img src={state.theme.image.preview} alt="dummy" width="300" height="300" />
+      ) : (
         <>
-          <h2>Step 2: Choose an available Category or Subcategory for your event.</h2>
-          {FilterSubcategoriesUI()}
-      
-          <input
-            type="file"
-            id="upload-button"
-            style={{ display: "none" }}
-            onChange={actions.theme.chooseImage}
-          />
+          <FontAwesomeIconStyled icon={faUpload}/>
+          
+          <h3>Upload your photo</h3>
         </>
+      )}
+    </label>
+      
+      <>
+        <h2>Step 2: Choose an available Category or Subcategory for your event.</h2>
+        {FilterSubcategoriesUI()}
+    
+        <input
+          type="file"
+          id="upload-button"
+          style={{ display: "none" }}
+          onChange={actions.theme.chooseImage}
+        />
+      </>
 
       {
         state.theme.image.preview ?

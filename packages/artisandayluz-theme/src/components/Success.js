@@ -11,13 +11,13 @@ const Success = ({state,actions}) => {
             <p>Check your event at: </p> 
                 
             <div>
-                <Link href={`/allevents/` + state.theme.bodyPostEvent.slug}>{`https://artisandayluz.com/allevents/` + state.theme.bodyPostEvent.slug}</Link>
+                <a href={`/allevents/` + state.theme.bodyPostEvent.slug}>{`https://artisandayluz.com/allevents/` + state.theme.bodyPostEvent.slug}</a>
             </div>
      
             <div>
-                <Link href="/">
+                <a href="/">
                     I'm done, log out.
-                </Link>
+                </a>
             </div>
         </SuccessContainer>
     )

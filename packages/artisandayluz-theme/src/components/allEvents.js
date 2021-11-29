@@ -48,7 +48,7 @@ const allEvents = ( {state, libraries, actions} ) => {
     const [filteredByTag, saveFilteredByTag] = useState([]);
     const {allCategory, FilterSubcategoriesUI} = useFilterTags("");
     const [filterByDate, setFilterByDate] = useState([]);
-
+    
     const categories = state.source.category;
 
     //FILTER BY CATEGORIES STARTS
@@ -233,7 +233,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                                                         <EventInfoSecond>
                                                             <span>{timeStartShort} - {timeEndShort} <i>*{event.acf.timezone}</i></span>
                                                             <h3>{event.acf.title}</h3>
-                                                            <span>Free</span>
+                                                            <span>{event.acf.cost}</span>
                                                         </EventInfoSecond>    
                                                     </EventInfo>
                                                     
@@ -302,7 +302,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                                                 <EventInfoSecond>
                                                     <span>{timeStartShort} - {timeEndShort} <i>*{event.acf.timezone}</i></span>
                                                     <h3>{event.acf.title}</h3>
-                                                    <span>Free</span>
+                                                    <span>{event.acf.cost}</span>
                                                 </EventInfoSecond>    
                                             </EventInfo>
                                             
@@ -370,7 +370,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                                             <EventInfoSecond>
                                                 <span>{timeStartShort} - {timeEndShort} <i>*{event.acf.timezone}</i></span>
                                                 <h3>{event.acf.title}</h3>
-                                                <span>Free</span>
+                                                <span>{event.acf.cost}</span>
                                             </EventInfoSecond>    
                                         </EventInfo>
                                         
