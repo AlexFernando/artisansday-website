@@ -97,6 +97,7 @@ const useFilterTags = () => {
                 <select
                     onChange = { e => saveCategory(e.target.value) }
                     value={allCategory}
+                    required
                 >
 
                     <option>Choose a Category</option>

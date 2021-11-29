@@ -7,6 +7,16 @@ import { useDetectOutsideClick } from "../hooks/useDectectOutsideClick";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faRunning, faSeedling, faDiagnoses } from '@fortawesome/free-solid-svg-icons'
 
+import Image from "@frontity/components/image";
+import artwork from '../images/artwork.jpg';
+import dance from '../images/dance.jpeg';
+import earth from '../images/earth1.png';
+import mantra from '../images/mantra.jpg';
+import meditation from '../images/meditation.png';
+import prayer from '../images/prayer1.png';
+import talk from '../images/talk.jpeg';
+import yoga from '../images/yoga.jpeg';
+
 const useFilterTags = () => {
     
     const [allCategory, saveCategory] = useState('');
@@ -94,14 +104,18 @@ const useFilterTags = () => {
     //icons
     const faIconsArr = [faUser, faUser, faUser, faDiagnoses, faSeedling, faRunning]
 
+    const imagesIcon = [artwork, dance, earth, mantra, meditation, prayer, talk, yoga]
+
     //porque parentesis y no llaves?
     const FilterSubcategoriesUI = () => (
 
         <MyForm>
                       
             {realCategories.map((option, index) => (
-                <div>
-                    <div>
+                <>
+            
+                
+                    {/* <div>
                         <FontIconCategoryStyle icon={faIconsArr[index]}/>
                         <p>{option.name}</p>
                     </div>
@@ -120,9 +134,16 @@ const useFilterTags = () => {
                         }
                     </>
 
-                    </select>
-
-                </div>
+                    </select> */}
+               
+                        {/* <FontIconCategoryStyle icon={faIconsArr[index]}/> */}
+              
+                        <ButtonIconStyles type="button" onClick = {() => saveCategory(option.name)}>
+                            <ImageIconStyles src={imagesIcon[index]} /><br></br>
+                            <span>{option.name}</span>
+                        </ButtonIconStyles>
+              
+                </>
             ))}
 
         </MyForm>
@@ -189,4 +210,26 @@ const FontIconCategoryStyle = styled(FontAwesomeIcon)`
     @media(max-width: 768px) {
         margin-top: 2rem;
     }  
+`
+
+const ButtonIconStyles = styled.button`
+    background-color: #fff;
+    border: 1px solid #fff;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    max-height: 150px;
+    max-width: 120px;
+
+    span {
+        font-size: 1rem;
+        color: gray;
+        font-weight: bold;
+    }
+`
+
+const ImageIconStyles = styled(Image)`
+    max-width: 80px;
+    max-height: 100px;
+    margin-bottom: .5rem;
 `

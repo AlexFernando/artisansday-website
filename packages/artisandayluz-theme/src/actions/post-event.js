@@ -1,10 +1,13 @@
 import { fetch } from "frontity";
+import { connect, styled } from "frontity";
 
 const postEvent = async ({ state }) => {
 
   const categories = state.theme.categoriesArr;
   let imageId = state.theme.idImage;
   let objectToPost = state.theme.objectForm;
+
+  console.log("postEvent.js : ", objectToPost)
 
   objectToPost["categories"] = categories;
   objectToPost.acf_fields["image_event"] = imageId;

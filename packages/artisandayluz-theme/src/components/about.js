@@ -14,6 +14,8 @@ const About = ({state}) => {
 
     const pageAbout = state.source.page[422];
 
+    const IconsArray = [faSeedling, faRainbow, faHands, faHeart]
+
     return(
 
         <>
@@ -34,123 +36,82 @@ const About = ({state}) => {
                 <PanelList>
                     <Panel>
                         <InfoContainer>
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faSeedling} />
-                                <p>{pageAbout.acf.purpose_paragraph_first}</p>
-                            </InfoElem>
-
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faRainbow} />
-                                <p>{pageAbout.acf.purpose_paragraph_second}</p>
-                            </InfoElem>
-
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faHands} />
-                                <p>{pageAbout.acf.purpose_paragraph_third}</p>
-                            </InfoElem>
-
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faHeart} />
-                                <p>{pageAbout.acf.purpose_paragraph_fourth}</p>
-                            </InfoElem>
-                        </InfoContainer>
-                    </Panel>
-
-                    <Panel>
-                        <InfoContainer>
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faSeedling} />
+                            {pageAbout.acf.purpose_paragraphs.split('%').map( (elem, index) => {
+                                return(
+                                    <InfoElem>
+                                        <FontAwesomeIconStyled icon={IconsArray[index]} />
+                                        <p>{elem}</p>
+                                    </InfoElem>
+                                )
                         
-                                <p>
-                                    {pageAbout.acf.why_paragraph_first}
-                                </p>
-                            </InfoElem>
-        
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faRainbow} />
-                                
-                                <p>
-                                    {pageAbout.acf.why_paragraph_second}
-                                </p>
-                            </InfoElem>
-        
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faHands} />
-                                <p>
-                                    {pageAbout.acf.why_paragraph_third}
-                                </p>
-                            </InfoElem>
-        
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faHeart} />
-                                <p>
-                                    {pageAbout.acf.why_paragraph_fourth}
-                                </p>
-                            </InfoElem>
+                            })}
+                        </InfoContainer>
+                    </Panel>
+
+                    <Panel>
+
+                        <InfoContainer>
+                            {pageAbout.acf.what_paragraphs.split('%').map( (elem, index) => {
+                                return(
+                                    <InfoElem>
+                                        <>
+                                            <FontAwesomeIconStyled icon={IconsArray[index]} />
+                                            <p>{elem}</p>
+                                        </>
+                                    </InfoElem>
+                                )
+                       
+                            })}
+                          
+                        </InfoContainer>
+
+                        <InfoContainer>
+                            {Object.keys(pageAbout.acf.what_paragraphs_second_set).map( (elem, index) => {
+                                return(
+                                    <InfoElem>
+                                        <>
+                                            <h3>{pageAbout.acf.what_paragraphs_second_set[elem].title}</h3>
+                                            <p>{pageAbout.acf.what_paragraphs_second_set[elem].text_paragraph}</p>
+                                        </>
+                                    </InfoElem>
+                                )
+                       
+                            })}
+                          
                         </InfoContainer>
                     </Panel>
 
                     <Panel>
                         <InfoContainer>
-                            <InfoElem>
-                                <h3>{pageAbout.acf.why_title_fifth}</h3>
-                                <p>
-                                    {pageAbout.acf.why_paragraph_fifth}
-                                </p>
-                            </InfoElem>
-
-                            <InfoElem>
-                                <h3>{pageAbout.acf.why_title_six}</h3>
-                                <p>
-                                    {pageAbout.acf.why_paragraph_six}
-                                </p>
-                            </InfoElem>
-
-                            <InfoElem>
-                                <h3>{pageAbout.acf.why_title_seven} </h3>
-                                <p>
-                                    {pageAbout.acf.why_paragraph_seven}
-                                </p>
-                            </InfoElem>
-
-                            <InfoElem>
-                                <h3>{pageAbout.acf.why_title_eight}</h3>
-                                <p>
-                                    {pageAbout.acf.why_paragraph_eight}
-                                </p>
-                            </InfoElem>
+                            {pageAbout.acf.why_paragraphs.split('%').map( (elem, index) => {
+                                return(
+                                    <InfoElem>
+                                        <>
+                                            <FontAwesomeIconStyled icon={IconsArray[index]} />
+                                            <p>{elem}</p>
+                                        </>
+                                    </InfoElem>
+                                )
+                       
+                            })}
                         </InfoContainer>
+
                     </Panel>
 
                     <Panel>
                         <InfoContainer>
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faSeedling} />
-                                <p>
-                                    {pageAbout.acf.proposal_paragraph_first}
-                                </p>
-                            </InfoElem>
-
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faRainbow} />
-                                <p>
-                                    {pageAbout.acf.proposal_paragraph_second}
-                                </p>
-                            </InfoElem>
-
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faHands} />
-                                <p>
-                                    {pageAbout.acf.proposal_paragraph_third}
-                                </p>
-                            </InfoElem>
-
-                            <InfoElem>
-                                <FontAwesomeIconStyled icon={faHeart} />
-                                <p>
-                                    {pageAbout.acf.proposal_paragraph_fourth}
-                                </p>
-                            </InfoElem>
+                            {pageAbout.acf.proposal_paragraphs.split('%').map( (elem, index) => {
+                                return(
+                                    <InfoElem>
+                                        <>
+                                            <FontAwesomeIconStyled icon={IconsArray[index]} />
+                                            <p>{elem}</p>
+                                        </>
+                                    </InfoElem>
+                                )
+                       
+                            })}
+                          
                         </InfoContainer>
                     </Panel>
                 </PanelList>
