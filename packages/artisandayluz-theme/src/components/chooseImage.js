@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import { connect, styled } from "frontity";
+import React, {useEffect, useState} from "react";
+import { connect, styled} from "frontity";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload} from '@fortawesome/free-solid-svg-icons'
 import useFilterTags from './useFilterTagsLogin';

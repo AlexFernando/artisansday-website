@@ -1,2 +1,31 @@
 .react-multiple-carousel__arrow--right::before{content:"»"}
 .react-multiple-carousel__arrow--left::before{content:"«"}
+
+.react-datetime-picker {
+    display: inline-flex;
+    position: relative;
+  
+    /*new starts*/
+    @media (min-width: 768px){
+      margin-right: 2rem;
+    }
+    /*new ends*/
+}
+
+.react-datetime-picker__wrapper {
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+    border: thin solid gray;
+    
+    /*new*/
+        padding:10px;
+        margin:10px 0; 
+        border: 2px solid #777;
+        box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+        border-radius:10px;
+        width:100%;
+        font-family:inherit;
+        font-size: inherit;
+    /*end new*/
+}
