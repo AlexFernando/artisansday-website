@@ -36,6 +36,10 @@ const EventDetails = ({state, libraries}) => {
 
     const timeEnd = arrDateTimeEnd[1];
     const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
+
+    let cityArr = postEvent.acf.timezone.split("/");
+                                        
+    let cityVenue = cityArr[cityArr.length -1];
                                 
 
     //array months to get date data
@@ -60,7 +64,7 @@ const EventDetails = ({state, libraries}) => {
     return ( 
         <EventDetailsContainer>
             <h1>{postEvent.acf.title}</h1> 
-            <h3>{monthsName[arrDateAlt[1]-1]} {arrDateAlt[2]} 	&nbsp;	&nbsp; &nbsp; {timeStartShort} - {timeEndShort} 	&nbsp;	&nbsp; &nbsp; Timezone: {postEvent.acf.timezone}</h3>
+            <h3>{monthsName[arrDateAlt[1]-1]} {arrDateAlt[2]} 	&nbsp;	&nbsp; &nbsp; {timeStartShort} - {timeEndShort} 	&nbsp;	&nbsp; &nbsp; City Venue: {cityVenue}</h3>
 
             {/* loading the styles for AddToCalendar  */}
             <Global styles={css(calendarStyles)} />

@@ -1,6 +1,17 @@
 import React, {useState, useEffect} from "react";
-import { connect, styled } from "frontity";
+import { connect, styled, Global } from "frontity";
 import {useForm}  from '../hooks/useForm';
+
+//react date time Picker
+import DateTimePicker from 'react-datetime-picker';
+//styles dateTimePicker 
+import DateTimePickerStyles from 'react-datetime-picker/dist/DateTimePicker.css';
+import CalendarCss from 'react-calendar/dist/Calendar.css';
+import ClockCss from 'react-clock/dist/Clock.css';
+import generalStyles from '../styles/generalStyles.css';
+
+import { months } from "moment";
+
 
 const FormEvent = ({ state, actions }) => {
 
@@ -21,9 +32,41 @@ const FormEvent = ({ state, actions }) => {
         },
       }
 
+    //datetime Picker State Starts
+    const [value, onChange] = useState(new Date());
+    const [valueEnd, onChangeEnd] = useState(new Date());
+    //datetime Picker State ends
+    
+    let arrayDateTimeStart = value.toString().split(' ');
+    let arrayDateTimeEnd = valueEnd.toString().split(' ');
+
+    const monthsName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    let month =  monthsName.indexOf(arrayDateTimeStart[1]) + 1; 
+    let monthFinal = ''
+
+    let monthEnd = monthsName.indexOf(arrayDateTimeEnd[1]) + 1;
+    let monthFinalEnd = ''
+    
+    if(month >= 10) {
+        monthFinal = month.toString();
+        monthFinalEnd = monthEnd.toString();
+    }
+
+    else {
+        monthFinal = '0'+month.toString();
+        monthFinalEnd = '0'+monthEnd.toString();
+    }
+
+    let dateTimeStartFormat = arrayDateTimeStart[3]+"-"+monthFinal+"-"+arrayDateTimeStart[2]+" T"+arrayDateTimeStart[4];
+    let dateTimeEndFormat = arrayDateTimeEnd[3]+"-"+monthFinalEnd+"-"+arrayDateTimeEnd[2]+" T"+arrayDateTimeEnd[4];
+
+
+
     const postEventHandler = () => {
 
-        console.log("el field post directo: ",fieldsPost)
+        myFields.acf_fields['date_time_start'] = dateTimeStartFormat;
+        myFields.acf_fields['date_time_end'] = dateTimeEndFormat;
 
         Object.keys(fieldsPost).map( item => {
 
@@ -31,14 +74,21 @@ const FormEvent = ({ state, actions }) => {
                 myFields[item] = fieldsPost[item]; 
                 myFields.acf_fields[item] = fieldsPost[item];  
             }
+
+            else if(item === 'video') {
+
+                let expresion = /((https|http):\/\/(?:www\.)?(youtube.com\/embed\/[^\s]+|player.vimeo.com\/video\/[^\s]+))/g;
+                let URLVideo = fieldsPost[item].match(expresion);
+                let finalUrlVideo = URLVideo[0].slice(0,-1);
+                myFields.acf_fields[item] = finalUrlVideo;
+            }
         
             else {
                 myFields.acf_fields[item] = fieldsPost[item];  
             }
         })
-        console.log("myFields: ",myFields)  
+
         state.theme.objectForm = myFields;
-        console.log("before sending to postEvent: ", state.theme.objectForm);
         state.theme.postEvent;
     }
 
@@ -56,7 +106,8 @@ const FormEvent = ({ state, actions }) => {
         
             link_to_website: {
                 pattern: {
-                    value: 'https?://.+',          
+                    // value: '(https?://.+',   
+                    value: '(^(https|http):\/\/([^\s]+)|(www\.[^\s]+))',       
                     message:"the link is invalid.",
                 },
             },
@@ -70,24 +121,24 @@ const FormEvent = ({ state, actions }) => {
 
             video: {
                 pattern: {
-                  value: '(^(https|http):\/\/(?:www\.)?(youtube.com\/embed\/[^\s]+|player.vimeo.com\/video\/[^\s]+))',
+                  value: '((https|http):\/\/(?:www\.)?(youtube.com\/embed\/[^\s]+|player.vimeo.com\/video\/[^\s]+))',
                   message: 'The url video is not valid'
                 }
             },
         
-            date_time_start: {
-                pattern: {
-                    value: '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}',
-                    message: 'The datetime is invalid, try to suit the example show above'
-                }
-            },
+            // date_time_start: {
+            //     pattern: {
+            //         value: '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}',
+            //         message: 'The datetime is invalid, try to suit the example show above'
+            //     }
+            // },
 
-            date_time_end: {
-                pattern: {
-                    value: '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}',
-                    message: 'The datetime is invalid, try to suit the example show above'
-                }
-            }
+            // date_time_end: {
+            //     pattern: {
+            //         value: '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}',
+            //         message: 'The datetime is invalid, try to suit the example show above'
+            //     }
+            // }
 
         },
         onSubmit: () => postEventHandler(),
@@ -102,7 +153,7 @@ const FormEvent = ({ state, actions }) => {
     <p><strong>Warning: </strong> You have to be sure that you're completing all the data correctly, For now, you won't be able to change it later.</p>
   
     <FormStyles onSubmit={handleSubmit}>
-            <div>
+            <WrapperField>
                 <label htmlFor="title">Title of the Event:</label><br></br>
                 <input 
                     type="text"        
@@ -113,9 +164,9 @@ const FormEvent = ({ state, actions }) => {
                 />
 
                 {/* {errors.title && <p>{errors.title}</p>} */}
-            </div> 
+            </WrapperField> 
 
-            <div>
+            <WrapperField>
                 <label htmlFor="organizer">Organizer/Organization Name:</label><br></br>
                 <input
                     type="text"   
@@ -124,9 +175,9 @@ const FormEvent = ({ state, actions }) => {
                     onChange={handleChange("organizer")}
                     required
                 />
-            </div> <br></br>
+            </WrapperField> <br></br>
 
-            <div>
+            <WrapperField>
                 <label htmlFor="organizer_email">Organizer/Organization Email:</label><br></br>
                 <input
                     type="email"   
@@ -136,9 +187,9 @@ const FormEvent = ({ state, actions }) => {
                     required
                 />
                 {/* {errors.organizer_email && <p>{errors.organizer_email}</p>} */}
-            </div> <br></br>
+            </WrapperField> <br></br>
 
-            <div>
+            <WrapperField>
                 <label htmlFor="link_to_website">Link Website</label>
                 <input
                     type="text"                     
@@ -148,14 +199,13 @@ const FormEvent = ({ state, actions }) => {
                     required
                 />
                 {errors.link_to_website && <p>{errors.link_to_website}</p>}
-            </div> <br></br> 
+            </WrapperField> <br></br> 
 
-            <div>
+            <WrapperField>
                 <label htmlFor="video_url">Video Url</label>
-                <span>(The link video has to be an embed link video from youtube or vimeo. See a useful <a href="https://help.glassdoor.com/s/article/Finding-the-embed-code-on-YouTube-or-Vimeo?language=en_US" target="_blank" rel="noopener noreferrer">link</a>, on how to get an embed video)</span>
+                <span>(Paste a embed Iframe code from youtube or vimeo. See a useful <a href="https://help.glassdoor.com/s/article/Finding-the-embed-code-on-YouTube-or-Vimeo?language=en_US" target="_blank" rel="noopener noreferrer">link</a>, on how to get an embed video)</span>
                 <br></br>
-                <input
-                    type="text"
+                <textarea
                     placeholder="Video Link Embed"                     
                     defaultValue={user.video || ''}
                     onChange={handleChange('video')}
@@ -163,9 +213,9 @@ const FormEvent = ({ state, actions }) => {
                 />
 
                 {errors.video && <p>{errors.video}</p>}
-            </div> <br></br>
+            </WrapperField> <br></br>
 
-            <div>
+            <WrapperField>
                 <label htmlFor="language_event">Language Event:</label><br></br>
                 <input
                     type="text"
@@ -174,9 +224,9 @@ const FormEvent = ({ state, actions }) => {
                     onChange={handleChange("language_event")}
                     required
                 />
-            </div> <br></br>
+            </WrapperField> <br></br>
 
-            <div>
+            <WrapperField>
                 <label htmlFor="cost">Cost:</label><br></br>
                 <input
                     type="text"
@@ -185,10 +235,10 @@ const FormEvent = ({ state, actions }) => {
                     onChange={handleChange("cost")}
                     required
                 />
-            </div> <br></br>
+            </WrapperField> <br></br>
 
 
-            <div>
+            {/* <div>
                 <label htmlFor="date_time_start">Date Time Start:</label><br></br>
                 <span>(If you don't see a calendar picker, follow this format "yyyy-dd-mm T hh:mm" for this field)</span><br></br>
                 <span>(Ex: 2021-11-15T15:30)</span>
@@ -202,9 +252,24 @@ const FormEvent = ({ state, actions }) => {
                 />
 
                 {errors.date_time_start && <p className="error">{errors.date_time_start}</p>}
-            </div> <br></br>
+            </div> <br></br> */}
 
-            <div>
+            <DateTimeWrapper>
+                <Global styles={DateTimePickerStyles} />
+                <Global styles={CalendarCss} />
+                <Global styles={ClockCss}/>
+                <Global styles={generalStyles} />
+
+                <label htmlFor="date_time_start">Date Time Start:</label><br></br>
+                    <DateTimePicker
+                        value={value}
+                        onChange={onChange}
+                        required
+                    />
+
+            </DateTimeWrapper><br></br>
+
+            {/* <WrapperField>
                 <label htmlFor="date_time_end">Date Time End:</label><br></br>
                 <span>(If you don't see a calendar picker, follow this format "yyyy-dd-mm T hh:mm" for this field)</span><br></br>
                 <span>(Ex: 2021-11-15T15:30)</span>
@@ -217,9 +282,23 @@ const FormEvent = ({ state, actions }) => {
                     required
                 />
                 {errors.date_time_end && <p className="error">{errors.date_time_end}</p>}
-            </div> <br></br>
+            </WrapperField> <br></br> */}
 
-            <div>
+            <DateTimeWrapper>
+                <Global styles={DateTimePickerStyles} />
+                <Global styles={CalendarCss} />
+                <Global styles={ClockCss}/>
+                <Global styles={generalStyles} />
+
+                <label htmlFor="date_time_start">Date Time End:</label><br></br>
+                    <DateTimePicker
+                        value={valueEnd}
+                        onChange={onChangeEnd}
+                        required
+                    />
+            </DateTimeWrapper><br></br>
+
+            <WrapperField>
                 <label htmlFor="description">Description of the Event:</label><br></br>
                 <textarea
                     placeholder= "Description"                     
@@ -227,11 +306,11 @@ const FormEvent = ({ state, actions }) => {
                     onChange={handleChange("description")}
                     required
                 />
-            </div> <br></br>
+            </WrapperField> <br></br>
 
-            <div>
-                <label htmlFor="timezone">Timezone:</label>
-                <span>(Choose a timezone where the event going to take place)</span>
+            <WrapperField>
+                <label htmlFor="timezone">City Venue:</label>
+                <span>(Choose a city where the event going to take place)</span>
                 <br></br>
                 <select
                     type="text"
@@ -239,86 +318,86 @@ const FormEvent = ({ state, actions }) => {
                     onChange={handleChange("timezone")}
                     required
                 >
-                            <option value="Africa/Abidjan">Africa/Abidjan (GMT)</option>
-                            <option value="Africa/Accra">Africa/Accra (GMT)</option>
-                            <option value="Africa/Addis_Ababa">Africa/Addis_Ababa (EAT)</option>
-                            <option value="Africa/Algiers">Africa/Algiers (CET)</option>
-                            <option value="Africa/Asmara">Africa/Asmara (EAT)</option>
-                            <option value="Africa/Bamako">Africa/Bamako (GMT)</option>
-                            <option value="Africa/Bangui">Africa/Bangui (WAT)</option>
-                            <option value="Africa/Banjul">Africa/Banjul (GMT)</option>
-                            <option value="Africa/Bissau">Africa/Bissau (GMT)</option>
-                            <option value="Africa/Blantyre">Africa/Blantyre (CAT)</option>
-                            <option value="Africa/Brazzaville">Africa/Brazzaville (WAT)</option>
-                            <option value="Africa/Bujumbura">Africa/Bujumbura (CAT)</option>
-                            <option value="Africa/Cairo">Africa/Cairo (EET)</option>
-                            <option value="Africa/Casablanca">Africa/Casablanca (+01)</option>
-                            <option value="Africa/Ceuta">Africa/Ceuta (CEST)</option>
-                            <option value="Africa/Conakry">Africa/Conakry (GMT)</option>
-                            <option value="Africa/Dakar">Africa/Dakar (GMT)</option>
-                            <option value="Africa/Dar_es_Salaam">Africa/Dar_es_Salaam (EAT)</option>
-                            <option value="Africa/Djibouti">Africa/Djibouti (EAT)</option>
-                            <option value="Africa/Douala">Africa/Douala (WAT)</option>
-                            <option value="Africa/El_Aaiun">Africa/El_Aaiun (+01)</option>
-                            <option value="Africa/Freetown">Africa/Freetown (GMT)</option>
-                            <option value="Africa/Gaborone">Africa/Gaborone (CAT)</option>
-                            <option value="Africa/Harare">Africa/Harare (CAT)</option>
-                            <option value="Africa/Johannesburg">Africa/Johannesburg (SAST)</option>
-                            <option value="Africa/Juba">Africa/Juba (CAT)</option>
-                            <option value="Africa/Kampala">Africa/Kampala (EAT)</option>
-                            <option value="Africa/Khartoum">Africa/Khartoum (CAT)</option>
-                            <option value="Africa/Kigali">Africa/Kigali (CAT)</option>
-                            <option value="Africa/Kinshasa">Africa/Kinshasa (WAT)</option>
-                            <option value="Africa/Lagos">Africa/Lagos (WAT)</option>
-                            <option value="Africa/Libreville">Africa/Libreville (WAT)</option>
-                            <option value="Africa/Lome">Africa/Lome (GMT)</option>
-                            <option value="Africa/Luanda">Africa/Luanda (WAT)</option>
-                            <option value="Africa/Lubumbashi">Africa/Lubumbashi (CAT)</option>
-                            <option value="Africa/Lusaka">Africa/Lusaka (CAT)</option>
-                            <option value="Africa/Malabo">Africa/Malabo (WAT)</option>
-                            <option value="Africa/Maputo">Africa/Maputo (CAT)</option>
-                            <option value="Africa/Maseru">Africa/Maseru (SAST)</option>
-                            <option value="Africa/Mbabane">Africa/Mbabane (SAST)</option>
-                            <option value="Africa/Mogadishu">Africa/Mogadishu (EAT)</option>
-                            <option value="Africa/Monrovia">Africa/Monrovia (GMT)</option>
-                            <option value="Africa/Nairobi">Africa/Nairobi (EAT)</option>
-                            <option value="Africa/Ndjamena">Africa/Ndjamena (WAT)</option>
-                            <option value="Africa/Niamey">Africa/Niamey (WAT)</option>
-                            <option value="Africa/Nouakchott">Africa/Nouakchott (GMT)</option>
-                            <option value="Africa/Ouagadougou">Africa/Ouagadougou (GMT)</option>
-                            <option value="Africa/Porto-Novo">Africa/Porto-Novo (WAT)</option>
-                            <option value="Africa/Sao_Tome">Africa/Sao_Tome (GMT)</option>
-                            <option value="Africa/Tripoli">Africa/Tripoli (EET)</option>
-                            <option value="Africa/Tunis">Africa/Tunis (CET)</option>
-                            <option value="Africa/Windhoek">Africa/Windhoek (CAT)</option>
+                            <option value="Africa/Abidjan">Abidjan (Ivory Coast) (GMT)</option>
+                            <option value="Africa/Accra">Accra (Ghana) (GMT)</option>
+                            <option value="Africa/Addis_Ababa">Addis_Ababa (Ethiopia) (EAT)</option>
+                            <option value="Africa/Algiers">Algiers (Algeria) (CET)</option>
+                            <option value="Africa/Asmara">Asmara (Eritrea) (EAT)</option>
+                            <option value="Africa/Bamako">Bamako (GMT)</option>
+                            <option value="Africa/Bangui">Bangui (WAT)</option>
+                            <option value="Africa/Banjul">Banjul (GMT)</option>
+                            <option value="Africa/Bissau">Bissau (GMT)</option>
+                            <option value="Africa/Blantyre">Blantyre (CAT)</option>
+                            <option value="Africa/Brazzaville">Brazzaville (WAT)</option>
+                            <option value="Africa/Bujumbura">Bujumbura (CAT)</option>
+                            <option value="Africa/Cairo">Cairo (EET)</option>
+                            <option value="Africa/Casablanca">Casablanca (+01)</option>
+                            <option value="Africa/Ceuta">Ceuta (CEST)</option>
+                            <option value="Africa/Conakry">Conakry (GMT)</option>
+                            <option value="Africa/Dakar">Dakar (GMT)</option>
+                            <option value="Africa/Dar_es_Salaam">Dar_es_Salaam (EAT)</option>
+                            <option value="Africa/Djibouti">Djibouti (EAT)</option>
+                            <option value="Africa/Douala">Douala (WAT)</option>
+                            <option value="Africa/El_Aaiun">El_Aaiun (+01)</option>
+                            <option value="Africa/Freetown">Freetown (GMT)</option>
+                            <option value="Africa/Gaborone">Gaborone (CAT)</option>
+                            <option value="Africa/Harare">Harare (CAT)</option>
+                            <option value="Africa/Johannesburg">Johannesburg (SAST)</option>
+                            <option value="Africa/Juba">Juba (CAT)</option>
+                            <option value="Africa/Kampala">Kampala (EAT)</option>
+                            <option value="Africa/Khartoum">Khartoum (CAT)</option>
+                            <option value="Africa/Kigali">Kigali (CAT)</option>
+                            <option value="Africa/Kinshasa">Kinshasa (WAT)</option>
+                            <option value="Africa/Lagos">Lagos (WAT)</option>
+                            <option value="Africa/Libreville">Libreville (WAT)</option>
+                            <option value="Africa/Lome">Lome (GMT)</option>
+                            <option value="Africa/Luanda">Luanda (WAT)</option>
+                            <option value="Africa/Lubumbashi">Lubumbashi (CAT)</option>
+                            <option value="Africa/Lusaka">Lusaka (CAT)</option>
+                            <option value="Africa/Malabo">Malabo (WAT)</option>
+                            <option value="Africa/Maputo">Maputo (CAT)</option>
+                            <option value="Africa/Maseru">Maseru (SAST)</option>
+                            <option value="Africa/Mbabane">Mbabane (SAST)</option>
+                            <option value="Africa/Mogadishu">Mogadishu (EAT)</option>
+                            <option value="Africa/Monrovia">Monrovia (GMT)</option>
+                            <option value="Africa/Nairobi">Nairobi (EAT)</option>
+                            <option value="Africa/Ndjamena">Ndjamena (WAT)</option>
+                            <option value="Africa/Niamey">Niamey (WAT)</option>
+                            <option value="Africa/Nouakchott">Nouakchott (GMT)</option>
+                            <option value="Africa/Ouagadougou">Ouagadougou (GMT)</option>
+                            <option value="Africa/Porto-Novo">Porto-Novo (WAT)</option>
+                            <option value="Africa/Sao_Tome">Sao_Tome (GMT)</option>
+                            <option value="Africa/Tripoli">Tripoli (EET)</option>
+                            <option value="Africa/Tunis">Tunis (CET)</option>
+                            <option value="Africa/Windhoek">Windhoek (CAT)</option>
                             <option value="America/Adak">America/Adak (HDT)</option>
                             <option value="America/Anchorage">America/Anchorage (AKDT)</option>
                             <option value="America/Anguilla">America/Anguilla (AST)</option>
                             <option value="America/Antigua">America/Antigua (AST)</option>
                             <option value="America/Araguaina">America/Araguaina (-03)</option>
-                            <option value="America/Argentina/Buenos_Aires">Argentina/Buenos_Aires (-03)</option>
-                            <option value="America/Argentina/Catamarca">America/Argentina/Catamarca (-03)</option>
-                            <option value="America/Argentina/Cordoba">America/Argentina/Cordoba (-03)</option>
-                            <option value="America/Argentina/Jujuy">America/Argentina/Jujuy (-03)</option>
-                            <option value="America/Argentina/La_Rioja">America/Argentina/La_Rioja (-03)</option>
-                            <option value="America/Argentina/Mendoza">America/Argentina/Mendoza (-03)</option>
-                            <option value="America/Argentina/Rio_Gallegos">America/Argentina/Rio_Gallegos (-03)</option>
-                            <option value="America/Argentina/Salta">America/Argentina/Salta (-03)</option>
-                            <option value="America/Argentina/San_Juan">America/Argentina/San_Juan (-03)</option>
-                            <option value="America/Argentina/San_Luis">America/Argentina/San_Luis (-03)</option>
-                            <option value="America/Argentina/Tucuman">America/Argentina/Tucuman (-03)</option>
-                            <option value="America/Argentina/Ushuaia">America/Argentina/Ushuaia (-03)</option>
-                            <option value="America/Aruba">America/Aruba (AST)</option>
-                            <option value="America/Asuncion">America/Asuncion (-04)</option>
-                            <option value="America/Atikokan">America/Atikokan (EST)</option>
-                            <option value="America/Bahia">America/Bahia (-03)</option>
-                            <option value="America/Bahia_Banderas">America/Bahia_Banderas (CDT)</option>
-                            <option value="America/Barbados">America/Barbados (AST)</option>
-                            <option value="America/Belem">America/Belem (-03)</option>
-                            <option value="America/Belize">America/Belize (CST)</option>
-                            <option value="America/Blanc-Sablon">America/Blanc-Sablon (AST)</option>
-                            <option value="America/Boa_Vista">America/Boa_Vista (-04)</option>
-                            <option value="America/Bogota">America/Bogota (-05)</option>
+                            <option value="America/Argentina/Buenos_Aires"> Buenos_Aires (Argentina) (-03)</option>
+                            <option value="America/Argentina/Catamarca">Catamarca (Argentina) (-03)</option>
+                            <option value="America/Argentina/Cordoba">Cordoba (Argentina) (-03)</option>
+                            <option value="America/Argentina/Jujuy"> Jujuy (Argentina) (-03)</option>
+                            <option value="America/Argentina/La_Rioja"> La_Rioja (Argentina) (-03)</option>
+                            <option value="America/Argentina/Mendoza"> Mendoza (Argentina) (-03)</option>
+                            <option value="America/Argentina/Rio_Gallegos"> Rio_Gallegos (Argentina) (-03)</option>
+                            <option value="America/Argentina/Salta"> Salta (Argentina) (-03)</option>
+                            <option value="America/Argentina/San_Juan"> San_Juan (Argentina) (-03)</option>
+                            <option value="America/Argentina/San_Luis"> San_Luis (Argentina) (-03)</option>
+                            <option value="America/Argentina/Tucuman"> Tucuman (Argentina) (-03)</option>
+                            <option value="America/Argentina/Ushuaia"> Ushuaia (Argentina) (-03)</option>
+                            <option value="America/Aruba"> Oranjestad (Aruba) (AST)</option>
+                            <option value="America/Asuncion"> Asuncion (Paraguay) (-04)</option>
+                            <option value="America/Atikokan"> Atikokan (Ontario) (EST)</option>
+                            <option value="America/Bahia"> Bahia (Brasil) (-03)</option>
+                            <option value="America/Bahia_Banderas"> Bahia_Banderas (México) (CDT)</option>
+                            <option value="America/Barbados"> Barbados (Caribe) (AST)</option>
+                            <option value="America/Belem"> Belem (Brasil) (-03)</option>
+                            <option value="America/Belize"> Belize (Belize) (CST)</option>
+                            <option value="America/Blanc-Sablon"> Blanc-Sablon (Canada) (AST)</option>
+                            <option value="America/Boa_Vista"> Boa_Vista (Brasil) (-04)</option>
+                            <option value="America/Bogota">Bogota (Colombia) (-05)</option>
                             <option value="America/Boise">America/Boise (MDT)</option>
                             <option value="America/Cambridge_Bay">America/Cambridge_Bay (MDT)</option>
                             <option value="America/Campo_Grande">America/Campo_Grande (-04)</option>
@@ -554,66 +633,66 @@ const FormEvent = ({ state, actions }) => {
                             <option value="Australia/Melbourne">Australia/Melbourne (AEST)</option>
                             <option value="Australia/Perth">Australia/Perth (AWST)</option>
                             <option value="Australia/Sydney">Australia/Sydney (AEST)</option>
-                            <option value="Europe/Amsterdam">Europe/Amsterdam (CEST)</option>
-                            <option value="Europe/Andorra">Europe/Andorra (CEST)</option>
-                            <option value="Europe/Astrakhan">Europe/Astrakhan (+04)</option>
-                            <option value="Europe/Athens">Europe/Athens (EEST)</option>
-                            <option value="Europe/Belgrade">Europe/Belgrade (CEST)</option>
-                            <option value="Europe/Berlin">Europe/Berlin (CEST)</option>
-                            <option value="Europe/Bratislava">Europe/Bratislava (CEST)</option>
-                            <option value="Europe/Brussels">Europe/Brussels (CEST)</option>
-                            <option value="Europe/Bucharest">Europe/Bucharest (EEST)</option>
-                            <option value="Europe/Budapest">Europe/Budapest (CEST)</option>
-                            <option value="Europe/Busingen">Europe/Busingen (CEST)</option>
-                            <option value="Europe/Chisinau">Europe/Chisinau (EEST)</option>
-                            <option value="Europe/Copenhagen">Europe/Copenhagen (CEST)</option>
-                            <option value="Europe/Dublin">Europe/Dublin (IST)</option>
-                            <option value="Europe/Gibraltar">Europe/Gibraltar (CEST)</option>
-                            <option value="Europe/Guernsey">Europe/Guernsey (BST)</option>
-                            <option value="Europe/Helsinki">Europe/Helsinki (EEST)</option>
-                            <option value="Europe/Isle_of_Man">Europe/Isle_of_Man (BST)</option>
-                            <option value="Europe/Istanbul">Europe/Istanbul (+03)</option>
-                            <option value="Europe/Jersey">Europe/Jersey (BST)</option>
-                            <option value="Europe/Kaliningrad">Europe/Kaliningrad (EET)</option>
-                            <option value="Europe/Kiev">Europe/Kiev (EEST)</option>
-                            <option value="Europe/Kirov">Europe/Kirov (+03)</option>
-                            <option value="Europe/Lisbon">Europe/Lisbon (WEST)</option>
-                            <option value="Europe/Ljubljana">Europe/Ljubljana (CEST)</option>
-                            <option value="Europe/London">Europe/London (BST)</option>
-                            <option value="Europe/Luxembourg">Europe/Luxembourg (CEST)</option>
-                            <option value="Europe/Madrid">Europe/Madrid (CEST)</option>
-                            <option value="Europe/Malta">Europe/Malta (CEST)</option>
-                            <option value="Europe/Mariehamn">Europe/Mariehamn (EEST)</option>
-                            <option value="Europe/Minsk">Europe/Minsk (+03)</option>
-                            <option value="Europe/Monaco">Europe/Monaco (CEST)</option>
-                            <option value="Europe/Moscow">Europe/Moscow (MSK)</option>
-                            <option value="Europe/Oslo">Europe/Oslo (CEST)</option>
-                            <option value="Europe/Paris">Europe/Paris (CEST)</option>
-                            <option value="Europe/Podgorica">Europe/Podgorica (CEST)</option>
-                            <option value="Europe/Prague">Europe/Prague (CEST)</option>
-                            <option value="Europe/Riga">Europe/Riga (EEST)</option>
-                            <option value="Europe/Rome">Europe/Rome (CEST)</option>
-                            <option value="Europe/Samara">Europe/Samara (+04)</option>
-                            <option value="Europe/San_Marino">Europe/San_Marino (CEST)</option>
-                            <option value="Europe/Sarajevo">Europe/Sarajevo (CEST)</option>
-                            <option value="Europe/Saratov">Europe/Saratov (+04)</option>
-                            <option value="Europe/Simferopol">Europe/Simferopol (MSK)</option>
-                            <option value="Europe/Skopje">Europe/Skopje (CEST)</option>
-                            <option value="Europe/Sofia">Europe/Sofia (EEST)</option>
-                            <option value="Europe/Stockholm">Europe/Stockholm (CEST)</option>
-                            <option value="Europe/Tallinn">Europe/Tallinn (EEST)</option>
-                            <option value="Europe/Tirane">Europe/Tirane (CEST)</option>
-                            <option value="Europe/Ulyanovsk">Europe/Ulyanovsk (+04)</option>
-                            <option value="Europe/Uzhgorod">Europe/Uzhgorod (EEST)</option>
-                            <option value="Europe/Vaduz">Europe/Vaduz (CEST)</option>
-                            <option value="Europe/Vatican">Europe/Vatican (CEST)</option>
-                            <option value="Europe/Vienna">Europe/Vienna (CEST)</option>
-                            <option value="Europe/Vilnius">Europe/Vilnius (EEST)</option>
-                            <option value="Europe/Volgograd">Europe/Volgograd (+03)</option>
-                            <option value="Europe/Warsaw">Europe/Warsaw (CEST)</option>
-                            <option value="Europe/Zagreb">Europe/Zagreb (CEST)</option>
-                            <option value="Europe/Zaporozhye">Europe/Zaporozhye (EEST)</option>
-                            <option value="Europe/Zurich">Europe/Zurich (CEST)</option>
+                            <option value="Europe/Amsterdam"> Amsterdam (Netherlands) (CEST)</option>
+                            <option value="Europe/Andorra"> Andorra (Andorra) (CEST)</option>
+                            <option value="Europe/Astrakhan"> Astrakhan (Russia) (+04)</option>
+                            <option value="Europe/Athens"> Athens (Greek) (EEST)</option>
+                            <option value="Europe/Belgrade"> Belgrade (Serbia) (CEST)</option>
+                            <option value="Europe/Berlin"> Berlin (Germany) (CEST)</option>
+                            <option value="Europe/Bratislava"> Bratislava (Slovakia) (CEST)</option>
+                            <option value="Europe/Brussels"> Brussels (Belgium) (CEST)</option>
+                            <option value="Europe/Bucharest"> Bucharest (Romania) (EEST)</option>
+                            <option value="Europe/Budapest"> Budapest (Hungary) (CEST)</option>
+                            <option value="Europe/Busingen"> Busingen (Germany) (CEST)</option>
+                            <option value="Europe/Chisinau"> Chisinau (Republic of Moldova) (EEST)</option>
+                            <option value="Europe/Copenhagen"> Copenhagen (Denmark) (CEST)</option>
+                            <option value="Europe/Dublin"> Dublin (Ireland) (IST)</option>
+                            <option value="Europe/Gibraltar"> Gibraltar (CEST)</option>
+                            <option value="Europe/Guernsey"> Guernsey (BST)</option>
+                            <option value="Europe/Helsinki"> Helsinki (Finland) (EEST)</option>
+                            <option value="Europe/Isle_of_Man"> Isle_of_Man (BST)</option>
+                            <option value="Europe/Istanbul"> Istanbul (Turkey) (+03)</option>
+                            <option value="Europe/Jersey"> Jersey (BST)</option>
+                            <option value="Europe/Kaliningrad"> Kaliningrad (Russia) (EET)</option>
+                            <option value="Europe/Kiev"> Kiev  (Ukrain)(EEST)</option>
+                            <option value="Europe/Kirov"> Kirov (Russia) (+03)</option>
+                            <option value="Europe/Lisbon"> Lisbon (Portugal) (WEST)</option>
+                            <option value="Europe/Ljubljana"> Ljubljana (Slovenia) (CEST)</option>
+                            <option value="Europe/London"> London (England) (BST)</option>
+                            <option value="Europe/Luxembourg"> Luxembourg (Luxembourg)(CEST)</option>
+                            <option value="Europe/Madrid"> Madrid (Spain) (CEST)</option>
+                            <option value="Europe/Malta"> Malta (CEST)</option>
+                            <option value="Europe/Mariehamn"> Mariehamn (Finland) (EEST)</option>
+                            <option value="Europe/Minsk"> Minsk (Belarus) (+03)</option>
+                            <option value="Europe/Monaco"> Monaco (CEST)</option>
+                            <option value="Europe/Moscow"> Moscow (Russia) (MSK)</option>
+                            <option value="Europe/Oslo"> Oslo (Norway) (CEST)</option>
+                            <option value="Europe/Paris"> Paris (France) (CEST)</option>
+                            <option value="Europe/Podgorica"> Podgorica () (CEST)</option>
+                            <option value="Europe/Prague"> Prague (Cezch Republik)(CEST)</option>
+                            <option value="Europe/Riga"> Riga (Latvia) (EEST)</option>
+                            <option value="Europe/Rome"> Rome (Italy )(CEST)</option>
+                            <option value="Europe/Samara"> Samara (Russia) (+04)</option>
+                            <option value="Europe/San_Marino"> San_Marino (CEST)</option>
+                            <option value="Europe/Sarajevo"> Sarajevo (Bosnia and Herzegovina) (CEST)</option>
+                            <option value="Europe/Saratov"> Saratov (Russia) (+04)</option>
+                            <option value="Europe/Simferopol"> Simferopol (Ukrain) (MSK)</option>
+                            <option value="Europe/Skopje"> Skopje ((North Macedonia) (CEST)</option>
+                            <option value="Europe/Sofia"> Sofia (Bulgaria) (EEST)</option>
+                            <option value="Europe/Stockholm"> Stockholm (Sweden) (CEST)</option>
+                            <option value="Europe/Tallinn"> Tallinn (Estonia) (EEST)</option>
+                            <option value="Europe/Tirane"> Tirane  ()(CEST)</option>
+                            <option value="Europe/Ulyanovsk"> Ulyanovsk (Russia) (+04)</option>
+                            <option value="Europe/Uzhgorod"> Uzhgorod (Slovakia) (EEST)</option>
+                            <option value="Europe/Vaduz"> Vaduz (Liechtenstein) (CEST)</option>
+                            <option value="Europe/Vatican"> Vatican (CEST)</option>
+                            <option value="Europe/Vienna"> Vienna (Austria) (CEST)</option>
+                            <option value="Europe/Vilnius"> Vilnius (Lithuania) (EEST)</option>
+                            <option value="Europe/Volgograd"> Volgograd (Russia) (+03)</option>
+                            <option value="Europe/Warsaw"> Warsaw (Poland) (CEST)</option>
+                            <option value="Europe/Zagreb"> Zagreb (Crotia) (CEST)</option>
+                            <option value="Europe/Zaporozhye"> Zaporozhye (Ukraine) (EEST)</option>
+                            <option value="Europe/Zurich"> Zurich (Switzerland) (CEST)</option>
                             <option value="Indian/Antananarivo">Indian/Antananarivo (EAT)</option>
                             <option value="Indian/Chagos">Indian/Chagos (+06)</option>
                             <option value="Indian/Christmas">Indian/Christmas (+07)</option>
@@ -665,11 +744,11 @@ const FormEvent = ({ state, actions }) => {
                             <option value="Pacific/Wallis">Pacific/Wallis (+12)</option>
                             <option value="UTC">UTC (UTC)</option>
                     </select>
-            </div> <br></br>       
+            </WrapperField> <br></br>       
 
-                <button type="submit" className="submit">
+                <ButtonSubmit type="submit" className="submit">
                     Create Event
-                </button>  
+                </ButtonSubmit>  
     </FormStyles>
 
 
@@ -681,13 +760,27 @@ const FormEvent = ({ state, actions }) => {
 
 
 const FormStyles = styled.form`
-
   display: flex;
   flex-wrap: wrap;
+`
 
-  div {
-    flex-basis: 40%;
-    margin-right: 5rem;
+const WrapperField = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex-basis: 90%;
+    
+    /**new start */
+    @media (max-width: 768px){
+        &:nth-of-type(9) {
+            margin-top: 4rem;
+        }
+    }
+   /**new ends */
+    
+    @media (min-width: 768px){
+        flex-basis: 45%;
+        margin-right: 5rem;
+    }
      
     label {
         padding: 2rem 1rem 0 0;
@@ -715,8 +808,8 @@ const FormStyles = styled.form`
         width:100%;
         font-family:inherit;
         font-size: inherit;
-        width: 100%;
         height: 100%;
+        
     }
 
     span {
@@ -734,29 +827,29 @@ const FormStyles = styled.form`
         color: #e4605e;
         font-size: 1rem;
     }
-  }
-  
-  button {
-        /* remove default behavior */
-        appearance:none;
-        -webkit-appearance:none;
+`
 
-        /* usual styles */
-        padding:1rem 2rem;
-        border:none;
-        background-color:#3F51B5;
-        color:#fff;
-        font-weight:600;
-        border-radius:5px;
+const ButtonSubmit = styled.button`
+
+    /* remove default behavior */
+    display: flex;
+    justify-content: start;
+    appearance:none;
+    -webkit-appearance:none;
+
+    /* usual styles */
+    padding:1rem 2rem;
+    border:none;
+    background-color:#3F51B5;
+    color:#fff;
+    font-weight:600;
+    border-radius:5px;
+    margin-top: 3rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+
+    @media(min-width: 768px) {
         margin-top: 3rem;
-        cursor: pointer;
-        font-size: 1.2rem;
-
-
-        @media(min-width: 768px) {
-            margin-top: 10rem;
-        }
-
     }
 `
 
@@ -771,6 +864,15 @@ const FormContainer = styled.div`
 
     p {
         font-size: 1.2rem;
+    }
+`;
+
+//datetimewraper styles
+const DateTimeWrapper = styled.div`
+    label {
+        padding: 2rem 1rem 0 0;
+        display: flex;
+        width: 100%;
     }
 `;
 

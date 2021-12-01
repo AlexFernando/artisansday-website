@@ -62,27 +62,27 @@ const useFilterTags = () => {
 
 
 
-    categories.map( category => {
+    // categories.map( category => {
 
-        if(category.parent !== 0){
+    //     if(category.parent !== 0){
 
-            if(category.name !== "Uncategorized") {
+    //         if(category.name !== "Uncategorized") {
 
-                const newData = {"id": category.id, "name": category.name, "parent": category.parent};
-                realSubCategories.push(newData);
-            }
-        }
-    })
+    //             const newData = {"id": category.id, "name": category.name, "parent": category.parent};
+    //             realSubCategories.push(newData);
+    //         }
+    //     }
+    // })
 
-    realSubCategories.map( subcategory => {
+    // realSubCategories.map( subcategory => {
         
-        for( var i = 0 ; i < realCategories.length; i++) {
-            realCategories[i]["number"] = i+1;
-            if( realCategories[i].id === subcategory.parent) {
-                realCategories[i]["subcategories"].push(subcategory.name);
-            }
-        }
-    })
+    //     for( var i = 0 ; i < realCategories.length; i++) {
+    //         realCategories[i]["number"] = i+1;
+    //         if( realCategories[i].id === subcategory.parent) {
+    //             realCategories[i]["subcategories"].push(subcategory.name);
+    //         }
+    //     }
+    // })
 
     const dropdownRefTags = useRef(null);
     const [isTagsActive, setTagsIsActive] = useDetectOutsideClick(dropdownRefTags, false);

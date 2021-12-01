@@ -84,7 +84,7 @@ const allEvents = ( {state, libraries, actions} ) => {
     useEffect( () => {
       
         if(allCategory !== "") {
-            const filter = eventsNoCategories.filter(elemToolkit => elemToolkit.category === allCategory.trim() || elemToolkit.subcategory === allCategory.trim())
+            const filter = eventsNoCategories.filter(elemToolkit => elemToolkit.category === allCategory.trim())
             saveFilteredByTag(filter);
             setFilterByDate([]);
         } 
@@ -188,7 +188,8 @@ const allEvents = ( {state, libraries, actions} ) => {
 
                      
                             <EventContainer>
-                            <Global styles={generalStyles,multiCarouselStyles} />
+                            <Global styles={multiCarouselStyles} />
+                            <Global styles={generalStyles} />
                             <Carousel
                                 ssr
                                 partialVisbile
@@ -216,7 +217,11 @@ const allEvents = ( {state, libraries, actions} ) => {
                                         const timeEnd = arrDateTimeEnd[1];
 
                                         const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
-                                
+
+                                        let cityArr = event.acf.timezone.split("/");
+                                        
+                                        let cityVenue = cityArr[cityArr.length -1];
+
                                         return(
                                             
                                             <EventWrapLink>
@@ -231,7 +236,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                                                         </EventInfoFirst>
                             
                                                         <EventInfoSecond>
-                                                            <span>{timeStartShort} - {timeEndShort} <i>*{event.acf.timezone}</i></span>
+                                                            <span>{timeStartShort} - {timeEndShort} <i>*{cityVenue}</i></span>
                                                             <h3>{event.acf.title}</h3>
                                                             <span>{event.acf.cost}</span>
                                                         </EventInfoSecond>    
@@ -256,7 +261,8 @@ const allEvents = ( {state, libraries, actions} ) => {
                     
                         <EventContainer>
                               
-                            <Global styles={generalStyles, multiCarouselStyles} />
+                            <Global styles={multiCarouselStyles} />
+                            <Global styles={generalStyles} />
                             <Carousel
                                 ssr
                                 partialVisbile
@@ -285,6 +291,10 @@ const allEvents = ( {state, libraries, actions} ) => {
                                 const timeEnd = arrDateTimeEnd[1];
 
                                 const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
+
+                                let cityArr = event.acf.timezone.split("/");
+                                        
+                                let cityVenue = cityArr[cityArr.length -1];
                                 
                                 return(
                                     
@@ -300,7 +310,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                                                 </EventInfoFirst>
                     
                                                 <EventInfoSecond>
-                                                    <span>{timeStartShort} - {timeEndShort} <i>*{event.acf.timezone}</i></span>
+                                                    <span>{timeStartShort} - {timeEndShort} <i>*{cityVenue}</i></span>
                                                     <h3>{event.acf.title}</h3>
                                                     <span>{event.acf.cost}</span>
                                                 </EventInfoSecond>    
@@ -325,7 +335,8 @@ const allEvents = ( {state, libraries, actions} ) => {
                 
                 <EventContainer>
                 
-                    <Global styles={generalStyles, multiCarouselStyles} />
+                    <Global styles={multiCarouselStyles} />
+                    <Global styles={generalStyles} />
                     <Carousel
                         ssr
                         partialVisbile
@@ -353,6 +364,10 @@ const allEvents = ( {state, libraries, actions} ) => {
                             const timeEnd = arrDateTimeEnd[1];
 
                             const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
+
+                            let cityArr = event.acf.timezone.split("/");
+                                        
+                            let cityVenue = cityArr[cityArr.length -1];
                             
                             return(
                                 
@@ -368,7 +383,7 @@ const allEvents = ( {state, libraries, actions} ) => {
                                             </EventInfoFirst>
                 
                                             <EventInfoSecond>
-                                                <span>{timeStartShort} - {timeEndShort} <i>*{event.acf.timezone}</i></span>
+                                                <span>{timeStartShort} - {timeEndShort} <i>*{cityVenue}</i></span>
                                                 <h3>{event.acf.title}</h3>
                                                 <span>{event.acf.cost}</span>
                                             </EventInfoSecond>    
