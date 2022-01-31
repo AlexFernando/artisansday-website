@@ -36,7 +36,32 @@ export default {
           isHomePage: true,
         },
 
+        "/es/": {
+          isReady: true,
+          isFetching: false,
+          isHomePage: true
+        },
+
+        "/fr/": {
+          isReady: true,
+          isFetching: false,
+          isHomePage: true
+        },
+
         "/fullprogram/": {
+          isReady: true,
+          isFetching: false,
+          isFullProgram: true,
+        },
+
+
+        "/es/fullprogram/": {
+          isReady: true,
+          isFetching: false,
+          isFullProgram: true,
+        },
+
+        "/fr/fullprogram/": {
           isReady: true,
           isFetching: false,
           isFullProgram: true,

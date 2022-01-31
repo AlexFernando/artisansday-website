@@ -8,7 +8,18 @@ import Loading from './Loading';
 const stayInTouch = ({state, actions, libraries}) => {
 
     useEffect( () => {
-        actions.source.fetch("/contact")
+        if(state.theme.lang === "en") {
+            actions.source.fetch("/contact")
+        }
+
+        else if (state.theme.lang === "es") {
+            actions.source.fetch("/es/contact")
+        }
+
+        else {
+            actions.source.fetch("/fr/contact")
+        }
+
     }, [])
 
     const Html2react = libraries.html2react.Component;
@@ -20,18 +31,17 @@ const stayInTouch = ({state, actions, libraries}) => {
         <>
         {typeof contentForm === "undefined" ? <Loading /> 
             :
-
             <MarginTopContainer>
                 <HeadContainer>
                                     
                     <Title>
-                        Contact
+                        {contentForm.acf.title_contact}
                     </Title>
 
                     <Separator></Separator>
 
                     <SubTitle>
-                        Stay in touch. In case you have any question, please email us using the form below.
+                        {contentForm.acf.subtitle_contact}
                     </SubTitle>
                 </HeadContainer>
                 <Content>
