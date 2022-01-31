@@ -4,7 +4,7 @@ import Loading from './Loading';
 
 //icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSeedling, faRainbow, faCampground, faHeart, faHands} from '@fortawesome/free-solid-svg-icons';
+import { faSeedling, faRainbow, faHeart, faHands} from '@fortawesome/free-solid-svg-icons';
 
 // react tab tab
 import {Tabs, TabList, Tab, PanelList, Panel} from 'react-tabtab';
@@ -27,93 +27,67 @@ const About = ({state}) => {
 
             <Tabs customStyle={customStyle}>
                 <TabList>
-                    <Tab>{pageAbout.acf.purpose_title}</Tab>
-                    <Tab>{pageAbout.acf.what_title}</Tab>
-                    <Tab>{pageAbout.acf.why_title}</Tab>
-                    <Tab>{pageAbout.acf.proposal_title}</Tab>
+                    {
+                        Object.keys(pageAbout.acf.about_items).map( (elem,index) => {
+
+                            return (
+                            
+                                <Tab>{pageAbout.acf.about_items[elem].title}</Tab>
+                                    
+                            )
+                        })
+                    }
                 </TabList>
-                
+
                 <PanelList>
-                    <Panel>
-                        <InfoContainer>
-                            {pageAbout.acf.purpose_paragraphs.split('%').map( (elem, index) => {
-                                return(
-                                    <InfoElem>
-                                        <FontAwesomeIconStyled icon={IconsArray[index]} />
-                                        <p>{elem}</p>
-                                    </InfoElem>
-                                )
+                    
+                    {
+                        Object.keys(pageAbout.acf.about_items).map( (elem, index) => {
+                            return (
+                                <Panel>
+                                    <InfoContainer>
+
+                                        {
+                                            pageAbout.acf.about_items[elem].paragraphs.split('%').map( (item, idx) => {
+                                                return(
+                                                    <InfoElem>
+                                                        <FontAwesomeIconStyled icon={IconsArray[idx]} />
+                                                        <p>{item}</p>
+                                                    </InfoElem>
+                                                )
+                                            
+                                            })
+                                        }
+
+                                    </InfoContainer>
+
+                                    {
+                                        Object.keys(pageAbout.acf.about_items[elem]).length > 2 ? 
+                                            <InfoContainer>
+                                                {
+                                                    Object.keys(pageAbout.acf.about_items[elem].paragraphs_set_two).map((myElem) => {
+                                                        return(
+                                                            <InfoElem>
+                                                                <h3>
+                                                                    {pageAbout.acf.about_items[elem].paragraphs_set_two[myElem].title}
+                                                                </h3>
+
+                                                                <p>
+                                                                    {pageAbout.acf.about_items[elem].paragraphs_set_two[myElem].paragraph}
+                                                                </p>    
+                                                            </InfoElem>
+                                                        )   
+                                                    }) 
+                                                    
+                                                }
+                                            </InfoContainer>
+                                        :null
+                                    }
+                                </Panel>
+                            )
+                        })
                         
-                            })}
-                        </InfoContainer>
-                    </Panel>
-
-                    <Panel>
-
-                        <InfoContainer>
-                            {pageAbout.acf.what_paragraphs.split('%').map( (elem, index) => {
-                                return(
-                                    <InfoElem>
-                                        <>
-                                            <FontAwesomeIconStyled icon={IconsArray[index]} />
-                                            <p>{elem}</p>
-                                        </>
-                                    </InfoElem>
-                                )
-                       
-                            })}
-                          
-                        </InfoContainer>
-
-                        <InfoContainer>
-                            {Object.keys(pageAbout.acf.what_paragraphs_second_set).map( (elem, index) => {
-                                return(
-                                    <InfoElem>
-                                        <>
-                                            <h3>{pageAbout.acf.what_paragraphs_second_set[elem].title}</h3>
-                                            <p>{pageAbout.acf.what_paragraphs_second_set[elem].text_paragraph}</p>
-                                        </>
-                                    </InfoElem>
-                                )
-                       
-                            })}
-                          
-                        </InfoContainer>
-                    </Panel>
-
-                    <Panel>
-                        <InfoContainer>
-                            {pageAbout.acf.why_paragraphs.split('%').map( (elem, index) => {
-                                return(
-                                    <InfoElem>
-                                        <>
-                                            <FontAwesomeIconStyled icon={IconsArray[index]} />
-                                            <p>{elem}</p>
-                                        </>
-                                    </InfoElem>
-                                )
-                       
-                            })}
-                        </InfoContainer>
-
-                    </Panel>
-
-                    <Panel>
-                        <InfoContainer>
-                            {pageAbout.acf.proposal_paragraphs.split('%').map( (elem, index) => {
-                                return(
-                                    <InfoElem>
-                                        <>
-                                            <FontAwesomeIconStyled icon={IconsArray[index]} />
-                                            <p>{elem}</p>
-                                        </>
-                                    </InfoElem>
-                                )
-                       
-                            })}
-                          
-                        </InfoContainer>
-                    </Panel>
+                    }
                 </PanelList>
             </Tabs>
 

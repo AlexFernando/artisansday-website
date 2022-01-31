@@ -3,6 +3,7 @@ import {css, connect, styled } from "frontity";
 import Link from './Link'
 import Image from '@frontity/components/image';
 import Loading from './Loading';
+import LangSwitcher from './langSwitcher'
 
 const NavBar = ({state}) => {
 
@@ -27,36 +28,41 @@ const NavBar = ({state}) => {
       {navbarOpen ? (
         <>             
             <Navbox>
-                <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
-                    <Link href= "/">Home</Link>
-                </Button> 
-                <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
-                    <Link href= "/about">About</Link>
-                </Button> 
+                {
+                  state.theme.menu.map(([name, link]) => {
 
-                <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
-                    <Link href="/fullprogram">Full Program</Link>
-                </Button>
-                <Button onClick = {() => setNavbarOpen(!navbarOpen)}> 
-                    <Link href= "/mainevent">Main Event</Link>
-                </Button>   
-               
-                <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
-                    <Link href="/contact">Contact</Link>
-                </Button>
+                    return(
+                      <Button onClick = {() => setNavbarOpen(!navbarOpen)}>
+                        <Link href= {link}>{name}</Link>
+                      </Button> 
+                    );
+                   
+                  })
+                }
+                <LangSwitcher />
             </Navbox>
+
+        
         </>
 
       ) : (
         <>
-        <Navbox open>
-          <Button><Link href= "/">Home</Link></Button> 
-          <Button><Link href= "/about">About</Link></Button> 
-          <Button><Link href="/fullprogram">Full Program</Link></Button> 
-          <Button> <Link href= "/mainevent">Main Event</Link></Button> 
-          <Button> <Link href= "/contact">Contact</Link></Button> 
-        </Navbox>
-  </>
+          <Navbox open>
+            <ContainerLinks>
+              {
+                state.theme.menu.map(([name, link]) => {
+
+                  return(
+                    <Button><Link href= {link}>{name}</Link></Button> 
+                  );
+                  
+                })
+              }
+            </ContainerLinks>
+
+            <LangSwitcher />  
+          </Navbox>  
+        </>
       )}
       
     </Navigation>
@@ -70,8 +76,8 @@ export default connect(NavBar);
 
 const Navigation = styled.nav`
    display: flex;
-   flex: 1 0 100%; /**new line */
-   height: 15vh;
+
+   height: auto;
    justify-content: space-between;
    align-items: center;
    border-bottom: 2px solid #33333320;
@@ -111,11 +117,10 @@ const Navbox = styled.div`
 
   display: flex;
   /*height: 100%;*/
-
-  flex: 1 0 100%; /**new line */
-  justify-content: center;
+  flex: 1 1 100%; /**new line */
+  justify-content: space-around;
   align-items: center;
-  margin: auto;
+  margin: 0;
   height: 10vh;
   background-color: #fff;
   
@@ -136,6 +141,9 @@ const Navbox = styled.div`
     top: 10vh;
     left: ${props => (props.open ? "-100%" : "0")};
   }
+`
+const ContainerLinks = styled.div`
+  display: flex;
 `
 
 const Hamburger = styled.div`
@@ -194,6 +202,12 @@ const Hamburger = styled.div`
     cursor: pointer;
 
         @media(min-width: 768px) {
+            margin: 0rem 1rem 0 1rem;
+            font-size: .9rem;
+            color: #000;
+        }
+
+        @media(min-width: 1200px) {
             margin: 0rem 1rem 0 1rem;
             font-size: 1.3rem;
             color: #000;

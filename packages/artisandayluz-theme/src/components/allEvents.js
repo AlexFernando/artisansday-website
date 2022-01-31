@@ -34,14 +34,35 @@ const responsive = {
 const allEvents = ( {state, libraries, actions} ) => {
 
     useEffect( () => {
-        actions.source.fetch("/allevents")
-        //source calendar week
-        actions.source.fetch("/calendar-week")
+
+        if(state.theme.lang === "en") {
+            actions.source.fetch("/allevents")
+            //source calendar week
+            actions.source.fetch("/calendar-week")
+            actions.source.fetch("/pageevents")
+        }
+
+        else if (state.theme.lang === "fr") {
+            actions.source.fetch("/fr/allevents")
+            //source calendar week
+            actions.source.fetch("/fr/calendar-week")
+            actions.source.fetch("/fr/pageevents")
+        } 
+
+        else {
+            actions.source.fetch("/es/allevents")
+            actions.source.fetch("/es/calendar-week")
+            actions.source.fetch("/es/pageevents")
+        }
     }, [])
 
-    const data = state.source.get('/allevents')
+    const data = state.theme.lang === "en" ? state.source.get('/allevents') : state.theme.lang === "fr" ? state.source.get('/fr/allevents') : state.source.get('/es/allevents')
 
-    const dataCalendarWeek = state.source.get('/calendar-week')
+    const dataCalendarWeek = state.source.get('/calendar-week');
+
+    const dataPageEvents = state.source.get('/pageevents');
+
+    const pageEvents = state.source.page["817"]
 
    
     // ALL THE LOGIC STATE FOR CATEGORIES AND 
@@ -157,34 +178,38 @@ const allEvents = ( {state, libraries, actions} ) => {
     //DATES CALENDAR ENDS//
 
     return(
+
+        <>
+        {typeof pageEvents === "undefined" ? <Loading /> : 
+        <>
  
         <PageContainer>
         
-            <h1>Full Program</h1>
+            <h1>{pageEvents.acf.title_full_program}</h1>
 
-            <p>Check out our events happening soon, try to filter by categories or click on a day</p>
+            <p>{pageEvents.acf.subtitle_full_program}</p>
 
                     
                     <TagsContainer>
                         {FilterSubcategoriesUI()}
                     </TagsContainer>
                     <ButtonContainerEvents>
-                        <ButtonStylesEvents onClick={() => SetView(4)}>Thursday</ButtonStylesEvents>
-                        <ButtonStylesEvents onClick={() => SetView(5)}>Friday</ButtonStylesEvents>
-                        <ButtonStylesEvents onClick={() => SetView(6)}>Saturday</ButtonStylesEvents>
+                        <ButtonStylesEvents onClick={() => SetView(4)}>{pageEvents.acf.days_of_week.thursday}</ButtonStylesEvents>
+                        <ButtonStylesEvents onClick={() => SetView(5)}>{pageEvents.acf.days_of_week.friday}</ButtonStylesEvents>
+                        <ButtonStylesEvents onClick={() => SetView(6)}>{pageEvents.acf.days_of_week.saturday}</ButtonStylesEvents>
 
-                        <ButtonStylesEvents onClick={() => SetView(3)}>Sunday</ButtonStylesEvents>
+                        <ButtonStylesEvents onClick={() => SetView(3)}>{pageEvents.acf.days_of_week.sunday}</ButtonStylesEvents>
 
-                        <ButtonStylesEvents onClick={() => SetView(0)}>Monday</ButtonStylesEvents>
-                        <ButtonStylesEvents onClick={() => SetView(1)}>Tuesday</ButtonStylesEvents>
-                        <ButtonStylesEvents onClick={() => SetView(2)}>Wednesday</ButtonStylesEvents>
+                        <ButtonStylesEvents onClick={() => SetView(0)}>{pageEvents.acf.days_of_week.monday}</ButtonStylesEvents>
+                        <ButtonStylesEvents onClick={() => SetView(1)}>{pageEvents.acf.days_of_week.tuesday}</ButtonStylesEvents>
+                        <ButtonStylesEvents onClick={() => SetView(2)}>{pageEvents.acf.days_of_week.wednesday}</ButtonStylesEvents>
 
                     </ButtonContainerEvents>
 
                     {data.isReady && eventsOfToday.length > 0 && filterByDate.length === 0 && filteredByTag.length === 0  ? 
                         <>
                         
-                        <h1>Today Events</h1>
+                        <h1>{pageEvents.acf.today_events_title}</h1>
 
                      
                             <EventContainer>
@@ -406,10 +431,14 @@ const allEvents = ( {state, libraries, actions} ) => {
             }
 
             {data.isReady && eventsOfToday.length === 0 && filteredByTag.length === 0 && filterByDate.length === 0 ?
-                <NoEventsParagraph>There's no events to show you</NoEventsParagraph>
+                <NoEventsParagraph>{pageEvents.acf.message_event}</NoEventsParagraph>
                 : null
             } 
         </PageContainer>
+
+        </>
+        }
+        </>
         )
 }
  

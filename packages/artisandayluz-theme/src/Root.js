@@ -19,6 +19,8 @@ const Root = ({state, actions}) => {
     useEffect( () => {
         actions.source.fetch("/homepage")
         actions.source.fetch("/allevents")
+        actions.source.fetch("/es/homepage");
+        actions.source.fetch("/fr/homepage");
     }, [])
 
     
@@ -60,10 +62,16 @@ const Root = ({state, actions}) => {
         {data.isFullProgram && <AllEvents />}  
         {data.isAllevents && <EventsDetails/>}
         {state.router.link === "/mainevent/" && <MainEvent />}
-
-        {state.router.link === "/contact/" && <StayInTouch />}
+        {state.router.link === "/es/mainevent/" && <MainEvent />}
+        {state.router.link === "/fr/mainevent/" && <MainEvent />}
 
         {state.router.link === "/about/" && <About/>}
+        {state.router.link === "/es/about/" && <About/>}
+        {state.router.link === "/fr/about/" && <About/>}
+
+        {state.router.link === "/contact/" && <StayInTouch />}
+        {state.router.link === "/es/contact/" && <StayInTouch />}
+        {state.router.link === "/fr/contact/" && <StayInTouch />}
 
         {data.isCreateEvent && <CreateEvent />}
 

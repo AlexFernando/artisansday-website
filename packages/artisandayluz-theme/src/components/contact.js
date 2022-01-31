@@ -73,7 +73,18 @@ const FontAwesomeIconStyled = styled(FontAwesomeIcon)`
 const Contact = ({state,actions}) => {
 
     useEffect( () => {
-        actions.source.fetch("/footer-info")
+        if(state.theme.lang === "en") {
+            actions.source.fetch("/footer-info")
+        }
+
+        else if (state.theme.lang === "fr") {
+            actions.source.fetch("/fr/footer-info")
+        }
+
+        else {
+            actions.source.fetch("/es/footer-info")
+        }
+
     }, [])
 
     const pageFooterInfo = state.source.page[165];
@@ -84,8 +95,8 @@ const Contact = ({state,actions}) => {
             :
         <ContactContainer>
             <ContactElement>
-                <h2>Contact</h2>
-                <h3>Stay in touch</h3>
+                <h2>{pageFooterInfo.acf.contact_title}</h2>
+                <h3>{pageFooterInfo.acf.subtitle_contact}</h3>
                 <ul>
                     <li><FontAwesomeIconStyled icon={faPhone}/>{pageFooterInfo.acf.phone_contact_1}</li>
                     <li><FontAwesomeIconStyled icon={faPhone}/>{pageFooterInfo.acf.phone_contact_2}</li>
@@ -94,8 +105,8 @@ const Contact = ({state,actions}) => {
             </ContactElement>
 
             <ContactElement>
-                <h2>Social Media</h2>
-                <h3>Follow us to stay tuned about our latest features and releases</h3>
+                <h2>{pageFooterInfo.acf.social_media_title}</h2>
+                <h3>{pageFooterInfo.acf.social_media_subtitle}</h3>
             
                 <ul>
                         <li><a href={pageFooterInfo.acf.link_facebook} alt="Share on Facebook" aria-label="Link to Facebook" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faFacebookSquare}/></a>Facebook</li>

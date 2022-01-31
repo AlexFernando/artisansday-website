@@ -12,10 +12,23 @@ const HomePage = ({state, actions, libraries}) => {
     const pageHome = state.source.page[121];
 
     useEffect( () => {
-        actions.source.fetch("/allevents")
+    
+        if(state.theme.lang === "en") {
+            actions.source.fetch("/allevents")
+        }
+
+        else if (state.theme.lang === "fr") {
+            console.log("claro")
+            actions.source.fetch("/fr/allevents")
+        }
+
+        else {
+            actions.source.fetch("/es/allevents")
+        }
+
     }, [])
 
-    const data = state.source.get('/allevents')
+    const data = state.theme.lang === "en" ? state.source.get('/allevents') : state.theme.lang === "fr" ? state.source.get('/fr/allevents') : state.source.get('/es/allevents')
 
     // Today events
 
@@ -148,12 +161,12 @@ const BackgroundColor = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     background-position:center center;
-    height: 700px;
+    height: 750px;
     display: flex;
     justify-content: center;
     align-content: center;
     overflow-wrap: break-word;
-    padding: 1rem 2rem;
+    padding: 4% 2%;
    
     @media(max-width: 768px) {
         height: 673px;
@@ -167,18 +180,23 @@ const MainContainer = styled.div`
     flex-direction: column;
     flex-basis: 60%;
     justify-content: center;
+    margin-top: 5%;
 
     @media(max-width: 768px) {
         flex-basis: 100%;
+        margin-top: 20%;
     }
 
         h1 {
             text-transform: capitalize;
             font-size: 2rem;
             letter-spacing: 4px;
-            margin-top: 5rem;
 
             @media(min-width: 768px) {
+                font-size: 2.5rem;
+            }
+
+            @media(min-width: 968px) {
                 font-size: 4rem;
             }
         }
@@ -225,7 +243,7 @@ const ImageStyledHome = styled(Image)`
     margin-top: 4rem;
 
     @media(max-width: 768px) {
-        margin-top: 2rem;
+        margin-top: 5%;
     }
 `
 

@@ -141,6 +141,7 @@ const useFilterTags = () => {
                         <ButtonIconStyles type="button" onClick = {() => saveCategory(option.name)}>
                             <ImageIconStyles src={imagesIcon[index]} /><br></br>
                             <span>{option.name}</span>
+                            
                         </ButtonIconStyles>
               
                 </>
