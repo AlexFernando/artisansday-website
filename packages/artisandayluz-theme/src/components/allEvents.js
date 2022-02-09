@@ -6,6 +6,8 @@ import Link from './Link';
 import Loading from './Loading';
 import useFilterTags from '../hooks/useFilterTags';
 import {NoEventsParagraph} from './Home';
+import {hoursStringToDecimal} from '../helpers/index'
+import {decimalHoursToString} from '../helpers/index';
 
 /**CAROUSEL EVENTS */
 import Carousel from "react-multi-carousel";
@@ -230,19 +232,32 @@ const allEvents = ( {state, libraries, actions} ) => {
 
                                         // new date time to delete old custom fields
                                         const arrDateTimeStart = event.acf.date_time_start.split(" ");
+                                        const durationEventStr = event.acf.duration_event;
 
                                         const arrDateAlt = arrDateTimeStart[0].split("-");
-                                    
+
                                         const timeStart = arrDateTimeStart[1];
-                                        
+
                                         const timeStartShort = timeStart.substring(0, timeStart.length -3)
+                                        
+                                        const totalHoursDateTimeStart = hoursStringToDecimal(timeStartShort)
+
+                                        const totalHoursDurationEvents = hoursStringToDecimal(durationEventStr)
+                                        
+                                        console.log("totalHoursDateTime: ", totalHoursDateTimeStart, "totalHoursDuration: ", totalHoursDurationEvents);
                                     
-                                        const arrDateTimeEnd = event.acf.date_time_end.split(" ");
+                                        const totalHours = totalHoursDateTimeStart + totalHoursDurationEvents;
                                     
+                                        const finalTimeEnd = decimalHoursToString(totalHours);
+                                    
+                                        console.log("finalTimeEnd: ", finalTimeEnd);
+                                        
+                                        let myFinalDateTimeEnd = arrDateTimeStart[0]+" "+ finalTimeEnd + ":00"
+                                    
+                                        const arrDateTimeEnd = myFinalDateTimeEnd.split(" ");
                                         const timeEnd = arrDateTimeEnd[1];
-
                                         const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
-
+                                    
                                         let cityArr = event.acf.timezone.split("/");
                                         
                                         let cityVenue = cityArr[cityArr.length -1];
@@ -304,19 +319,27 @@ const allEvents = ( {state, libraries, actions} ) => {
 
                                 // new date time to delete old custom fields
                                 const arrDateTimeStart = event.acf.date_time_start.split(" ");
+                                const durationEventStr = event.acf.duration_event;
 
                                 const arrDateAlt = arrDateTimeStart[0].split("-");
-                            
+
                                 const timeStart = arrDateTimeStart[1];
 
                                 const timeStartShort = timeStart.substring(0, timeStart.length -3)
+                                
+                                const totalHoursDateTimeStart = hoursStringToDecimal(timeStartShort)
+
+                                const totalHoursDurationEvents = hoursStringToDecimal(durationEventStr)
                             
-                                const arrDateTimeEnd = event.acf.date_time_end.split(" ");
+                                const totalHours = totalHoursDateTimeStart + totalHoursDurationEvents;
                             
+                                const finalTimeEnd = decimalHoursToString(totalHours);
+                                
+                                let myFinalDateTimeEnd = arrDateTimeStart[0]+" "+ finalTimeEnd + ":00"
+                            
+                                const arrDateTimeEnd = myFinalDateTimeEnd.split(" ");
                                 const timeEnd = arrDateTimeEnd[1];
-
                                 const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
-
                                 let cityArr = event.acf.timezone.split("/");
                                         
                                 let cityVenue = cityArr[cityArr.length -1];
@@ -377,21 +400,31 @@ const allEvents = ( {state, libraries, actions} ) => {
                             const monthsName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
                             // new date time to delete old custom fields
+                                                           
                             const arrDateTimeStart = event.acf.date_time_start.split(" ");
+                            const durationEventStr = event.acf.duration_event;
 
                             const arrDateAlt = arrDateTimeStart[0].split("-");
-                        
+
                             const timeStart = arrDateTimeStart[1];
+
                             const timeStartShort = timeStart.substring(0, timeStart.length -3)
+                            
+                            const totalHoursDateTimeStart = hoursStringToDecimal(timeStartShort)
+
+                            const totalHoursDurationEvents = hoursStringToDecimal(durationEventStr)
                         
-                            const arrDateTimeEnd = event.acf.date_time_end.split(" ");
+                            const totalHours = totalHoursDateTimeStart + totalHoursDurationEvents;
                         
+                            const finalTimeEnd = decimalHoursToString(totalHours);
+                            
+                            let myFinalDateTimeEnd = arrDateTimeStart[0]+" "+ finalTimeEnd + ":00"
+                        
+                            const arrDateTimeEnd = myFinalDateTimeEnd.split(" ");
                             const timeEnd = arrDateTimeEnd[1];
-
                             const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
-
                             let cityArr = event.acf.timezone.split("/");
-                                        
+                                    
                             let cityVenue = cityArr[cityArr.length -1];
                             
                             return(

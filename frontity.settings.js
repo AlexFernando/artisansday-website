@@ -66,7 +66,7 @@ const settings = [
   //SPANISH SITE
   {
     "name": "artisandayluz-spanish",
-    "match": [".*localhost:3000\/es(\/.*)?$"],
+    "match": [".*artisandayluz.com\/es(\/.*)?$"],
     "state": {
       "frontity": {
         "url": "https://artisandayluz.com/es/",
@@ -134,7 +134,7 @@ const settings = [
     //FRENCH SITE
     {
       "name": "artisandayluz-french",
-      "match": [".*localhost:3000\/fr(\/.*)?$"],
+      "match": [".*artisandayluz.com\/fr(\/.*)?$"],
       "state": {
         "frontity": {
           "url": "https://artisandayluz.com/fr/",

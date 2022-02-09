@@ -10,6 +10,9 @@ import CalendarCss from 'react-calendar/dist/Calendar.css';
 import ClockCss from 'react-clock/dist/Clock.css';
 import generalStyles from '../styles/generalStyles.css';
 
+//city country
+import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
+
 import { months } from "moment";
 
 
@@ -27,47 +30,55 @@ const FormEvent = ({ state, actions }) => {
           "language_event": "",
           "cost": "",
           "date_time_start": "",
-          "date_time_end": "",
-          "timezone": ""
+          "duration_event": "",
+          "timezone": "",
+          "address": "",
+          "city": "",
+          "country": ""
         },
       }
 
     //datetime Picker State Starts
     const [value, onChange] = useState(new Date());
-    const [valueEnd, onChangeEnd] = useState(new Date());
+    //const [valueEnd, onChangeEnd] = useState(new Date());
     //datetime Picker State ends
-    
+    //CITY COUNTRY STATES
+    const [city, selectCity] = useState("");
+    const [country, selectCountry] = useState("");
+
+    console.log("country: ", country, "city: ", city);
+
     let arrayDateTimeStart = value.toString().split(' ');
-    let arrayDateTimeEnd = valueEnd.toString().split(' ');
+    //let arrayDateTimeEnd = valueEnd.toString().split(' ');
 
     const monthsName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     let month =  monthsName.indexOf(arrayDateTimeStart[1]) + 1; 
     let monthFinal = ''
 
-    let monthEnd = monthsName.indexOf(arrayDateTimeEnd[1]) + 1;
-    let monthFinalEnd = ''
+    // let monthEnd = monthsName.indexOf(arrayDateTimeEnd[1]) + 1;
+    // let monthFinalEnd = ''
     
     if(month >= 10) {
         monthFinal = month.toString();
-        monthFinalEnd = monthEnd.toString();
+        //monthFinalEnd = monthEnd.toString();
     }
 
     else {
         monthFinal = '0'+month.toString();
-        monthFinalEnd = '0'+monthEnd.toString();
+        //monthFinalEnd = '0'+monthEnd.toString();
     }
 
     let dateTimeStartFormat = arrayDateTimeStart[3]+"-"+monthFinal+"-"+arrayDateTimeStart[2]+" T"+arrayDateTimeStart[4];
-    let dateTimeEndFormat = arrayDateTimeEnd[3]+"-"+monthFinalEnd+"-"+arrayDateTimeEnd[2]+" T"+arrayDateTimeEnd[4];
-
-
+    //let dateTimeEndFormat = arrayDateTimeEnd[3]+"-"+monthFinalEnd+"-"+arrayDateTimeEnd[2]+" T"+arrayDateTimeEnd[4];
 
     const postEventHandler = () => {
 
         myFields.acf_fields['date_time_start'] = dateTimeStartFormat;
-        myFields.acf_fields['date_time_end'] = dateTimeEndFormat;
-
+        //myFields.acf_fields['date_time_end'] = dateTimeEndFormat;
+        myFields.acf_fields['city'] = city;
+        myFields.acf_fields['country'] = country;
+        
         Object.keys(fieldsPost).map( item => {
 
             if(item === 'title') {
@@ -76,11 +87,28 @@ const FormEvent = ({ state, actions }) => {
             }
 
             else if(item === 'video') {
+                // HACER LO DEL LINK http://jsfiddle.net/88Ms2/377/
+                // let expresion = /((https|http):\/\/(?:www\.)?(youtube.com\/embed\/[^\s]+|player.vimeo.com\/video\/[^\s]+))/g;
+                // let URLVideo = fieldsPost[item].match(expresion);
+                // let finalUrlVideo = URLVideo[0].slice(0,-1);
+                // myFields.acf_fields[item] = finalUrlVideo;
+                let URLVideo = '';
+                let expressionOne= /(?:http?s?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)/g;
+                let groupMatchOne = expressionOne.exec(fieldsPost[item])
+                let expresionTwo = /(?:http?s?:\/\/)?(?:www\.)?(?:vimeo\.com)\/?(.+)/g;
+                let groupMatchTwo = expresionTwo.exec(fieldsPost[item])
+           
+                if(groupMatchOne) {
+                    URLVideo = 'https://www.youtube.com/embed/'+ groupMatchOne[1]
+                }    
+                
+                else if(groupMatchTwo) {
+                    URLVideo = 'https://vimeo.com/'+groupMatchTwo[1]
+                }
 
-                let expresion = /((https|http):\/\/(?:www\.)?(youtube.com\/embed\/[^\s]+|player.vimeo.com\/video\/[^\s]+))/g;
-                let URLVideo = fieldsPost[item].match(expresion);
-                let finalUrlVideo = URLVideo[0].slice(0,-1);
-                myFields.acf_fields[item] = finalUrlVideo;
+                myFields.acf_fields[item] = URLVideo;
+
+                console.log("URLVideo: ", URLVideo)
             }
         
             else {
@@ -118,10 +146,11 @@ const FormEvent = ({ state, actions }) => {
             //         message: 'The email is not valid'
             //     }
             // },
-
+            //CAMBIAR PATTERN POR UNO LINK DE YOUTUBE NORMAL
             video: {
                 pattern: {
-                  value: '((https|http):\/\/(?:www\.)?(youtube.com\/embed\/[^\s]+|player.vimeo.com\/video\/[^\s]+))',
+                  //value: '((https|http):\/\/(?:www\.)?(youtube.com\/embed\/[^\s]+|player.vimeo.com\/video\/[^\s]+))',
+                  value: '(?:http?s?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)|(?:http?s?:\/\/)?(?:www\.)?(?:vimeo\.com)\/?(.+)',
                   message: 'The url video is not valid'
                 }
             },
@@ -164,7 +193,7 @@ const FormEvent = ({ state, actions }) => {
                 />
 
                 {/* {errors.title && <p>{errors.title}</p>} */}
-            </WrapperField> 
+            </WrapperField> <br></br>
 
             <WrapperField>
                 <label htmlFor="organizer">Organizer/Organization Name:</label><br></br>
@@ -190,7 +219,7 @@ const FormEvent = ({ state, actions }) => {
             </WrapperField> <br></br>
 
             <WrapperField>
-                <label htmlFor="link_to_website">Link Website</label>
+                <label htmlFor="link_to_website">Link Website</label><br></br>
                 <input
                     type="text"                     
                     placeholder="Link of Website's Organization"                     
@@ -238,64 +267,31 @@ const FormEvent = ({ state, actions }) => {
             </WrapperField> <br></br>
 
 
-            {/* <div>
-                <label htmlFor="date_time_start">Date Time Start:</label><br></br>
-                <span>(If you don't see a calendar picker, follow this format "yyyy-dd-mm T hh:mm" for this field)</span><br></br>
-                <span>(Ex: 2021-11-15T15:30)</span>
-                <input
-                    placeholder="DateTimeStart"                     
-                    type="datetime-local"
-                    defaultValue={user.date_time_start || ''}
-                    min="2021-06-07T00:00" max="2022-12-22T00:00"
-                    onChange={handleChange('date_time_start')}
-                    required
-                />
-
-                {errors.date_time_start && <p className="error">{errors.date_time_start}</p>}
-            </div> <br></br> */}
-
             <DateTimeWrapper>
                 <Global styles={DateTimePickerStyles} />
                 <Global styles={CalendarCss} />
                 <Global styles={ClockCss}/>
                 <Global styles={generalStyles} />
 
-                <label htmlFor="date_time_start">Date Time Start:</label><br></br>
+                <div>
+                    <label htmlFor="date_time_start">Date Time Start:</label><br></br>
                     <DateTimePicker
                         value={value}
                         onChange={onChange}
                         required
                     />
-
-            </DateTimeWrapper><br></br>
-
-            {/* <WrapperField>
-                <label htmlFor="date_time_end">Date Time End:</label><br></br>
-                <span>(If you don't see a calendar picker, follow this format "yyyy-dd-mm T hh:mm" for this field)</span><br></br>
-                <span>(Ex: 2021-11-15T15:30)</span>
-                <input
-                    placeholder="DateTimeEnd"                     
-                    type="datetime-local" 
-                    defaultValue={user.date_time_end || ''}
-                    min="2021-06-07T00:00" max="2022-12-22T00:00"
-                    onChange={handleChange("date_time_end")}
-                    required
-                />
-                {errors.date_time_end && <p className="error">{errors.date_time_end}</p>}
-            </WrapperField> <br></br> */}
-
-            <DateTimeWrapper>
-                <Global styles={DateTimePickerStyles} />
-                <Global styles={CalendarCss} />
-                <Global styles={ClockCss}/>
-                <Global styles={generalStyles} />
-
-                <label htmlFor="date_time_start">Date Time End:</label><br></br>
-                    <DateTimePicker
-                        value={valueEnd}
-                        onChange={onChangeEnd}
-                        required
+                </div>
+            
+                <div>   
+                    <label>Duration: </label><span>(Write a duration in the format hh:mm. Ex: 01:30)</span><br></br>
+                    <input 
+                        type="text" 
+                        required 
+                        pattern="[0-9]{2}:[0-9]{2}" defaultValue={user.duration_event || ''} placeholder="hh:mm"
+                        onChange={handleChange("duration_event")}
                     />
+                </div>
+      
             </DateTimeWrapper><br></br>
 
             <WrapperField>
@@ -309,12 +305,12 @@ const FormEvent = ({ state, actions }) => {
             </WrapperField> <br></br>
 
             <WrapperField>
-                <label htmlFor="timezone">City Venue:</label>
-                <span>(Choose a city where the event going to take place)</span>
+                <label htmlFor="timezone">Timezone:</label>
+                <span>(Choose a timezone where the event going to take place)</span>
                 <br></br>
                 <select
                     type="text"
-                    defaultValue=""
+                    defaultValue="Africa/Abidjan"
                     onChange={handleChange("timezone")}
                     required
                 >
@@ -744,24 +740,66 @@ const FormEvent = ({ state, actions }) => {
                             <option value="Pacific/Wallis">Pacific/Wallis (+12)</option>
                             <option value="UTC">UTC (UTC)</option>
                     </select>
-            </WrapperField> <br></br>       
+            </WrapperField> <br></br>    
 
-                <ButtonSubmit type="submit" className="submit">
-                    Create Event
-                </ButtonSubmit>  
-    </FormStyles>
+            <CityCountryWrapper>
+                <input
+                    type="text"
+                    placeholder="Address's Event"                     
+                    defaultValue={user.address || ''}
+                    onChange={handleChange("address")}
+                    required
+                />
+                
+                <CountryDropdown
+                    value={country}
+                    onChange={val => selectCountry(val)} 
+                />
 
+                <RegionDropdown
+                    country={country}
+                    value={city}
+                    onChange={(val) => selectCity(val)} 
+                />
+            </CityCountryWrapper><br></br>    
 
+            <ButtonSubmit type="submit" className="submit">
+                Create Event
+            </ButtonSubmit>
+        
+        </FormStyles>
 
     </FormContainer>
 
   );
 };
 
+const FormContainer = styled.div`
+    padding: 0rem 1rem;
+    margin-top: 12rem;
+    margin-bottom: 5rem;
+
+    @media(max-width: 768px) {
+        padding: 0rem 1rem;
+        margin: 8rem 0;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 1.2rem;
+    }
+`;
 
 const FormStyles = styled.form`
   display: flex;
   flex-wrap: wrap;
+
+  @media (max-width: 768px){
+    padding: 0;
+  }
 `
 
 const WrapperField = styled.div`
@@ -833,7 +871,6 @@ const ButtonSubmit = styled.button`
 
     /* remove default behavior */
     display: flex;
-    justify-content: start;
     appearance:none;
     -webkit-appearance:none;
 
@@ -852,28 +889,80 @@ const ButtonSubmit = styled.button`
         margin-top: 3rem;
     }
 `
-
-const FormContainer = styled.div`
-    padding: 0rem 2rem;
-    margin-top: 12rem;
-    margin-bottom: 5rem;
- 
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    p {
-        font-size: 1.2rem;
-    }
-`;
-
 //datetimewraper styles
 const DateTimeWrapper = styled.div`
+    display: flex;
+    @media(max-width: 768px) {
+        flex-direction: column;
+    }
+
     label {
         padding: 2rem 1rem 0 0;
         display: flex;
         width: 100%;
     }
+
+    span {
+        color: #696969;
+        font-size: .9rem;
+
+        a {
+            list-style: none;
+            color:red;
+        }
+    }
+
+    input[type=text] {
+        // input elements with type="text" attribute
+        padding:10px;
+        margin:10px 0; 
+        border: 2px solid #777;
+        box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+        border-radius:10px;
+        max-width: 80%;
+        font-family:inherit;
+        font-size: inherit;
+    }
+`;
+
+const CityCountryWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4rem;
+    flex-basis: 90%;
+
+    input[type=text], select {
+        // input elements with type="text" attribute
+        padding:10px;
+        margin:10px 0; 
+        border: 2px solid #777;
+        box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+        border-radius:10px;
+        max-width:100%;
+        font-family:inherit;
+        font-size: inherit;
+    }
+
+        /**new start */
+    @media (max-width: 768px){
+
+        flex-direction: column;
+        max-width: 90%;
+        margin-top: 1rem;
+
+        input[type=text], select {
+            // input elements with type="text" attribute
+            padding:10px;
+            margin: 10px 0; 
+            border: 2px solid #777;
+            box-shadow: 0 0 15px 4px rgba(0,0,0,0.06);
+            max-width: 100%;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+    }
+
 `;
 
 export default connect(FormEvent);

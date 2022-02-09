@@ -111,14 +111,30 @@ const HomePage = ({state, actions, libraries}) => {
 
                     // new date time to delete old custom fields
                     const arrDateTimeStart = event.acf.date_time_start.split(" ");
-
+                    const durationEventStr = postEvent.acf.duration_event;
                     const arrDateAlt = arrDateTimeStart[0].split("-");
-                
                     const timeStart = arrDateTimeStart[1];
-                        
-                    const arrDateTimeEnd = event.acf.date_time_end.split(" ");
+                    const timeStartShort = timeStart.substring(0, timeStart.length -3)
                 
+                    const totalHoursDateTimeStart = hoursStringToDecimal(timeStartShort)
+                
+                    const totalHoursDurationEvents = hoursStringToDecimal(durationEventStr)
+                
+                    const totalHours = totalHoursDateTimeStart + totalHoursDurationEvents;
+                
+                    const finalTimeEnd = decimalHoursToString(totalHours);
+                         
+                    let myFinalDateTimeEnd = arrDateTimeStart[0]+" "+ finalTimeEnd + ":00"
+
+                    console.log(myFinalDateTimeEnd);
+                
+                    const arrDateTimeEnd = myFinalDateTimeEnd.split(" ");
                     const timeEnd = arrDateTimeEnd[1];
+                    const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
+                
+                    let cityArr = postEvent.acf.timezone.split("/");
+                                                        
+                    let cityVenue = cityArr[cityArr.length -1];
                  return(
 
                     <EventWrapLink>

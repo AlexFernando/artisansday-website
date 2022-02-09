@@ -46,6 +46,10 @@ const LoginStyles = styled.div`
   margin-bottom: 10rem;
   text-align: center;
 
+  @media (max-width: 768px) {
+    margin: 5rem 1rem;
+  }
+
   div {
     margin-top: 2rem;
 
@@ -77,6 +81,10 @@ const LoginStyles = styled.div`
     width:100%;
     font-family:inherit;
     font-size: inherit;
+
+    @media (max-width: 768px) {
+      max-width: 90%;
+    }
   }
 
   button {
