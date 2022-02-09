@@ -40,8 +40,8 @@ const Root = ({state, actions}) => {
                 
                     /* * {
                         border: 1px solid #f00 !important;
-                    }  
-                     */
+                    }   */
+                     
                     p {
                         font-family: 'Montserrat', sans-serif;
                         font-weight: 400;

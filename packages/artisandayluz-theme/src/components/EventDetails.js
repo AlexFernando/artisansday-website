@@ -6,6 +6,10 @@ import Link from './Link';
 /**import react add to my calendar button */
 import AddToCalendar from '@culturehq/add-to-calendar';
 import calendarStyles from '@culturehq/add-to-calendar/dist/styles.css';
+import {hoursStringToDecimal} from '../helpers/index'
+import {decimalHoursToString} from '../helpers/index';
+//COLOCAR UN INPUT PARA MINUTOS Y OTRO PARA HORAS CON UN FORMATO ESPECIFICO, LUEGO ANTES DE AGREGAR AL CALENDARIO SUMAR CON EL INPUT DE DATE TIME START, PARA OBTENER TIME END
+///FINALMENTE BORRAR TODOS LOS TIME_ENDS DEL CODIGO GENERAL
 
 /**MOMENT TIME ZONE */
 const moment = require('moment-timezone');
@@ -23,33 +27,39 @@ const EventDetails = ({state, libraries}) => {
 
     //DATE
 
-    //const arrDate = postEvent.acf.start_date.split("/");
+    const durationEventStr = postEvent.acf.duration_event;
 
     const arrDateTimeStart = postEvent.acf.date_time_start.split(" ");
 
     const arrDateAlt = arrDateTimeStart[0].split("-");
-
     const timeStart = arrDateTimeStart[1];
     const timeStartShort = timeStart.substring(0, timeStart.length -3)
 
-    const arrDateTimeEnd = postEvent.acf.date_time_end.split(" ");
+    const totalHoursDateTimeStart = hoursStringToDecimal(timeStartShort)
 
+    const totalHoursDurationEvents = hoursStringToDecimal(durationEventStr)
+
+    const totalHours = totalHoursDateTimeStart + totalHoursDurationEvents;
+
+    const finalTimeEnd = decimalHoursToString(totalHours);
+    
+    let myFinalDateTimeEnd = arrDateTimeStart[0]+" "+ finalTimeEnd + ":00"
+
+    const arrDateTimeEnd = myFinalDateTimeEnd.split(" ");
     const timeEnd = arrDateTimeEnd[1];
     const timeEndShort = timeEnd.substring(0, timeEnd.length -3);
 
     let cityArr = postEvent.acf.timezone.split("/");
+    console.log("cityArr: ", cityArr)
                                         
     let cityVenue = cityArr[cityArr.length -1];
                                 
-
     //array months to get date data
     const monthsName = ['January', 'Febraury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     //TIMEZONE
     let startDateTime = moment.tz(postEvent.acf.date_time_start, postEvent.acf.timezone);
-    let endDateTime = moment.tz(postEvent.acf.date_time_end, postEvent.acf.timezone);
-
-    //TIMEZONE
+    let endDateTime = moment.tz(myFinalDateTimeEnd, postEvent.acf.timezone);
 
     //ADD TO MY CALENDAR
     let event = {
@@ -64,8 +74,7 @@ const EventDetails = ({state, libraries}) => {
     return ( 
         <EventDetailsContainer>
             <h1>{postEvent.acf.title}</h1> 
-            <h3>{monthsName[arrDateAlt[1]-1]} {arrDateAlt[2]} 	&nbsp;	&nbsp; &nbsp; {timeStartShort} - {timeEndShort} 	&nbsp;	&nbsp; &nbsp; City Venue: {cityVenue}</h3>
-
+            <h3>{monthsName[arrDateAlt[1]-1]} {arrDateAlt[2]} 	&nbsp;	&nbsp; &nbsp; {timeStartShort} - {timeEndShort} 	&nbsp;	&nbsp; &nbsp; Timezone: {cityVenue}</h3>
             {/* loading the styles for AddToCalendar  */}
             <Global styles={css(calendarStyles)} />
 
@@ -83,11 +92,9 @@ const EventDetails = ({state, libraries}) => {
                 <div>
                     <h4>Details</h4>
                     <div>
-                        
                         <span><strong>Date:</strong> <br></br> {monthsName[arrDateAlt[1]-1]} {arrDateAlt[2]}</span>
                     </div>
                     <div>
-           
                         <span><strong>Time:</strong> <br></br> {timeStartShort} - {timeEndShort}</span>
                     </div>
                     <div>
@@ -113,6 +120,16 @@ const EventDetails = ({state, libraries}) => {
                     </div>
                     <div>
                         <a href={postEvent.acf.link_to_website} target="_blank" rel="noopener noreferrer">View Organizer Website</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Venue / Address</h4>
+                    <div>
+                        <span css={css`text-transform:capitalize;`}>{postEvent.acf.address}</span>
+                    </div>
+                    <div>
+                        <span>{postEvent.acf.city}{", "}{postEvent.acf.country}</span>
                     </div>
                 </div>
                 

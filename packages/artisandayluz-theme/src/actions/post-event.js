@@ -9,12 +9,18 @@ const postEvent = async ({ state }) => {
 
   console.log("postEvent.js : ", objectToPost)
 
+  console.log("imageId: ", imageId)
+
+  console.log("ObjectToPost: ", objectToPost)
+
   objectToPost["categories"] = categories;
+
   objectToPost.acf_fields["image_event"] = imageId;
 
   let objStatusPublish = {...objectToPost, status: 'publish'}
 
-
+  console.log("objStatusPublish: ", objStatusPublish)
+  
   const res = await fetch(`${state.source.api}wp/v2/allevents`, {
     method: "POST",
     headers: new Headers({
